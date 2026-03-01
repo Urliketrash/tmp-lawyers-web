@@ -1,5 +1,5 @@
 import { useState } from "react";
-// import emailjs from "@emailjs/browser"; // Uncomment when ready to use real service
+import emailjs from "@emailjs/browser";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -28,21 +28,33 @@ export default function Contact() {
     }
 
     try {
-      // Simulate API call delay (Since we don't have keys yet)
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // EmailJS Configuration
+      const serviceID = "service_hostinger";
+      const templateID = "template_mihzk1e";
+      const publicKey = "qrrcpPi0u2kRsEHHJ";
+
+      // Send email
+      await emailjs.send(
+        serviceID, 
+        templateID, 
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+          reply_to: formData.email,
+          to_email: "tmp@tmplawyers.com", // Target Email
+        }, 
+        publicKey
+      );
       
       // Success state
       setStatus("success");
       setFormData({ name: "", email: "", message: "" });
-      // alert("Pesan berhasil terkirim! Kami akan segera menghubungi Anda.");
       
-      // Reset status after 3 seconds
-      // setTimeout(() => setStatus("idle"), 3000);
-
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error sending email:", error);
       setStatus("error");
-      alert("Gagal mengirim pesan.");
+      alert("Maaf, pesan gagal terkirim. Silakan coba lagi atau hubungi WhatsApp kami.");
     }
   };
   return (
@@ -70,11 +82,11 @@ export default function Contact() {
               <div className="flex items-center gap-6">
                 <i className="fab fa-whatsapp text-tmp-gold text-xl"></i>
                 <a
-                  href="https://wa.me/6281221881231"
+                  href="https://wa.me/6281210054874"
                   target="_blank"
                   className="text-sm text-gray-300 font-bold tracking-widest hover:text-tmp-gold"
                 >
-                  0812-2188-1231
+                  0812-1005-4874
                 </a>
               </div>
               <div className="flex items-center gap-6">

@@ -1,0 +1,24 @@
+1:"$Sreact.fragment"
+2:I[31333,["/_next/static/chunks/507eeb12a3aba4c1.js","/_next/static/chunks/4a51dbebbdad0826.js"],"default"]
+4:I[97367,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/d2be314c3ece3fbe.js"],"OutletBoundary"]
+5:"$Sreact.suspense"
+:HL["/_next/static/chunks/0a6ff56d9459c219.css","style"]
+3:T8dd,<p style="text-align: justify;">Aborsi bukanlah keputusan yang bisa dipaksakan oleh pihak manapun, termasuk keluarga atau calon mertua. Tindakan memaksa seorang wanita untuk mengugurkan kandungannya merupakan pelanggaran berat terhadap integritas tubuh dan hak asasi manusia.<br><br></p>
+
+<h3 style="text-align: justify;"><b>Hak Otonomi Wanita atas Tubuhnya</b></h3>
+<p style="text-align: justify;">Setiap wanita memiliki hak penuh atas tubuh dan kehamilannya. Tidak ada pihak lain, baik suami maupun orang tua/mertua, yang memiliki wewenang hukum untuk memerintahkan atau memaksa dilakukannya aborsi tanpa persetujuan wanita tersebut.<br><br></p>
+
+<h3 style="text-align: justify;"><b>Perspektif Hukum dan Ancaman Pidana</b></h3>
+<p style="text-align: justify;">Dalam hukum positif di Indonesia, tindakan memaksa aborsi dapat dikategorikan sebagai tindak pidana serius:<br></p>
+<ul>
+    <li style="text-align: justify;"><strong>Kekerasan:</strong> Pemaksaan aborsi dapat dijerat pasal penganiayaan atau kekerasan.</li>
+    <li style="text-align: justify;"><strong>Pasal Aborsi Ilegal:</strong> Undang-Undang Kesehatan dan KUHP melarang aborsi tanpa indikasi medis yang sah. Pihak yang menyuruh atau memaksa melakukan aborsi ilegal juga dapat dikenai hukuman sebagai pihak yang turut serta melakukan tindak pidana.<br></li><li style="text-align: justify;"><br></li>
+</ul>
+
+<h3 style="text-align: justify;"><b>Pandangan Etika dan Agama</b></h3>
+<p style="text-align: justify;">Secara etika dan moral, serta dalam pandangan agama (seperti Islam), aborsi tanpa alasan syar'i atau medis yang darurat (seperti membahayakan nyawa ibu) adalah tindakan yang dilarang. Alasan ketidaksukaan atau paksaan dari calon mertua sama sekali bukan alasan yang dapat dibenarkan.</p><p style="text-align: justify;"><br></p>
+
+<p style="text-align: justify;">Jika Anda atau kerabat mengalami tekanan atau paksaan semacam ini, segera cari perlindungan hukum dan bantuan profesional. Ingat, keputusan medis adalah hak mutlak pasien (ibu hamil) yang harus dihormati.</p><p style="text-align: justify;"><br></p>
+
+<p style="text-align: justify;"><i>Disclaimer: Artikel ini adalah informasi hukum umum dan bukan nasihat hukum profesional. Konsultasikan kasus spesifik Anda dengan pengacara.</i></p>0:{"buildId":"XiBjEkEYe_zQ_PBTY7i23","rsc":["$","$1","c",{"children":[["$","$L2",null,{"news":{"id":"tuzZff3ZCMZGngdk41Ak","title":"Disuruh Aborsi oleh Calon Mertua? Ini Hukum dan Ancaman Pidananya","date":"2026-02-13","category":"LITIGATION","summary":"Memaksa seseorang untuk melakukan aborsi, termasuk oleh calon mertua, adalah tindakan melanggar hukum dan Hak Asasi Manusia. Artikel ini membahas perspektif hukum di Indonesia terkait pemaksaan aborsi dan hak otonomi wanita atas tubuhnya.","content":"$3","imageUrl":"https://res.cloudinary.com/dy2stohsk/image/upload/v1771098967/yomedg77kzvkfofdgw1j.png","author":"Admin Team"}}],[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/0a6ff56d9459c219.css","precedence":"next"}],["$","script","script-0",{"src":"/_next/static/chunks/4a51dbebbdad0826.js","async":true}]],["$","$L4",null,{"children":["$","$5",null,{"name":"Next.MetadataOutlet","children":"$@6"}]}]]}],"loading":null,"isPartial":false}
+6:null

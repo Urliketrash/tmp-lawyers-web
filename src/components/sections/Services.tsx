@@ -6,7 +6,7 @@ export default function Services() {
         "TMP Law Firm mampu membantu setiap klien baik perorangan maupun badan usaha, mencakup Konsultasi lisan maupun tertulis, Legal Opinion, Analis Risiko Hukum serta Strategi penyelesaian masalah hukum.",
     },
     {
-      title: "Pendampingan dan Perwakilan atas Penanganan Perkara",
+      title: "Pendampingan dan \nPerwakilan atas \nPenanganan Perkara",
       description:
         "Pengacara kami sangat berpengalaman dalam memberikan jasa pendampingan hukum kepada klien dalam berbagai proses hukum, termasuk pendampingan dalam setiap negosiasi dan/atau mediasi, pemeriksaan pada Kepolisian/Kejaksaan dan instansi terkait serta pendampingan dan mewakili klien dalam persidangan di pengadilan.",
     },
@@ -87,7 +87,7 @@ export default function Services() {
               data-aos="fade-up"
               data-aos-delay={index * 50}
             >
-              <h4 className="text-tmp-gold font-bold uppercase tracking-widest text-xs mb-4 min-h-[3rem] flex items-center">
+              <h4 className="text-tmp-gold font-bold uppercase tracking-widest text-sm mb-4 min-h-[3rem] flex items-center justify-center text-center">
                 {service.title}
               </h4>
               <p className="text-gray-400 text-xs leading-loose text-justify">

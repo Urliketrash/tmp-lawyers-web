@@ -53,29 +53,25 @@ export default function Clients() {
           ))}
         </div>
 
-        {/* Other Clients - 2 Column List */}
+        {/* Other Clients - Grid layout matching Top Clients */}
         <div className="border-t border-white/5 pt-16">
           <div className="text-center mb-12">
-            <h3 className="text-3xl font-serif italic text-white mb-4">Our Clients</h3>
+            <h3 className="text-3xl font-serif italic text-white mb-4">Our Clients & Legal Assistance for Projects</h3>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-x-12 gap-y-4 max-w-4xl mx-auto">
-             <ul className="space-y-4">
-                {otherClients.slice(0, 6).map((client, index) => (
-                    <li key={index} className="flex items-start text-gray-400 text-xs uppercase tracking-wider">
-                        <span className="text-tmp-gold mr-3">•</span>
-                        {client}
-                    </li>
-                ))}
-             </ul>
-             <ul className="space-y-4">
-                {otherClients.slice(6).map((client, index) => (
-                    <li key={index} className="flex items-start text-gray-400 text-xs uppercase tracking-wider">
-                        <span className="text-tmp-gold mr-3">•</span>
-                        {client}
-                    </li>
-                ))}
-             </ul>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+             {otherClients.map((client, index) => (
+                <div
+                  key={index}
+                  className="border border-white/10 bg-tmp-dark p-6 md:p-8 flex items-center justify-center text-center rounded hover:border-tmp-gold/50 transition-colors duration-300 group min-h-[120px]"
+                  data-aos="fade-up"
+                  data-aos-delay={index * 50}
+                >
+                  <span className="text-gray-300 text-[10px] md:text-xs font-bold uppercase tracking-widest group-hover:text-white leading-relaxed">
+                    {client}
+                  </span>
+                </div>
+             ))}
           </div>
         </div>
 

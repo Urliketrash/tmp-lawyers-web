@@ -1,0 +1,7 @@
+:HL["/_next/static/chunks/6bf0473525daa085.css","style"]
+:HL["/_next/static/media/2a65768255d6b625-s.p.d19752fb.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/media/e8f2fbee2754df70-s.p.9b7a96b4.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/chunks/0a6ff56d9459c219.css","style"]
+:HL["https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css","style"]
+:HL["https://unpkg.com/aos@2.3.1/dist/aos.css","style"]
+0:{"buildId":"XiBjEkEYe_zQ_PBTY7i23","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"news","paramType":null,"paramKey":"news","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}

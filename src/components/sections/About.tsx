@@ -7,19 +7,21 @@ export default function About() {
             <h2 className="text-tmp-gold text-xs font-bold uppercase tracking-[0.5em] mb-6">
               Our Firm
             </h2>
-            <h3 className="text-4xl font-serif italic mb-10 text-white">
-              Sejak 2021
-            </h3>
-            <p className="text-gray-400 text-sm leading-loose mb-6 text-justify">
-              Law Firm Tao Manullang & Partners hadir menawarkan bantuan jasa
-              hukum komprehensif mencakup area litigasi, non-litigasi, dan area
-              bisnis komersil bagi individu/perusahaan.
-            </p>
-            <p className="text-gray-400 text-sm leading-loose text-justify">
-              Kami melakukan upaya preventif dengan identifikasi regulasi,
-              analisa pengelolaan resiko, dan memberikan pertimbangan hukum
-              sehingga klien mampu mengambil keputusan tepat.
-            </p>
+            
+            <div className="space-y-4 text-justify text-gray-400 text-sm leading-loose">
+              <p>
+                TMP Law Firm merupakan firma hukum yang didirikan di Jakarta sejak 2021. TMP Law Firm hadir menawarkan bantuan jasa hukum yang komprehensif kepada klien kami. Jasa hukum yang disediakan mencakup berbagai area sesuai kebutuhan dan kepentingan klien, seperti area litigasi, non-litigasi, termasuk area bisnis komersil bagi individu/perusahaan.
+              </p>
+              <p>
+                TMP Law Firm akan senantiasa memenuhi kebutuhan dengan pelayanan yang optimal dalam setiap penanganan perkara/permasalahan hukum dengan strategi yang efektif-efisien sehingga mampu memberikan hasil terbaik bagi klien. Tujuan utama TMP Law Firm yaitu menjadi firma hukum yang mampu menjawab kebutuhan klien atas segala permasalahan hukum yang dihadapi.
+              </p>
+              <p>
+                Tujuan tersebut didukung dengan pengalaman kami pada segala aspek, mulai dari partner serta associates yang memiliki pengalaman dalam setiap bidang keahliannya. TMP Law Firm mampu membantu permasalahan hukum Anda dengan tim yang profesional dalam bidangnya seperti Hukum Pidana, Hukum Perdata, Hukum Bisnis, Hukum Perbankan atau Jasa Keuangan, Hukum Properti, Hukum Pajak, Hukum Pasar Modal, Hukum Ketenagakerjaan, dan Perlindungan Konsumen.
+              </p>
+              <p>
+                Kami juga mampu memberikan Pelayanan Jasa Hukum pada setiap kegiatan bisnis klien dalam upaya preventif dengan melakukan identifikasi atas setiap regulasi, analisa pengelolaan risiko, dan memberikan pertimbangan hukum sehingga klien mampu mengambil keputusan yang tepat dalam pelaksanaan kegiatan bisnis.
+              </p>
+            </div>
           </div>
           <div
             className="bg-tmp-dark p-10 border-l-2 border-tmp-gold"
