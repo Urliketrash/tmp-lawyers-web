@@ -80,7 +80,10 @@ export default function DashboardPage() {
             </Link>
          </nav>
 
-         <Link href="/" className="text-gray-500 hover:text-white text-xs uppercase tracking-widest mt-auto md:mt-0">
+         <Link 
+            href="/" 
+            className="text-gray-400 hover:text-white hover:bg-red-900/50 hover:border-red-500 border border-white/10 px-4 py-3 rounded text-xs uppercase tracking-widest mt-auto md:mt-0 font-bold flex items-center justify-center transition-all duration-300"
+         >
             <i className="fas fa-sign-out-alt mr-2"></i> Logout
          </Link>
       </aside>

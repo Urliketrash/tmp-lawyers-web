@@ -223,7 +223,7 @@ export default function CreateNewsPage() {
 
             {/* Image Upload */}
             <div>
-                <label className="block text-tmp-gold text-xs font-bold uppercase tracking-widest mb-2">Image Upload</label>
+                <label className="block text-tmp-gold text-xs font-bold uppercase tracking-widest mb-2">Image Upload (Optional)</label>
                 
                 {uploadProgress > 0 && uploadProgress < 100 && (
                     <div className="w-full bg-gray-800 rounded-full h-2 mb-2">
