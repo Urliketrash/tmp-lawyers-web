@@ -68,15 +68,15 @@ export default function Navbar() {
         {/* Logo Area */}
         <div className="flex items-center gap-4">
           <Link href="/" className="block p-0" onClick={handleLogoClick}>
-            <div className="relative h-16 md:h-20 lg:h-24 w-auto aspect-[1/1]">
+            <div className="relative h-14 md:h-16 lg:h-20 w-auto aspect-[1/1]">
                  {/* Using standard img tag temporarily if Next/Image is tricky with unknown aspect ratios, 
                      but standard layout='fill' or objectFit is better. For now assuming squares or managing width manually */}
                 <Image 
                     src="/assets/logo.png" 
                     alt="Tao Manullang & Partners" 
-                    width={100} 
-                    height={100}
-                    className="h-full w-auto object-contain scale-[1.15]"
+                    width={80} 
+                    height={80}
+                    className="h-full w-auto object-contain"
                 />
             </div>
           </Link>
