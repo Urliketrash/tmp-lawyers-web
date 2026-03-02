@@ -7,12 +7,12 @@ import { getStorage } from "firebase/storage";
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://firebase.google.com/docs/web/setup#available-libraries
 const firebaseConfig = {
-  apiKey: "AIzaSyBMozvymscksF28_zMew5fvFO8T38PnQn0",
-  authDomain: "tmp-lawyers-web.firebaseapp.com",
-  projectId: "tmp-lawyers-web",
-  storageBucket: "tmp-lawyers-web.firebasestorage.app",
-  messagingSenderId: "828282393045",
-  appId: "1:828282393045:web:b9c334d5d5213ad877ed5c"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
 // Initialize Firebase
