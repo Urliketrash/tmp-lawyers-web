@@ -145,7 +145,16 @@ export default function Lawyers() {
                            <div className="space-y-4">
                               <div className="flex items-center gap-3 text-gray-400 text-sm">
                                 <span className="text-tmp-gold font-bold text-xs uppercase tracking-wider w-24 shrink-0">Email</span>
-                                <span className="break-all">{selectedLawyer.email || "-"}</span>
+                                {selectedLawyer.email && selectedLawyer.email !== "-" ? (
+                                    <a 
+                                        href={`mailto:${selectedLawyer.email}`}
+                                        className="break-all hover:text-tmp-gold transition-colors font-medium border-b border-white/10 hover:border-tmp-gold pb-0.5"
+                                    >
+                                        {selectedLawyer.email}
+                                    </a>
+                                ) : (
+                                    <span>-</span>
+                                )}
                               </div>
                               
                               <div className="flex items-center gap-3 text-gray-400 text-sm">
