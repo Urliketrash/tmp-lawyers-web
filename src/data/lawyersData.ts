@@ -34,7 +34,7 @@ export const lawyersData: Lawyer[] = [
       "Wakil Ketua KNPI"
     ],
     skills: ["CORPORATE LAW", "ENERGY & CONSTRUCTION", "MERGERS & ACQUISITIONS", "BUSINESS CRIME DEFENSE", "NEGOTIATION"],
-    email: "-",
+    email: "wangtao@tmplawyers.com",
     instagram: "@wangtaomanullang"
   },
   {
@@ -55,7 +55,7 @@ export const lawyersData: Lawyer[] = [
       "Pendamping Korban, Komnas Perlindungan Perempuan dan Anak (Komnas PPA)"
     ],
     skills: ["LITIGATION & NON-LITIGATION", "CRIMINAL & CIVIL LAW", "LAND DISPUTE", "MEDICAL LAW", "BANKRUPTCY & PKPU"],
-    email: "-",
+    email: "ronaldomunthe@tmplawyers.com",
     instagram: "@hisarronaldomunthe"
   },
   {
@@ -75,7 +75,7 @@ export const lawyersData: Lawyer[] = [
       "Associate Lawyer, TMP Law Firm"
     ],
     skills: ["LEGAL DUE DILIGENCE", "CORPORATE LAW", "CYBER CRIME", "INTELLECTUAL PROPERTY (HKI)", "BANKRUPTCY & PKPU"],
-    email: "-",
+    email: "yudisarya@tmplawyers.com",
     instagram: "@_yudisaryaa"
   },
   {
@@ -96,7 +96,7 @@ export const lawyersData: Lawyer[] = [
       "Konsultan Hukum Bisnis (F&B & UMKM)"
     ],
     skills: ["LITIGATION & NON-LITIGATION", "COMMERCIAL LAW", "CONTRACT DRAFTING", "ITE LAW", "LABOR LAW"],
-    email: "-",
+    email: "fadiltaufiq@tmplawyers.com",
     instagram: "@pakdejako"
   },
 ];
