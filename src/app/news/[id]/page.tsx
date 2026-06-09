@@ -1,6 +1,8 @@
 import { MOCK_NEWS, NewsItem } from "@/data/newsData";
 import NewsDetailContent from "@/components/NewsDetailContent";
 import { createClient } from "@/lib/supabase-server";
+import { Metadata } from "next";
+import { ArticleJsonLd } from "@/components/JsonLd";
 
 // Generate params for static export
 export async function generateStaticParams() {
@@ -20,6 +22,65 @@ export async function generateStaticParams() {
   return MOCK_NEWS.map((news) => ({
     id: news.id,
   }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  
+  let news: NewsItem | undefined = MOCK_NEWS.find((item) => item.id === id);
+
+  if (!news) {
+    try {
+      const supabase = await createClient();
+      const { data } = await supabase
+        .from("news")
+        .select("*")
+        .eq("id", id)
+        .single();
+      
+      if (data) {
+        news = {
+          id: data.id,
+          title: data.title,
+          date: data.date,
+          category: data.category,
+          summary: data.summary,
+          content: data.content,
+          imageUrl: data.image_url || "",
+          author: data.author
+        };
+      }
+    } catch (error) {
+      console.error("Error fetching unique news for metadata:", error);
+    }
+  }
+
+  if (!news) {
+    return {
+      title: "News Not Found",
+    };
+  }
+
+  return {
+    title: `${news.title} | TMP Law Firm`,
+    description: news.summary,
+    openGraph: {
+      title: news.title,
+      description: news.summary,
+      images: news.imageUrl ? [{ url: news.imageUrl }] : [],
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: news.title,
+      description: news.summary,
+      images: news.imageUrl ? [news.imageUrl] : [],
+    },
+  };
 }
 
 export default async function NewsDetailPage({
@@ -71,5 +132,19 @@ export default async function NewsDetailPage({
     );
   }
 
-  return <NewsDetailContent news={news} />;
+  return (
+    <>
+      <ArticleJsonLd
+        title={news.title}
+        description={news.summary}
+        imageUrl={news.imageUrl}
+        datePublished={news.date}
+        authorName={news.author || "Admin Team"}
+        publisherName="TMP Law Firm"
+        publisherLogo="https://tmplawyers.com/assets/logo.png"
+        url={`https://tmplawyers.com/news/${news.id}`}
+      />
+      <NewsDetailContent news={news} />
+    </>
+  );
 }

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { NewsItem } from "@/data/newsData";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
+import sanitizeHtml from "@/lib/sanitize";
 
 export default function NewsDetailContent({ news }: { news: NewsItem }) {
 
@@ -46,7 +47,7 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
 
         {/* Content */}
         <ScrollReveal variant="fade-up" className="prose prose-invert prose-lg max-w-none mx-auto text-gray-300 leading-relaxed font-light [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-6 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-6 [&_li]:mb-2 [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:text-white [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-white [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-white [&_p]:mb-6 [&_strong]:text-white [&_b]:text-white">
-            <div dangerouslySetInnerHTML={{ __html: news.content }} />
+            <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(news.content) }} />
         </ScrollReveal>
 
         {/* Share / Back */}
