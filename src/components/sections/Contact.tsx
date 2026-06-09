@@ -1,31 +1,28 @@
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { contactSchema, ContactInput } from "@/lib/validations/news";
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus("sending");
-
-    // Basic validation
-    if (!formData.name || !formData.email || !formData.message) {
-      alert("Mohon isi semua kolom.");
-      setStatus("idle");
-      return;
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ContactInput>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      message: ""
     }
+  });
+
+  const onSubmit = async (data: ContactInput) => {
+    setStatus("sending");
 
     try {
       // EmailJS Configuration
@@ -38,10 +35,10 @@ export default function Contact() {
         serviceID, 
         templateID, 
         {
-          from_name: formData.name,
-          from_email: formData.email,
-          message: formData.message,
-          reply_to: formData.email,
+          from_name: data.name,
+          from_email: data.email,
+          message: data.message,
+          reply_to: data.email,
           to_email: "tmp@tmplawyers.com", // Target Email
         }, 
         publicKey
@@ -49,7 +46,7 @@ export default function Contact() {
       
       // Success state
       setStatus("success");
-      setFormData({ name: "", email: "", message: "" });
+      reset();
       
     } catch (error) {
       console.error("Error sending email:", error);
@@ -157,40 +154,46 @@ export default function Contact() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-8">
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full bg-transparent border-b border-white/10 p-5 outline-none transition-all duration-400 text-white text-sm focus:border-tmp-gold focus:bg-white/5"
-                  placeholder="Full Name"
-                  disabled={status === "sending"}
-                  required
-                  suppressHydrationWarning
-                />
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full bg-transparent border-b border-white/10 p-5 outline-none transition-all duration-400 text-white text-sm focus:border-tmp-gold focus:bg-white/5"
-                  placeholder="Email Address"
-                  disabled={status === "sending"}
-                  required
-                  suppressHydrationWarning
-                />
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="w-full bg-transparent border-b border-white/10 p-5 outline-none transition-all duration-400 text-white text-sm focus:border-tmp-gold focus:bg-white/5"
-                  rows={6}
-                  placeholder="How can we help you?"
-                  disabled={status === "sending"}
-                  required
-                  suppressHydrationWarning
-                ></textarea>
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+                <div>
+                  <input
+                    type="text"
+                    {...register("name")}
+                    className="w-full bg-transparent border-b border-white/10 p-5 outline-none transition-all duration-400 text-white text-sm focus:border-tmp-gold focus:bg-white/5"
+                    placeholder="Full Name"
+                    disabled={status === "sending"}
+                    suppressHydrationWarning
+                  />
+                  {errors.name && (
+                    <p className="text-red-500 text-xs mt-2 pl-5">{errors.name.message}</p>
+                  )}
+                </div>
+                <div>
+                  <input
+                    type="email"
+                    {...register("email")}
+                    className="w-full bg-transparent border-b border-white/10 p-5 outline-none transition-all duration-400 text-white text-sm focus:border-tmp-gold focus:bg-white/5"
+                    placeholder="Email Address"
+                    disabled={status === "sending"}
+                    suppressHydrationWarning
+                  />
+                  {errors.email && (
+                    <p className="text-red-500 text-xs mt-2 pl-5">{errors.email.message}</p>
+                  )}
+                </div>
+                <div>
+                  <textarea
+                    {...register("message")}
+                    className="w-full bg-transparent border-b border-white/10 p-5 outline-none transition-all duration-400 text-white text-sm focus:border-tmp-gold focus:bg-white/5"
+                    rows={6}
+                    placeholder="How can we help you?"
+                    disabled={status === "sending"}
+                    suppressHydrationWarning
+                  ></textarea>
+                  {errors.message && (
+                    <p className="text-red-500 text-xs mt-2 pl-5">{errors.message.message}</p>
+                  )}
+                </div>
                 <button 
                   type="submit"
                   disabled={status === "sending"}

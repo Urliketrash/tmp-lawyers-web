@@ -6,6 +6,9 @@ import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import ActionLoader from "@/components/admin/ActionLoader";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { newsSchema, NewsInput } from "@/lib/validations/news";
 
 function EditNewsContent() {
   const router = useRouter();
@@ -19,15 +22,25 @@ function EditNewsContent() {
     status: 'loading' as 'loading' | 'success' | 'error',
     message: ''
   });
-  const [formData, setFormData] = useState({
-    title: "",
-    category: "LITIGATION",
-    summary: "",
-    content: "",
-    imageUrl: "",
-    author: "Admin Team",
-    date: ""
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm<NewsInput>({
+    resolver: zodResolver(newsSchema),
   });
+
+  const content = watch("content");
+  const [existingImageUrl, setExistingImageUrl] = useState("");
+
+  // Register the hidden content field
+  useEffect(() => {
+    register("content");
+  }, [register]);
 
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -51,15 +64,15 @@ function EditNewsContent() {
             if (error) throw error;
 
             if (data) {
-                setFormData({
+                reset({
                     title: data.title,
-                    category: data.category,
+                    category: data.category as any,
                     summary: data.summary,
                     content: data.content,
-                    imageUrl: data.image_url || "",
                     author: data.author,
                     date: data.date
                 });
+                setExistingImageUrl(data.image_url || "");
                 setPreviewUrl(data.image_url);
             } else {
                 alert("Article not found!");
@@ -74,11 +87,7 @@ function EditNewsContent() {
     };
 
     fetchData();
-  }, [id, router]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  }, [id, router, reset]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -94,16 +103,8 @@ function EditNewsContent() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: NewsInput) => {
     if (!id) return;
-
-    // Custom form validation to avoid silent HTML5 validation blocks
-    if (!formData.title || !formData.date || !formData.summary) {
-        setActionLoader({ isLoading: true, status: 'error', message: 'Validation Failed: Please fill in Title, Date, and Summary.' });
-        setTimeout(() => setActionLoader(prev => ({ ...prev, isLoading: false })), 3000);
-        return;
-    }
 
     setSubmitting(true);
     setActionLoader({ isLoading: true, status: 'loading', message: 'Updating Article...' });
@@ -128,7 +129,7 @@ function EditNewsContent() {
     try {
         console.log("Attempting to update article in Supabase...");
         
-        let finalImageUrl = formData.imageUrl;
+        let finalImageUrl = existingImageUrl;
 
         // 1. Upload NEW Image only if selected
         if (file) {
@@ -157,13 +158,13 @@ function EditNewsContent() {
         // 2. Update Supabase
         setActionLoader({ isLoading: true, status: 'loading', message: 'Saving Changes...' });
         const updateData = {
-          title: formData.title,
-          category: formData.category,
-          date: formData.date,
-          summary: formData.summary,
-          content: formData.content,
+          title: data.title,
+          category: data.category,
+          date: data.date,
+          summary: data.summary,
+          content: data.content,
           image_url: finalImageUrl,
-          author: formData.author,
+          author: data.author,
           updated_at: new Date().toISOString()
         };
         
@@ -218,18 +219,19 @@ function EditNewsContent() {
             </Link>
         </header>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Title */}
             <div>
                 <label className="block text-tmp-gold text-xs font-bold uppercase tracking-widest mb-2">Title</label>
                 <input 
                     type="text" 
-                    name="title" 
-                    value={formData.title} 
-                    onChange={handleChange}
+                    {...register("title")}
                     className="w-full bg-tmp-black border border-white/10 p-4 text-white focus:border-tmp-gold focus:outline-none transition-colors"
                     suppressHydrationWarning
                 />
+                {errors.title && (
+                    <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>
+                )}
             </div>
 
             {/* Category & Date */}
@@ -237,9 +239,7 @@ function EditNewsContent() {
                 <div>
                     <label className="block text-tmp-gold text-xs font-bold uppercase tracking-widest mb-2">Category</label>
                     <select 
-                        name="category" 
-                        value={formData.category} 
-                        onChange={handleChange}
+                        {...register("category")}
                         className="w-full bg-tmp-black border border-white/10 p-4 text-white focus:border-tmp-gold focus:outline-none transition-colors appearance-none"
                         suppressHydrationWarning
                     >
@@ -248,17 +248,21 @@ function EditNewsContent() {
                         <option value="EVENT">Event</option>
                         <option value="REGULATION">Regulation</option>
                     </select>
+                    {errors.category && (
+                        <p className="text-red-500 text-xs mt-1">{errors.category.message}</p>
+                    )}
                 </div>
                 <div>
                     <label className="block text-tmp-gold text-xs font-bold uppercase tracking-widest mb-2">Date</label>
                     <input 
                         type="date" 
-                        name="date" 
-                        value={formData.date} 
-                        onChange={handleChange}
+                        {...register("date")}
                         className="w-full bg-tmp-black border border-white/10 p-4 text-white focus:border-tmp-gold focus:outline-none transition-colors [color-scheme:dark]"
                         suppressHydrationWarning
                     />
+                    {errors.date && (
+                        <p className="text-red-500 text-xs mt-1">{errors.date.message}</p>
+                    )}
                 </div>
             </div>
 
@@ -266,23 +270,27 @@ function EditNewsContent() {
             <div>
                 <label className="block text-tmp-gold text-xs font-bold uppercase tracking-widest mb-2">Summary</label>
                 <textarea 
-                    name="summary" 
-                    value={formData.summary} 
-                    onChange={handleChange}
+                    {...register("summary")}
                     rows={3}
                     className="w-full bg-tmp-black border border-white/10 p-4 text-white focus:border-tmp-gold focus:outline-none transition-colors"
                     suppressHydrationWarning
                 />
+                {errors.summary && (
+                    <p className="text-red-500 text-xs mt-1">{errors.summary.message}</p>
+                )}
             </div>
 
             {/* Content */}
             <div className="mb-6">
                 <RichTextEditor
                     label="Content"
-                    value={formData.content}
-                    onChange={(html) => setFormData({ ...formData, content: html })}
+                    value={content}
+                    onChange={(html) => setValue("content", html, { shouldValidate: true })}
                     placeholder="Write your article content here..."
                 />
+                {errors.content && (
+                    <p className="text-red-500 text-xs mt-1">{errors.content.message}</p>
+                )}
             </div>
 
             {/* Image Upload */}

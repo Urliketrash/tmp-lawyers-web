@@ -1,11 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import ActionLoader from "@/components/admin/ActionLoader";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { newsSchema, NewsInput } from "@/lib/validations/news";
 
 export default function CreateNewsPage() {
   const router = useRouter();
@@ -15,23 +18,35 @@ export default function CreateNewsPage() {
     status: 'loading' as 'loading' | 'success' | 'error',
     message: ''
   });
-  const [formData, setFormData] = useState({
-    title: "",
-    category: "LITIGATION",
-    summary: "",
-    content: "",
-    imageUrl: "", // Uploading an image is now optional
-    author: "Admin Team",
-    date: new Date().toISOString().split('T')[0]
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<NewsInput>({
+    resolver: zodResolver(newsSchema),
+    defaultValues: {
+      title: "",
+      category: "LITIGATION",
+      summary: "",
+      content: "",
+      author: "Admin Team",
+      date: new Date().toISOString().split('T')[0]
+    }
   });
+
+  const content = watch("content");
+
+  // Register the hidden content field
+  useEffect(() => {
+    register("content");
+  }, [register]);
 
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -47,16 +62,7 @@ export default function CreateNewsPage() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Custom form validation to avoid silent HTML5 validation blocks
-    if (!formData.title || !formData.date || !formData.summary) {
-        setActionLoader({ isLoading: true, status: 'error', message: 'Validation Failed: Please fill in Title, Date, and Summary.' });
-        setTimeout(() => setActionLoader(prev => ({ ...prev, isLoading: false })), 3000);
-        return;
-    }
-
+  const onSubmit = async (data: NewsInput) => {
     setLoading(true);
     setActionLoader({ isLoading: true, status: 'loading', message: 'Publishing Article...' });
 
@@ -80,7 +86,7 @@ export default function CreateNewsPage() {
     try {
         console.log("Attempting to upload file and write to Supabase...");
         
-        let finalImageUrl = formData.imageUrl;
+        let finalImageUrl = "";
 
         // 1. Upload Image to Supabase Storage if exists
         if (file) {
@@ -109,13 +115,13 @@ export default function CreateNewsPage() {
         // 2. Add to Supabase DB
         setActionLoader({ isLoading: true, status: 'loading', message: 'Saving to Database...' });
         const docData = {
-          title: formData.title,
-          category: formData.category,
-          date: formData.date,
-          summary: formData.summary,
-          content: formData.content,
+          title: data.title,
+          category: data.category,
+          date: data.date,
+          summary: data.summary,
+          content: data.content,
           image_url: finalImageUrl,
-          author: formData.author
+          author: data.author
         };
 
         // Timeout Promise
@@ -165,19 +171,20 @@ export default function CreateNewsPage() {
             </Link>
         </header>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Title */}
             <div>
                 <label className="block text-tmp-gold text-xs font-bold uppercase tracking-widest mb-2">Title</label>
                 <input 
                     type="text" 
-                    name="title" 
-                    value={formData.title} 
-                    onChange={handleChange}
+                    {...register("title")}
                     className="w-full bg-tmp-black border border-white/10 p-4 text-white focus:border-tmp-gold focus:outline-none transition-colors"
                     placeholder="Enter article title..."
                     suppressHydrationWarning
                 />
+                {errors.title && (
+                    <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>
+                )}
             </div>
 
             {/* Category & Date */}
@@ -185,9 +192,7 @@ export default function CreateNewsPage() {
                 <div>
                     <label className="block text-tmp-gold text-xs font-bold uppercase tracking-widest mb-2">Category</label>
                     <select 
-                        name="category" 
-                        value={formData.category} 
-                        onChange={handleChange}
+                        {...register("category")}
                         className="w-full bg-tmp-black border border-white/10 p-4 text-white focus:border-tmp-gold focus:outline-none transition-colors appearance-none"
                         suppressHydrationWarning
                     >
@@ -196,17 +201,21 @@ export default function CreateNewsPage() {
                         <option value="EVENT">Event</option>
                         <option value="REGULATION">Regulation</option>
                     </select>
+                    {errors.category && (
+                        <p className="text-red-500 text-xs mt-1">{errors.category.message}</p>
+                    )}
                 </div>
                 <div>
                     <label className="block text-tmp-gold text-xs font-bold uppercase tracking-widest mb-2">Date</label>
                     <input 
                         type="date" 
-                        name="date" 
-                        value={formData.date} 
-                        onChange={handleChange}
+                        {...register("date")}
                         className="w-full bg-tmp-black border border-white/10 p-4 text-white focus:border-tmp-gold focus:outline-none transition-colors [color-scheme:dark]"
                         suppressHydrationWarning
                     />
+                    {errors.date && (
+                        <p className="text-red-500 text-xs mt-1">{errors.date.message}</p>
+                    )}
                 </div>
             </div>
 
@@ -214,24 +223,28 @@ export default function CreateNewsPage() {
             <div>
                 <label className="block text-tmp-gold text-xs font-bold uppercase tracking-widest mb-2">Summary (Short Description)</label>
                 <textarea 
-                    name="summary" 
-                    value={formData.summary} 
-                    onChange={handleChange}
+                    {...register("summary")}
                     rows={3}
                     className="w-full bg-tmp-black border border-white/10 p-4 text-white focus:border-tmp-gold focus:outline-none transition-colors"
                     placeholder="Brief overview for the card display..."
                     suppressHydrationWarning
                 />
+                {errors.summary && (
+                    <p className="text-red-500 text-xs mt-1">{errors.summary.message}</p>
+                )}
             </div>
 
             {/* Content (HTML Supported) */}
             <div className="mb-6">
                 <RichTextEditor
                     label="Content"
-                    value={formData.content}
-                    onChange={(html) => setFormData({ ...formData, content: html })}
+                    value={content}
+                    onChange={(html) => setValue("content", html, { shouldValidate: true })}
                     placeholder="Write your article content here..."
                 />
+                {errors.content && (
+                    <p className="text-red-500 text-xs mt-1">{errors.content.message}</p>
+                )}
             </div>
 
             {/* Image Upload */}

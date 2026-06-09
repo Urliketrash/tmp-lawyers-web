@@ -7,14 +7,27 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, LoginInput } from "@/lib/validations/news";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginInput>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: ""
+    }
+  });
 
   useEffect(() => {
     AOS.init({
@@ -24,13 +37,15 @@ export default function LoginPage() {
     });
   }, []);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLogin = async (data: LoginInput) => {
     setError("");
     setLoading(true);
 
     try {
-      const { error: err } = await supabase.auth.signInWithPassword({ email, password });
+      const { error: err } = await supabase.auth.signInWithPassword({ 
+        email: data.email, 
+        password: data.password 
+      });
       if (err) throw err;
       router.push("/admin/dashboard");
     } catch (err: any) {
@@ -66,25 +81,26 @@ export default function LoginPage() {
             </div>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-6" data-aos="fade-up" data-aos-delay="400">
+        <form onSubmit={handleSubmit(handleLogin)} className="space-y-6" data-aos="fade-up" data-aos-delay="400">
             <div>
                 <label className="block text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-2">Email Address</label>
                 <input 
                     type="email" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    {...register("email")}
                     className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 text-white focus:outline-none focus:border-tmp-gold transition-colors text-sm placeholder:text-gray-600"
                     placeholder="Your email address"
                     suppressHydrationWarning
                 />
+                {errors.email && (
+                    <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+                )}
             </div>
             <div>
                 <label className="block text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-2">Password</label>
                 <div className="relative w-full">
                     <input 
                         type={showPassword ? "text" : "password"}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        {...register("password")}
                         className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 pr-12 text-white focus:outline-none focus:border-tmp-gold transition-colors text-sm placeholder:text-gray-600"
                         placeholder="Your password"
                         suppressHydrationWarning
@@ -100,6 +116,9 @@ export default function LoginPage() {
                         <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
                     </button>
                 </div>
+                {errors.password && (
+                    <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+                )}
             </div>
             <button 
             type="submit" 
