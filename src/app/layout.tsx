@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 
 import LayoutWrapper from "@/components/LayoutWrapper";
 import Navbar from "@/components/Navbar";
+import QueryProvider from "@/providers/query-provider";
 
 export default function RootLayout({
   children,
@@ -39,8 +40,10 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <div className="relative w-full overflow-x-hidden min-h-screen">
-          <Navbar />
-          <LayoutWrapper>{children}</LayoutWrapper>
+          <QueryProvider>
+            <Navbar />
+            <LayoutWrapper>{children}</LayoutWrapper>
+          </QueryProvider>
         </div>
       </body>
     </html>

@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Preloader from "./Preloader";
+import { supabase } from "@/lib/supabase";
+import { useAuthStore } from "@/store/auth-store";
 
 export default function LayoutWrapper({
   children,
@@ -9,6 +11,36 @@ export default function LayoutWrapper({
   children: React.ReactNode;
 }) {
   const [isLoaded, setIsLoaded] = useState(false);
+  const setUser = useAuthStore((state) => state.setUser);
+  const setLoading = useAuthStore((state) => state.setLoading);
+
+  useEffect(() => {
+    // Check initial user
+    const checkUser = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        setUser(user);
+      } catch (err) {
+        console.error("Error getting user session:", err);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkUser();
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [setUser, setLoading]);
 
   return (
     <>
