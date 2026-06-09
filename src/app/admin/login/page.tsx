@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase"; // Using dummy firebase config
+import { supabase } from "@/lib/supabase";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -31,11 +30,12 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const { error: err } = await supabase.auth.signInWithPassword({ email, password });
+      if (err) throw err;
       router.push("/admin/dashboard");
     } catch (err: any) {
       console.error(err);
-      setError("Login Failed: Invalid Email or Password (or check Firebase Console if user exists)");
+      setError("Login Failed: Invalid Email or Password (or check Supabase Console if user exists)");
     } finally {
       setLoading(false);
     }

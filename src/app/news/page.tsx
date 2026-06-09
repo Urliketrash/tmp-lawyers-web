@@ -6,8 +6,7 @@ import "aos/dist/aos.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { supabase } from "@/lib/supabase";
 import { MOCK_NEWS, NewsItem } from "@/data/newsData";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
@@ -28,23 +27,25 @@ export default function NewsPage() {
 
   const fetchNews = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, "news"));
-      if (!querySnapshot.empty) {
-        const firebaseNews: NewsItem[] = [];
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            firebaseNews.push({
-                id: doc.id,
-                title: data.title,
-                date: data.date,
-                category: data.category,
-                summary: data.summary,
-                content: data.content,
-                imageUrl: data.imageUrl,
-                author: data.author
-            } as NewsItem);
-        });
-        setNews(firebaseNews);
+      const { data, error } = await supabase
+        .from("news")
+        .select("*")
+        .order("date", { ascending: false });
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        const mappedNews: NewsItem[] = data.map((item) => ({
+          id: item.id,
+          title: item.title,
+          date: item.date,
+          category: item.category,
+          summary: item.summary,
+          content: item.content,
+          imageUrl: item.image_url || "",
+          author: item.author
+        }));
+        setNews(mappedNews);
       }
     } catch (error) {
       console.error("Error fetching news:", error);

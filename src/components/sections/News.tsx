@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { supabase } from "@/lib/supabase";
 import { NewsItem } from "@/data/newsData";
 
 export default function News() {
@@ -14,28 +13,26 @@ export default function News() {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        // Query getting the latest 3 documents
-        // Note: For simple creation time ordering, we can sort in memory for now or adding orderBy later
-        const querySnapshot = await getDocs(collection(db, "news"));
-        if (!querySnapshot.empty) {
-          const firebaseNews: NewsItem[] = [];
-          querySnapshot.forEach((doc) => {
-              const data = doc.data();
-              firebaseNews.push({
-                  id: doc.id,
-                  title: data.title,
-                  date: data.date,
-                  category: data.category,
-                  summary: data.summary,
-                  content: data.content,
-                  imageUrl: data.imageUrl,
-                  author: data.author
-              } as NewsItem);
-          });
-          // Sort by date descending and take top 3
-          // Assuming date is YYYY-MM-DD string
-          const sorted = firebaseNews.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-          setNews(sorted.slice(0, 3));
+        const { data, error } = await supabase
+          .from("news")
+          .select("*")
+          .order("date", { ascending: false })
+          .limit(3);
+
+        if (error) throw error;
+
+        if (data) {
+          const mappedNews: NewsItem[] = data.map((item) => ({
+            id: item.id,
+            title: item.title,
+            date: item.date,
+            category: item.category,
+            summary: item.summary,
+            content: item.content,
+            imageUrl: item.image_url || "",
+            author: item.author
+          }));
+          setNews(mappedNews);
         }
       } catch (error) {
         console.error("Error fetching news:", error);

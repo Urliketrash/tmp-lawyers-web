@@ -3,31 +3,38 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 import AdminNewsList from "@/components/admin/AdminNewsList";
 import { lawyersData } from "@/data/lawyersData";
 
 export default function DashboardPage() {
   const [totalArticles, setTotalArticles] = useState(0);
   const [lastUpdated, setLastUpdated] = useState<string>("-");
-
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchStats = async () => {
        try {
          // Get Total Articles & Latest Update
-         const q = query(collection(db, "news"), orderBy("date", "desc"), limit(1));
-         const snapshot = await getDocs(collection(db, "news"));
-         const latestSnapshot = await getDocs(q);
+         const { count, error: countErr } = await supabase
+           .from("news")
+           .select("*", { count: "exact", head: true });
          
-         setTotalArticles(snapshot.size);
+         if (countErr) throw countErr;
+         setTotalArticles(count ?? 0);
 
-         if (!latestSnapshot.empty) {
-            const latestDoc = latestSnapshot.docs[0].data();
-            // Format date if possible, assuming date is a string or timestamp
-            setLastUpdated(latestDoc.date || "Unknown");
+         const { data: latestData, error: latestErr } = await supabase
+           .from("news")
+           .select("date")
+           .order("date", { ascending: false })
+           .limit(1);
+
+         if (latestErr) throw latestErr;
+
+         if (latestData && latestData.length > 0) {
+            setLastUpdated(latestData[0].date || "Unknown");
          }
 
        } catch (error) {
@@ -36,6 +43,17 @@ export default function DashboardPage() {
     };
     fetchStats();
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      router.push("/admin/login");
+    } catch (err) {
+      console.error("Error signing out:", err);
+      router.push("/admin/login");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black text-white flex relative">
@@ -80,12 +98,12 @@ export default function DashboardPage() {
             </Link>
          </nav>
 
-         <Link 
-            href="/" 
-            className="text-gray-400 hover:text-white hover:bg-red-900/50 hover:border-red-500 border border-white/10 px-4 py-3 rounded text-xs uppercase tracking-widest mt-auto md:mt-0 font-bold flex items-center justify-center transition-all duration-300"
+         <button 
+            onClick={handleLogout} 
+            className="text-gray-400 hover:text-white hover:bg-red-900/50 hover:border-red-500 border border-white/10 px-4 py-3 rounded text-xs uppercase tracking-widest mt-auto md:mt-0 font-bold flex items-center justify-center transition-all duration-300 w-full cursor-pointer text-left"
          >
             <i className="fas fa-sign-out-alt mr-2"></i> Logout
-         </Link>
+         </button>
       </aside>
 
       {/* Main Content */}

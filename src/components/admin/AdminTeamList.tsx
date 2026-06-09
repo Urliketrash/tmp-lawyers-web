@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 
 // Define strict type based on recent analysis
@@ -33,12 +32,30 @@ export default function AdminTeamList() {
   const fetchLawyers = async () => {
     setLoading(true);
     try {
-      const querySnapshot = await getDocs(collection(db, "lawyers"));
-      const firebaseLawyers: Lawyer[] = [];
-      querySnapshot.forEach((doc) => {
-          firebaseLawyers.push({ id: doc.id, ...doc.data() } as Lawyer);
-      });
-      setLawyers(firebaseLawyers);
+      const { data, error } = await supabase
+        .from("lawyers")
+        .select("*")
+        .order("display_order", { ascending: true });
+
+      if (error) throw error;
+
+      if (data) {
+        const mappedLawyers: Lawyer[] = data.map((item) => ({
+          id: item.id,
+          name: item.name,
+          role: item.role,
+          image: item.image || "",
+          shortDesc: item.short_desc || "",
+          italicDesc: item.italic_desc || "",
+          biography: item.biography || undefined,
+          email: item.email || undefined,
+          instagram: item.instagram || undefined,
+          education: item.education || undefined,
+          experience: item.experience || undefined,
+          skills: item.skills || undefined,
+        }));
+        setLawyers(mappedLawyers);
+      }
     } catch (error) {
       console.error("Error fetching lawyers:", error);
     } finally {
@@ -50,7 +67,13 @@ export default function AdminTeamList() {
     if (!confirm("Are you sure you want to delete this profile?")) return;
 
     try {
-      await deleteDoc(doc(db, "lawyers", id));
+      const { error } = await supabase
+        .from("lawyers")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+
       setLawyers(lawyers.filter(item => item.id !== id));
       alert("Profile deleted successfully!");
     } catch (error) {

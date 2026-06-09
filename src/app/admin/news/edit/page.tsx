@@ -2,8 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db, auth } from "@/lib/firebase";
+import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import ActionLoader from "@/components/admin/ActionLoader";
@@ -43,21 +42,25 @@ function EditNewsContent() {
 
     const fetchData = async () => {
         try {
-            const docRef = doc(db, "news", id);
-            const docSnap = await getDoc(docRef);
+            const { data, error } = await supabase
+              .from("news")
+              .select("*")
+              .eq("id", id)
+              .single();
 
-            if (docSnap.exists()) {
-                const data = docSnap.data();
+            if (error) throw error;
+
+            if (data) {
                 setFormData({
                     title: data.title,
                     category: data.category,
                     summary: data.summary,
                     content: data.content,
-                    imageUrl: data.imageUrl,
+                    imageUrl: data.image_url || "",
                     author: data.author,
                     date: data.date
                 });
-                setPreviewUrl(data.imageUrl);
+                setPreviewUrl(data.image_url);
             } else {
                 alert("Article not found!");
                 router.push("/admin/dashboard");
@@ -106,7 +109,7 @@ function EditNewsContent() {
     setActionLoader({ isLoading: true, status: 'loading', message: 'Updating Article...' });
 
     // Debug: Check Auth
-    const user = auth.currentUser;
+    const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
         setActionLoader({ isLoading: true, status: 'error', message: 'CRITICAL ERROR: You are not logged in!' });
         setTimeout(() => setActionLoader(prev => ({ ...prev, isLoading: false })), 3000);
@@ -123,45 +126,61 @@ function EditNewsContent() {
     }
 
     try {
-        console.log("Attempting to update article in Firestore...");
+        console.log("Attempting to update article in Supabase...");
         
         let finalImageUrl = formData.imageUrl;
 
         // 1. Upload NEW Image only if selected
         if (file) {
             setActionLoader({ isLoading: true, status: 'loading', message: 'Uploading Image...' });
-            const formDataUpload = new FormData();
-            formDataUpload.append("file", file);
-            formDataUpload.append("upload_preset", "tmp_upload");
+            
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+            const filePath = `news/${fileName}`;
 
-            const response = await fetch("https://api.cloudinary.com/v1_1/dy2stohsk/image/upload", {
-                method: "POST",
-                body: formDataUpload
-            });
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('news-images')
+                .upload(filePath, file);
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Cloudinary Error: ${errorData.error?.message || "Upload failed"}`);
+            if (uploadError) {
+                throw new Error(`Supabase Storage Error: ${uploadError.message}`);
             }
 
-            const data = await response.json();
-            finalImageUrl = data.secure_url;
+            const { data: { publicUrl } } = supabase.storage
+                .from('news-images')
+                .getPublicUrl(filePath);
+
+            finalImageUrl = publicUrl;
             setUploadProgress(100);
         }
 
-        // 2. Update Firestore
+        // 2. Update Supabase
         setActionLoader({ isLoading: true, status: 'loading', message: 'Saving Changes...' });
-        const docRef = doc(db, "news", id);
+        const updateData = {
+          title: formData.title,
+          category: formData.category,
+          date: formData.date,
+          summary: formData.summary,
+          content: formData.content,
+          image_url: finalImageUrl,
+          author: formData.author,
+          updated_at: new Date().toISOString()
+        };
         
         // Timeout Promise to prevent infinite hanging
         const timeout = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error("Request Timed Out! Firebase is not responding.")), 15000)
+            setTimeout(() => reject(new Error("Request Timed Out! Database is not responding.")), 15000)
         );
 
-        await Promise.race([
-            updateDoc(docRef, { ...formData, imageUrl: finalImageUrl }),
+        const updatePromise = supabase.from("news").update(updateData).eq("id", id);
+        const result: any = await Promise.race([
+            updatePromise,
             timeout
         ]);
+
+        if (result.error) {
+            throw result.error;
+        }
 
         console.log("Update success!");
         setActionLoader({ isLoading: true, status: 'success', message: 'Article Updated Successfully!' });

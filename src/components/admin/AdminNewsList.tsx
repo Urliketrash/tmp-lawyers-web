@@ -3,11 +3,10 @@
 import Link from "next/link";
 
 import { useEffect, useState } from "react";
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { supabase } from "@/lib/supabase";
 import { NewsItem } from "@/data/newsData";
 
-// Fallback Mock Data if Firebase is not configured or empty
+// Fallback Mock Data if database is empty
 import { MOCK_NEWS } from "@/data/newsData";
 
 import ConfirmDialog from "./ConfirmDialog";
@@ -33,32 +32,31 @@ export default function AdminNewsList() {
   const fetchNews = async () => {
     setLoading(true);
     try {
-      // Try to fetch from Firebase
-      const querySnapshot = await getDocs(collection(db, "news"));
-      if (!querySnapshot.empty) {
-        const firebaseNews: NewsItem[] = [];
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            firebaseNews.push({
-                id: doc.id,
-                title: data.title,
-                date: data.date,
-                category: data.category,
-                summary: data.summary,
-                content: data.content,
-                imageUrl: data.imageUrl,
-                author: data.author
-            } as NewsItem);
-        });
-        setNews(firebaseNews);
+      const { data, error } = await supabase
+        .from("news")
+        .select("*")
+        .order("date", { ascending: false });
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        const mappedNews: NewsItem[] = data.map((item) => ({
+          id: item.id,
+          title: item.title,
+          date: item.date,
+          category: item.category,
+          summary: item.summary,
+          content: item.content,
+          imageUrl: item.image_url || "",
+          author: item.author
+        }));
+        setNews(mappedNews);
       } else {
-        // If empty or error, use Mock Data temporarily for demo
-        console.log("No data found, using Mock Data");
+        console.log("No news articles in database, showing mock data");
         setNews(MOCK_NEWS);
       }
     } catch (error) {
       console.error("Error fetching news:", error);
-      // Fallback to mock data on error (e.g. missing permission/keys)
       setNews(MOCK_NEWS);
     } finally {
       setLoading(false);
@@ -77,7 +75,12 @@ export default function AdminNewsList() {
     setActionLoader({ isLoading: true, status: 'loading', message: 'Deleting Article...' });
 
     try {
-      await deleteDoc(doc(db, "news", deleteId));
+      const { error } = await supabase
+        .from("news")
+        .delete()
+        .eq("id", deleteId);
+
+      if (error) throw error;
       
       // Update state to remove deleted item
       setNews(news.filter(item => item.id !== deleteId));

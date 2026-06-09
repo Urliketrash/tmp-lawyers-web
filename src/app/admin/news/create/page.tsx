@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { collection, addDoc } from "firebase/firestore";
-import { db, auth } from "@/lib/firebase";
+import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import ActionLoader from "@/components/admin/ActionLoader";
@@ -62,7 +61,7 @@ export default function CreateNewsPage() {
     setActionLoader({ isLoading: true, status: 'loading', message: 'Publishing Article...' });
 
     // Debug: Check Auth
-    const user = auth.currentUser;
+    const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
         setActionLoader({ isLoading: true, status: 'error', message: 'CRITICAL ERROR: You are not logged in! Please re-login.' });
         setTimeout(() => setActionLoader(prev => ({ ...prev, isLoading: false })), 3000);
@@ -79,47 +78,61 @@ export default function CreateNewsPage() {
     }
 
     try {
-        console.log("Attempting to upload file and write to Firestore...");
+        console.log("Attempting to upload file and write to Supabase...");
         
         let finalImageUrl = formData.imageUrl;
 
-        // 1. Upload Image to Cloudinary if exists
+        // 1. Upload Image to Supabase Storage if exists
         if (file) {
             setActionLoader({ isLoading: true, status: 'loading', message: 'Uploading Image...' });
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("upload_preset", "tmp_upload"); // Unsigned preset we just created
+            
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+            const filePath = `news/${fileName}`;
 
-            // Cloud Name: dy2stohsk
-            const response = await fetch("https://api.cloudinary.com/v1_1/dy2stohsk/image/upload", {
-                method: "POST",
-                body: formData
-            });
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('news-images')
+                .upload(filePath, file);
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Cloudinary Error: ${errorData.error?.message || "Upload failed"}`);
+            if (uploadError) {
+                throw new Error(`Supabase Storage Error: ${uploadError.message}`);
             }
 
-            const data = await response.json();
-            finalImageUrl = data.secure_url; // Get the URL from Cloudinary
-            setUploadProgress(100); // Mark as complete
+            const { data: { publicUrl } } = supabase.storage
+                .from('news-images')
+                .getPublicUrl(filePath);
+
+            finalImageUrl = publicUrl;
+            setUploadProgress(100);
         }
 
-        // 2. Add to Firestore
+        // 2. Add to Supabase DB
         setActionLoader({ isLoading: true, status: 'loading', message: 'Saving to Database...' });
-        const docData = { ...formData, imageUrl: finalImageUrl };
+        const docData = {
+          title: formData.title,
+          category: formData.category,
+          date: formData.date,
+          summary: formData.summary,
+          content: formData.content,
+          image_url: finalImageUrl,
+          author: formData.author
+        };
 
         // Timeout Promise
         const timeout = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error("Request Timed Out! Firestore/Storage is not responding.")), 15000)
+            setTimeout(() => reject(new Error("Request Timed Out! Database is not responding.")), 15000)
         );
 
-        // Race addDoc vs Timeout
-        await Promise.race([
-            addDoc(collection(db, "news"), docData),
+        // Race insert vs Timeout
+        const insertPromise = supabase.from('news').insert(docData);
+        const result: any = await Promise.race([
+            insertPromise,
             timeout
         ]);
+
+        if (result.error) {
+            throw result.error;
+        }
 
         console.log("Write success!");
         setActionLoader({ isLoading: true, status: 'success', message: 'Article Published Successfully!' });

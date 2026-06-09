@@ -1,19 +1,19 @@
 import { MOCK_NEWS, NewsItem } from "@/data/newsData";
 import NewsDetailContent from "@/components/NewsDetailContent";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, doc, getDoc } from "firebase/firestore";
+import { createClient } from "@/lib/supabase-server";
 
 // Generate params for static export
 export async function generateStaticParams() {
   try {
-    const querySnapshot = await getDocs(collection(db, "news"));
-    if (!querySnapshot.empty) {
-        return querySnapshot.docs.map((doc) => ({
-            id: doc.id,
+    const supabase = await createClient();
+    const { data } = await supabase.from("news").select("id");
+    if (data && data.length > 0) {
+        return data.map((item) => ({
+            id: item.id,
         }));
     }
   } catch (e) {
-    console.error("Firebase build fetch failed, using mock", e);
+    console.error("Supabase build fetch failed, using mock", e);
   }
   
   // Fallback to mock
@@ -34,24 +34,29 @@ export default async function NewsDetailPage({
   // 1. Try finding in MOCK first (fastest for demo)
   news = MOCK_NEWS.find((item) => item.id === id);
 
-  // 2. If not in mock, try fetching from Firebase
+  // 2. If not in mock, try fetching from Supabase
   if (!news) {
     try {
-        const docRef = doc(db, "news", id);
-        const docSnap = await getDoc(docRef);
+        const supabase = await createClient();
+        const { data, error } = await supabase
+          .from("news")
+          .select("*")
+          .eq("id", id)
+          .single();
         
-        if (docSnap.exists()) {
-            const data = docSnap.data();
+        if (error) throw error;
+        
+        if (data) {
             news = {
-                id: docSnap.id,
+                id: data.id,
                 title: data.title,
                 date: data.date,
                 category: data.category,
                 summary: data.summary,
                 content: data.content,
-                imageUrl: data.imageUrl,
+                imageUrl: data.image_url || "",
                 author: data.author
-            } as NewsItem;
+            };
         }
     } catch (error) {
         console.error("Error fetching unique news:", error);
