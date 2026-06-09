@@ -1,0 +1,15 @@
+node_modules
+.next
+.git
+.gitignore
+.vercel
+out
+build
+README.md
+Dockerfile
+docker-compose.yml
+.dockerignore
+laporan_pkl_tmplawyers.md
+laporan_pkl_final
+Laporan PKL Rabiansyah Putra copy.docx
+*.log
