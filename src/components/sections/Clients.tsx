@@ -1,3 +1,5 @@
+import ScrollReveal from "@/components/ScrollReveal";
+
 export default function Clients() {
   const topClients = [
     "PT. Asuransi Allianz Utama Indonesia",
@@ -31,25 +33,25 @@ export default function Clients() {
     >
       <div className="container mx-auto max-w-6xl">
         {/* Top Clients - 4x2 Grid */}
-        <div className="text-center mb-12" data-aos="fade-up">
+        <ScrollReveal variant="fade-up" className="text-center mb-12">
           <h2 className="text-tmp-gold text-xs font-bold uppercase tracking-[0.5em] mb-4">
             Our Clients
           </h2>
           <h3 className="text-4xl font-serif italic text-white">Our Top Clients</h3>
-        </div>
+        </ScrollReveal>
         
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-24">
           {topClients.map((client, index) => (
-            <div
+            <ScrollReveal
               key={index}
+              variant="fade-up"
+              delay={index * 0.05}
               className="border border-white/10 bg-tmp-dark p-6 md:p-8 flex items-center justify-center text-center rounded hover:border-tmp-gold/50 transition-colors duration-300 group min-h-[120px]"
-              data-aos="fade-up"
-              data-aos-delay={index * 50}
             >
               <span className="text-gray-300 text-[10px] md:text-xs font-bold uppercase tracking-widest group-hover:text-white leading-relaxed">
                 {client}
               </span>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
 
@@ -61,16 +63,16 @@ export default function Clients() {
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
              {otherClients.map((client, index) => (
-                <div
+                <ScrollReveal
                   key={index}
+                  variant="fade-up"
+                  delay={index * 0.05}
                   className="border border-white/10 bg-tmp-dark p-6 md:p-8 flex items-center justify-center text-center rounded hover:border-tmp-gold/50 transition-colors duration-300 group min-h-[120px]"
-                  data-aos="fade-up"
-                  data-aos-delay={index * 50}
                 >
                   <span className="text-gray-300 text-[10px] md:text-xs font-bold uppercase tracking-widest group-hover:text-white leading-relaxed">
                     {client}
                   </span>
-                </div>
+                </ScrollReveal>
              ))}
           </div>
         </div>

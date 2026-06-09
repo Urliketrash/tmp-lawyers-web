@@ -3,6 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 
+import ScrollReveal from "@/components/ScrollReveal";
+
 export default function Hero() {
   return (
     <header
@@ -22,7 +24,7 @@ export default function Hero() {
         />
       </div>
 
-      <div className="max-w-5xl text-center relative z-20" data-aos="fade-up">
+      <ScrollReveal variant="fade-up" className="max-w-5xl text-center relative z-20">
         <div className="inline-block border-y border-tmp-gold py-2 px-6 mb-8">
           <p className="text-tmp-gold tracking-[0.5em] text-[10px] uppercase font-bold italic">
             Trust • Strategy • Professional
@@ -43,7 +45,7 @@ export default function Hero() {
         >
           Konsultasi Sekarang
         </Link>
-      </div>
+      </ScrollReveal>
     </header>
   );
 }

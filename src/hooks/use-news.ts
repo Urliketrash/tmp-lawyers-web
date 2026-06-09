@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { NewsItem } from '@/data/newsData';
-import { Lawyer } from '@/components/admin/AdminTeamList';
+import { Lawyer } from '@/data/lawyersData';
 
 /**
  * React Query hook to fetch all published news articles from Supabase.

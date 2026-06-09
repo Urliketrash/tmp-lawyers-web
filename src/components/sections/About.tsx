@@ -1,9 +1,11 @@
+import ScrollReveal from "@/components/ScrollReveal";
+
 export default function About() {
   return (
     <section id="about" className="py-32 px-6 bg-tmp-black">
       <div className="container mx-auto max-w-6xl">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
-          <div data-aos="fade-right">
+          <ScrollReveal variant="fade-right">
             <h2 className="text-tmp-gold text-xs font-bold uppercase tracking-[0.5em] mb-6">
               Our Firm
             </h2>
@@ -22,10 +24,10 @@ export default function About() {
                 Kami juga mampu memberikan Pelayanan Jasa Hukum pada setiap kegiatan bisnis klien dalam upaya preventif dengan melakukan identifikasi atas setiap regulasi, analisa pengelolaan risiko, dan memberikan pertimbangan hukum sehingga klien mampu mengambil keputusan yang tepat dalam pelaksanaan kegiatan bisnis.
               </p>
             </div>
-          </div>
-          <div
+          </ScrollReveal>
+          <ScrollReveal
+            variant="fade-left"
             className="bg-tmp-dark p-10 border-l-2 border-tmp-gold"
-            data-aos="fade-left"
           >
             <h4 className="text-tmp-gold font-bold text-xs uppercase mb-4 tracking-widest">
               Motto
@@ -37,7 +39,7 @@ export default function About() {
               Menjadi firma hukum yang mampu menjawab kebutuhan klien atas
               segala permasalahan hukum yang dihadapi.
             </p>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

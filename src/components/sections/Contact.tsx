@@ -1,8 +1,8 @@
 import { useState } from "react";
-import emailjs from "@emailjs/browser";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { contactSchema, ContactInput } from "@/lib/validations/news";
+import ScrollReveal from "@/components/ScrollReveal";
 
 export default function Contact() {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
@@ -25,33 +25,28 @@ export default function Contact() {
     setStatus("sending");
 
     try {
-      // EmailJS Configuration
-      const serviceID = "service_hostinger";
-      const templateID = "template_mihzk1e";
-      const publicKey = "qrrcpPi0u2kRsEHHJ";
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      });
 
-      // Send email
-      await emailjs.send(
-        serviceID, 
-        templateID, 
-        {
-          from_name: data.name,
-          from_email: data.email,
-          message: data.message,
-          reply_to: data.email,
-          to_email: "tmp@tmplawyers.com", // Target Email
-        }, 
-        publicKey
-      );
+      const resData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(resData.error || "Gagal mengirim email.");
+      }
       
       // Success state
       setStatus("success");
       reset();
       
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error sending email:", error);
       setStatus("error");
-      alert("Maaf, pesan gagal terkirim. Silakan coba lagi atau hubungi WhatsApp kami.");
+      alert(error.message || "Maaf, pesan gagal terkirim. Silakan coba lagi atau hubungi WhatsApp kami.");
     }
   };
   return (
@@ -61,7 +56,7 @@ export default function Contact() {
     >
       <div className="container mx-auto max-w-6xl">
         <div className="flex flex-col lg:flex-row gap-20">
-          <div className="lg:w-1/2" data-aos="fade-right">
+          <ScrollReveal variant="fade-right" className="lg:w-1/2">
             <h2 className="text-4xl font-serif italic mb-10 text-white">
               Our Contact
             </h2>
@@ -107,7 +102,7 @@ export default function Contact() {
                 </a>
               </div>
             </div>
-            <div className="mt-10" data-aos="fade-up">
+            <ScrollReveal variant="fade-up" className="mt-10">
               <div>
                 <a
                   href="https://maps.google.com/?q=The+Habibie+Center,+Jl.+Kemang+Selatan+No.98,+Jakarta+Selatan"
@@ -132,9 +127,9 @@ export default function Contact() {
                   Dapatkan Rute
                 </a>
               </div>
-            </div>
-          </div>
-          <div className="lg:w-1/2" data-aos="fade-left">
+            </ScrollReveal>
+          </ScrollReveal>
+          <ScrollReveal variant="fade-left" className="lg:w-1/2">
             {status === "success" ? (
               <div className="bg-white/5 border border-white/10 p-8 rounded-lg text-center animate-fade-in">
                 <div className="w-16 h-16 bg-tmp-gold/20 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -204,7 +199,7 @@ export default function Contact() {
                 </button>
               </form>
             )}
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

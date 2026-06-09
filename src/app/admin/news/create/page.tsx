@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
-import RichTextEditor from "@/components/admin/RichTextEditor";
+import TiptapEditor from "@/components/admin/TiptapEditor";
 import ActionLoader from "@/components/admin/ActionLoader";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -236,7 +236,7 @@ export default function CreateNewsPage() {
 
             {/* Content (HTML Supported) */}
             <div className="mb-6">
-                <RichTextEditor
+                <TiptapEditor
                     label="Content"
                     value={content}
                     onChange={(html) => setValue("content", html, { shouldValidate: true })}

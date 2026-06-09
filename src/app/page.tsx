@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import AOS from "aos";
-import "aos/dist/aos.css";
 
 
 import Footer from "@/components/Footer";
@@ -17,12 +15,6 @@ import Contact from "@/components/sections/Contact";
 
 export default function Home() {
   useEffect(() => {
-    AOS.init({
-      duration: 1000,
-      once: true,
-      easing: "ease-out",
-    });
-
     // Fix Next.js aggressive scroll-to-top on cross-route navigation
     if (window.location.hash) {
       const id = window.location.hash.replace('#', '');

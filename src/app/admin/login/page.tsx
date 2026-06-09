@@ -5,8 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import AOS from "aos";
-import "aos/dist/aos.css";
+import ScrollReveal from "@/components/ScrollReveal";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginInput } from "@/lib/validations/news";
@@ -29,13 +28,7 @@ export default function LoginPage() {
     }
   });
 
-  useEffect(() => {
-    AOS.init({
-      duration: 1000,
-      once: true,
-      easing: "ease-out",
-    });
-  }, []);
+
 
   const handleLogin = async (data: LoginInput) => {
     setError("");
@@ -66,22 +59,23 @@ export default function LoginPage() {
         <div className="absolute w-[900px] h-[900px] bg-tmp-gold/30 rounded-full mix-blend-screen filter blur-[120px] animate-blob animation-delay-4000 bottom-0 left-1/4"></div>
       </div>
 
-      <div className="w-full max-w-md bg-tmp-black/80 backdrop-blur-2xl border border-white/10 p-8 rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.5)] z-10" data-aos="zoom-in">
-        <div className="text-center mb-8" data-aos="fade-down" data-aos-delay="200">
+      <ScrollReveal variant="zoom-in" className="w-full max-w-md bg-tmp-black/80 backdrop-blur-2xl border border-white/10 p-8 rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.5)] z-10">
+        <ScrollReveal variant="fade-down" delay={0.2} className="text-center mb-8">
             <div className="relative w-20 h-20 mx-auto mb-4">
                <Image src="/assets/logo.png" alt="TMP Logo" fill className="object-contain" />
             </div>
             <h1 className="text-2xl font-serif italic text-white mb-1">Admin Access</h1>
             <h2 className="text-xs text-tmp-gold font-bold uppercase tracking-[0.3em]">Restricted Area</h2>
-        </div>
+        </ScrollReveal>
         
         {error && (
-            <div className="bg-red-500/20 border border-red-500 text-red-100 p-3 rounded text-xs mb-6 text-center" data-aos="shake">
+            <div className="bg-red-500/20 border border-red-500 text-red-100 p-3 rounded text-xs mb-6 text-center">
                 {error}
             </div>
         )}
 
-        <form onSubmit={handleSubmit(handleLogin)} className="space-y-6" data-aos="fade-up" data-aos-delay="400">
+        <ScrollReveal variant="fade-up" delay={0.4}>
+          <form onSubmit={handleSubmit(handleLogin)} className="space-y-6">
             <div>
                 <label className="block text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-2">Email Address</label>
                 <input 
@@ -128,9 +122,10 @@ export default function LoginPage() {
           >
             {loading ? "Verifying..." : "Enter Dashboard"}
           </button>
-        </form>
+          </form>
+        </ScrollReveal>
         
-        <div className="mt-8 flex flex-col items-center space-y-4" data-aos="fade-up" data-aos-delay="600">
+        <ScrollReveal variant="fade-up" delay={0.6} className="mt-8 flex flex-col items-center space-y-4">
             <Link 
               href="/"
               className="text-tmp-gold text-xs font-bold uppercase tracking-widest hover:text-white transition-colors flex items-center gap-2"
@@ -140,8 +135,8 @@ export default function LoginPage() {
             <p className="text-gray-600 text-[10px] uppercase tracking-widest">
                 &copy; 2026 Tao Manullang & Partners. Security logged.
             </p>
-        </div>
-      </div>
+        </ScrollReveal>
+      </ScrollReveal>
     </div>
   );
 }

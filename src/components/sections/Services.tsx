@@ -1,3 +1,5 @@
+import ScrollReveal from "@/components/ScrollReveal";
+
 export default function Services() {
   const services = [
     {
@@ -68,7 +70,7 @@ export default function Services() {
       className="py-32 px-6 bg-tmp-black border-t border-white/5"
     >
       <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-20" data-aos="fade-up">
+        <ScrollReveal variant="fade-up" className="text-center mb-20">
           <h2 className="text-tmp-gold text-xs font-bold uppercase tracking-[0.5em] mb-4">
             Our Services
           </h2>
@@ -77,15 +79,15 @@ export default function Services() {
             TMP Law Firm hadir menawarkan bantuan jasa hukum yang komprehensif
             kepada klien kami dengan motto: Trust - Strategy - Professional.
           </p>
-        </div>
+        </ScrollReveal>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, index) => (
-            <div
+            <ScrollReveal
               key={index}
+              variant="fade-up"
+              delay={index * 0.05}
               className="bg-tmp-dark p-8 rounded-lg group hover:bg-[#1a1a1a] transition-all duration-300 border border-white/5 hover:border-tmp-gold/20 flex flex-col h-full"
-              data-aos="fade-up"
-              data-aos-delay={index * 50}
             >
               <h4 className="text-tmp-gold font-bold uppercase tracking-widest text-sm mb-4 min-h-[3rem] flex items-center justify-center text-center">
                 {service.title}
@@ -93,7 +95,7 @@ export default function Services() {
               <p className="text-gray-400 text-xs leading-loose text-justify">
                 {service.description}
               </p>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>
