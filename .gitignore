@@ -41,3 +41,22 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# Build artifacts
+/out/
+/deploy_verify/
+*.zip
+
+# Documents (non-code)
+*.docx
+*.pdf
+*.log
+
+# Legacy
+/_legacy_backup/
+
+# Python
+*.py
+__pycache__/
+.venv/
+
