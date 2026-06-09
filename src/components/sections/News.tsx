@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { NewsItem } from "@/data/newsData";
 import ScrollReveal from "@/components/ScrollReveal";
