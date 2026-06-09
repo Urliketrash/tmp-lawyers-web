@@ -11,6 +11,15 @@ import { MOCK_NEWS } from "@/data/newsData";
 
 import ConfirmDialog from "./ConfirmDialog";
 import ActionLoader from "./ActionLoader";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 export default function AdminNewsList() {
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -122,42 +131,42 @@ export default function AdminNewsList() {
         <div className="p-6 border-b border-white/10 flex justify-between items-center">
             <h3 className="text-white font-bold text-sm">Published Articles</h3>
         </div>
-        <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-gray-400">
-                <thead className="bg-black/50 text-tmp-gold text-[10px] uppercase tracking-widest font-bold">
-                    <tr>
-                        <th className="px-6 py-4">Title</th>
-                        <th className="px-6 py-4">Category</th>
-                        <th className="px-6 py-4">Date</th>
-                        <th className="px-6 py-4 text-right">Actions</th>
-                    </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5">
-                    {news.map((item) => (
-                        <tr key={item.id} className="hover:bg-white/5 transition-colors">
-                            <td className="px-6 py-4 text-white font-medium">{item.title}</td>
-                            <td className="px-6 py-4">
-                                <span className="bg-white/10 text-white px-2 py-1 rounded text-[10px] uppercase font-bold">
-                                    {item.category}
-                                </span>
-                            </td>
-                            <td className="px-6 py-4">
-                                {new Date(item.date).toLocaleDateString()}
-                            </td>
-                            <td className="px-6 py-4 text-right">
-                                <Link href={`/admin/news/edit?id=${item.id}`} className="text-tmp-gold hover:text-white mr-4 transition-colors">Edit</Link>
-                                <button 
-                                    onClick={() => handleDeleteClick(item.id)}
-                                    className="text-red-500 hover:text-red-400 transition-colors"
-                                >
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead>Title</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {news.map((item) => (
+                    <TableRow key={item.id}>
+                        <TableCell className="text-white font-medium">{item.title}</TableCell>
+                        <TableCell>
+                            <span className="bg-white/10 text-white px-2 py-1 rounded text-[10px] uppercase font-bold">
+                                {item.category}
+                            </span>
+                        </TableCell>
+                        <TableCell>
+                            {new Date(item.date).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell className="text-right">
+                            <Link href={`/admin/news/edit?id=${item.id}`} className="text-tmp-gold hover:text-white mr-4 transition-colors font-bold text-xs uppercase tracking-widest">Edit</Link>
+                            <Button 
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDeleteClick(item.id)}
+                                className="text-red-500 hover:text-red-400 hover:bg-red-500/10 font-bold"
+                            >
+                                Delete
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
     </div>
   );
 }

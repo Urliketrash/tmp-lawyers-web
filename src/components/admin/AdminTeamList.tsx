@@ -4,6 +4,15 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 // Define strict type based on recent analysis
 export type Lawyer = {
@@ -89,49 +98,51 @@ export default function AdminTeamList() {
         <div className="p-6 border-b border-white/10 flex justify-between items-center">
             <h3 className="text-white font-bold text-sm">Team Members</h3>
         </div>
-        <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-gray-400">
-                <thead className="bg-black/50 text-tmp-gold text-[10px] uppercase tracking-widest font-bold">
-                    <tr>
-                        <th className="px-6 py-4">Profile</th>
-                        <th className="px-6 py-4">Name</th>
-                        <th className="px-6 py-4">Role</th>
-                        <th className="px-6 py-4 text-right">Actions</th>
-                    </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5">
-                    {lawyers.map((item) => (
-                        <tr key={item.id} className="hover:bg-white/5 transition-colors">
-                            <td className="px-6 py-4">
-                                <div className="relative w-10 h-10 rounded-full overflow-hidden border border-white/10">
-                                    <Image src={item.image} alt={item.name} fill className="object-cover" />
-                                </div>
-                            </td>
-                            <td className="px-6 py-4 text-white font-medium">{item.name}</td>
-                            <td className="px-6 py-4">
-                                <span className="bg-white/10 text-white px-2 py-1 rounded text-[10px] uppercase font-bold">
-                                    {item.role}
-                                </span>
-                            </td>
-                            <td className="px-6 py-4 text-right">
-                                <Link href={`/admin/team/edit/${item.id}`} className="text-tmp-gold hover:text-white mr-4 transition-colors">Edit</Link>
-                                <button 
-                                    onClick={() => handleDelete(item.id)}
-                                    className="text-red-500 hover:text-red-400 transition-colors"
-                                >
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                    {lawyers.length === 0 && (
-                        <tr>
-                            <td colSpan={4} className="px-6 py-8 text-center text-gray-500">No team members found.</td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-        </div>
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead>Profile</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Role</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {lawyers.map((item) => (
+                    <TableRow key={item.id}>
+                        <TableCell>
+                            <div className="relative w-10 h-10 rounded-full overflow-hidden border border-white/10">
+                                <Image src={item.image} alt={item.name} fill className="object-cover" />
+                            </div>
+                        </TableCell>
+                        <TableCell className="text-white font-medium">{item.name}</TableCell>
+                        <TableCell>
+                            <span className="bg-white/10 text-white px-2 py-1 rounded text-[10px] uppercase font-bold">
+                                {item.role}
+                            </span>
+                        </TableCell>
+                        <TableCell className="text-right">
+                            <Link href={`/admin/team/edit/${item.id}`} className="text-tmp-gold hover:text-white mr-4 transition-colors font-bold text-xs uppercase tracking-widest">
+                                Edit
+                            </Link>
+                            <Button 
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDelete(item.id)}
+                                className="text-red-500 hover:text-red-400 hover:bg-red-500/10 font-bold"
+                            >
+                                Delete
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                ))}
+                {lawyers.length === 0 && (
+                    <TableRow>
+                        <TableCell colSpan={4} className="text-center text-gray-500 py-8">No team members found.</TableCell>
+                    </TableRow>
+                )}
+            </TableBody>
+        </Table>
     </div>
   );
 }
