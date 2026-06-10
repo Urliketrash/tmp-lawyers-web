@@ -13,26 +13,24 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import ConfirmDialog from "./ConfirmDialog";
+import ActionLoader from "./ActionLoader";
 
-// Define strict type based on recent analysis
-export type Lawyer = {
-  id: string;
-  name: string;
-  role: string;
-  image: string;
-  shortDesc: string;
-  italicDesc: string;
-  biography?: string;
-  email?: string;
-  instagram?: string;
-  education?: string[];
-  experience?: string[];
-  skills?: string[];
-};
+// Fallback static data
+import { lawyersData, type Lawyer } from "@/data/lawyersData";
 
 export default function AdminTeamList() {
   const [lawyers, setLawyers] = useState<Lawyer[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Delete State
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [actionLoader, setActionLoader] = useState({
+    isLoading: false,
+    status: 'loading' as 'loading' | 'success' | 'error',
+    message: ''
+  });
 
   useEffect(() => {
     fetchLawyers();
@@ -48,7 +46,7 @@ export default function AdminTeamList() {
 
       if (error) throw error;
 
-      if (data) {
+      if (data && data.length > 0) {
         const mappedLawyers: Lawyer[] = data.map((item) => ({
           id: item.id,
           name: item.name,
@@ -64,30 +62,46 @@ export default function AdminTeamList() {
           skills: item.skills || undefined,
         }));
         setLawyers(mappedLawyers);
+      } else {
+        console.log("No lawyers in database, showing static data");
+        setLawyers(lawyersData);
       }
     } catch (error) {
       console.error("Error fetching lawyers:", error);
+      setLawyers(lawyersData);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this profile?")) return;
+  const handleDeleteClick = (id: string) => {
+    setDeleteId(id);
+    setIsConfirmOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteId) return;
+
+    setIsConfirmOpen(false);
+    setActionLoader({ isLoading: true, status: 'loading', message: 'Deleting Profile...' });
 
     try {
       const { error } = await supabase
         .from("lawyers")
         .delete()
-        .eq("id", id);
+        .eq("id", deleteId);
 
       if (error) throw error;
 
-      setLawyers(lawyers.filter(item => item.id !== id));
-      alert("Profile deleted successfully!");
+      setLawyers(lawyers.filter(item => item.id !== deleteId));
+      setActionLoader({ isLoading: true, status: 'success', message: 'Profile Deleted Successfully!' });
+      setTimeout(() => setActionLoader(prev => ({ ...prev, isLoading: false })), 1500);
     } catch (error) {
       console.error("Error deleting document: ", error);
-      alert("Failed to delete.");
+      setActionLoader({ isLoading: true, status: 'error', message: 'Failed to delete profile.' });
+      setTimeout(() => setActionLoader(prev => ({ ...prev, isLoading: false })), 3000);
+    } finally {
+      setDeleteId(null);
     }
   };
 
@@ -95,6 +109,22 @@ export default function AdminTeamList() {
 
   return (
     <div className="bg-tmp-black border border-white/10 rounded-lg overflow-hidden">
+        <ActionLoader 
+            isLoading={actionLoader.isLoading} 
+            status={actionLoader.status} 
+            message={actionLoader.message} 
+        />
+        
+        <ConfirmDialog
+            isOpen={isConfirmOpen}
+            title="Delete Profile?"
+            message="Are you sure you want to delete this team member? This action cannot be undone."
+            onConfirm={handleConfirmDelete}
+            onCancel={() => setIsConfirmOpen(false)}
+            confirmLabel="Delete"
+            isDestructive={true}
+        />
+
         <div className="p-6 border-b border-white/10 flex justify-between items-center">
             <h3 className="text-white font-bold text-sm">Team Members</h3>
         </div>
@@ -112,7 +142,7 @@ export default function AdminTeamList() {
                     <TableRow key={item.id}>
                         <TableCell>
                             <div className="relative w-10 h-10 rounded-full overflow-hidden border border-white/10">
-                                <Image src={item.image} alt={item.name} fill className="object-cover" />
+                                <Image src={item.image || "/assets/logo.png"} alt={item.name} fill className="object-cover" />
                             </div>
                         </TableCell>
                         <TableCell className="text-white font-medium">{item.name}</TableCell>
@@ -128,7 +158,7 @@ export default function AdminTeamList() {
                             <Button 
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => handleDelete(item.id)}
+                                onClick={() => handleDeleteClick(item.id)}
                                 className="text-red-500 hover:text-red-400 hover:bg-red-500/10 font-bold"
                             >
                                 Delete

@@ -55,25 +55,38 @@ export default function Clients() {
           ))}
         </div>
 
-        {/* Other Clients - Grid layout matching Top Clients */}
+        {/* Other Clients - Infinite Marquee Ticker */}
         <div className="border-t border-white/5 pt-16">
           <div className="text-center mb-12">
             <h3 className="text-3xl font-serif italic text-white mb-4">Our Clients & Legal Assistance for Projects</h3>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-             {otherClients.map((client, index) => (
-                <ScrollReveal
-                  key={index}
-                  variant="fade-up"
-                  delay={index * 0.05}
-                  className="border border-white/10 bg-tmp-dark p-6 md:p-8 flex items-center justify-center text-center rounded hover:border-tmp-gold/50 transition-colors duration-300 group min-h-[120px]"
+          <div className="relative w-full overflow-hidden py-6">
+            {/* Track Marquee Ticker */}
+            <div className="flex w-max animate-marquee-right py-2">
+              {/* First set */}
+              {otherClients.map((client, index) => (
+                <div
+                  key={`first-${index}`}
+                  className="mx-3 border border-white/10 bg-tmp-dark p-6 md:p-8 flex items-center justify-center text-center rounded hover:border-tmp-gold/50 transition-colors duration-300 group min-h-[120px] w-[260px] md:w-[300px] shrink-0"
                 >
                   <span className="text-gray-300 text-[10px] md:text-xs font-bold uppercase tracking-widest group-hover:text-white leading-relaxed">
                     {client}
                   </span>
-                </ScrollReveal>
-             ))}
+                </div>
+              ))}
+              {/* Second set (duplicate for seamless scrolling) */}
+              {otherClients.map((client, index) => (
+                <div
+                  key={`second-${index}`}
+                  className="mx-3 border border-white/10 bg-tmp-dark p-6 md:p-8 flex items-center justify-center text-center rounded hover:border-tmp-gold/50 transition-colors duration-300 group min-h-[120px] w-[260px] md:w-[300px] shrink-0"
+                >
+                  <span className="text-gray-300 text-[10px] md:text-xs font-bold uppercase tracking-widest group-hover:text-white leading-relaxed">
+                    {client}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

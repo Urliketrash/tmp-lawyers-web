@@ -4,12 +4,17 @@ export default function About() {
   return (
     <section id="about" className="py-32 px-6 bg-tmp-black">
       <div className="container mx-auto max-w-6xl">
+        <ScrollReveal variant="fade-up" className="text-center mb-16">
+          <h2 className="text-tmp-gold text-xs font-bold uppercase tracking-[0.5em] mb-4">
+            Our Firm
+          </h2>
+          <h3 className="text-2xl md:text-3xl font-serif font-bold italic text-white max-w-5xl mx-auto leading-relaxed">
+            Comprehensive Legal Services With Effective and Efficient.
+          </h3>
+        </ScrollReveal>
+
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           <ScrollReveal variant="fade-right">
-            <h2 className="text-tmp-gold text-xs font-bold uppercase tracking-[0.5em] mb-6">
-              Our Firm
-            </h2>
-            
             <div className="space-y-4 text-justify text-gray-400 text-sm leading-loose">
               <p>
                 TMP Law Firm merupakan firma hukum yang didirikan di Jakarta sejak 2021. TMP Law Firm hadir menawarkan bantuan jasa hukum yang komprehensif kepada klien kami. Jasa hukum yang disediakan mencakup berbagai area sesuai kebutuhan dan kepentingan klien, seperti area litigasi, non-litigasi, termasuk area bisnis komersil bagi individu/perusahaan.

@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
-import { NewsItem } from "@/data/newsData";
+import { NewsItem, MOCK_NEWS } from "@/data/newsData";
 import ScrollReveal from "@/components/ScrollReveal";
 
 export default function News() {
-  const [news, setNews] = useState<NewsItem[]>([]);
+  const [news, setNews] = useState<NewsItem[]>(MOCK_NEWS); // Default to static mock data
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function News() {
 
         if (error) throw error;
 
-        if (data) {
+        if (data && data.length > 0) {
           const mappedNews: NewsItem[] = data.map((item) => ({
             id: item.id,
             title: item.title,
@@ -35,7 +35,7 @@ export default function News() {
           setNews(mappedNews);
         }
       } catch (error) {
-        console.error("Error fetching news:", error);
+        console.error("Error fetching news, using fallback:", error);
       } finally {
         setLoading(false);
       }
@@ -45,8 +45,6 @@ export default function News() {
   }, []);
 
   if (loading) return null; // Or a loading skeleton
-
-  if (news.length === 0) return null; // Don't show section if no news
 
   return (
     <section id="news" className="py-32 px-6 bg-tmp-dark border-t border-white/5">

@@ -6,10 +6,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import AdminNewsList from "@/components/admin/AdminNewsList";
-import { lawyersData } from "@/data/lawyersData";
 
 export default function DashboardPage() {
   const [totalArticles, setTotalArticles] = useState(0);
+  const [totalMembers, setTotalMembers] = useState(0);
   const [lastUpdated, setLastUpdated] = useState<string>("-");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
@@ -36,6 +36,14 @@ export default function DashboardPage() {
          if (latestData && latestData.length > 0) {
             setLastUpdated(latestData[0].date || "Unknown");
          }
+
+         // Get Team Members count
+         const { count: teamCount, error: teamErr } = await supabase
+           .from("lawyers")
+           .select("*", { count: "exact", head: true });
+         
+         if (teamErr) throw teamErr;
+         setTotalMembers(teamCount ?? 0);
 
        } catch (error) {
          console.error("Error fetching stats:", error);
@@ -90,8 +98,8 @@ export default function DashboardPage() {
             <Link href="/admin/dashboard" className="block text-white bg-white/5 px-4 py-3 rounded text-sm font-bold border-l-2 border-tmp-gold">
                 <i className="fas fa-newspaper mr-3"></i> News & Articles
             </Link>
-            <Link href="#" className="block text-gray-500 hover:text-white px-4 py-3 rounded text-sm font-bold transition-colors opacity-50 cursor-not-allowed">
-                <i className="fas fa-users mr-3"></i> Team Profiles (Soon)
+            <Link href="/admin/team" className="block text-gray-400 hover:text-white hover:bg-white/5 px-4 py-3 rounded text-sm font-bold transition-colors">
+                <i className="fas fa-users mr-3"></i> Team Profiles
             </Link>
             <Link href="#" className="block text-gray-500 hover:text-white px-4 py-3 rounded text-sm font-bold transition-colors opacity-50 cursor-not-allowed">
                 <i className="fas fa-cog mr-3"></i> Settings (Soon)
@@ -147,7 +155,7 @@ export default function DashboardPage() {
                     <h3 className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">Team Members</h3>
                      <i className="fas fa-users text-blue-500 opacity-50"></i>
                 </div>
-                <p className="text-3xl text-white font-serif italic">{lawyersData.length}</p>
+                <p className="text-3xl text-white font-serif italic">{totalMembers}</p>
                  <div className="mt-4 h-1 w-full bg-white/5 rounded-full overflow-hidden">
                     <div className="h-full bg-blue-500 w-1/2 opacity-50"></div>
                 </div>

@@ -63,11 +63,13 @@ export async function POST(request: NextRequest) {
 
     const { name, email, message } = result.data;
 
+    const fromEmail = process.env.RESEND_FROM_EMAIL || 'inquiry@tmplawyers.com';
+    const toEmail = process.env.RESEND_TO_EMAIL || 'tmp@tmplawyers.com';
+
     // 3. Send email via Resend
-    // Replace with recipient email and verified sender domain
     const { data, error } = await resend.emails.send({
-      from: 'TMP Law Firm Inquiry <inquiry@tmplawyers.com>',
-      to: ['tmp@tmplawyers.com'],
+      from: `TMP Law Firm Inquiry <${fromEmail}>`,
+      to: [toEmail],
       replyTo: email,
       subject: `Konsultasi Hukum Baru dari ${name}`,
       html: `
