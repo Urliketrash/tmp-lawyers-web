@@ -80,21 +80,22 @@ export default function TeamManagementPage() {
             <p className="text-gray-500 text-xs tracking-widest">CONTENT MANAGER</p>
          </div>
          
-         {/* Menu Navigasi Sidebar */}
-         <nav className="space-y-2 flex-1">
+          <nav className="space-y-2 flex-1">
             {/* Navigasi ke Halaman Manajemen Berita */}
             <Link href="/admin/dashboard" className="block text-gray-400 hover:text-white hover:bg-white/5 px-4 py-3 rounded text-sm font-bold transition-colors">
-                <i className="fas fa-newspaper mr-3"></i> News & Articles
+              <i className="fas fa-newspaper mr-3"></i> News & Articles
             </Link>
             {/* Navigasi ke Halaman Manajemen Tim Pengacara (Aktif) */}
             <Link href="/admin/team" className="block text-white bg-white/5 px-4 py-3 rounded text-sm font-bold border-l-2 border-tmp-gold">
-                <i className="fas fa-users mr-3"></i> Team Profiles
+              <i className="fas fa-users mr-3"></i> Team Profiles
             </Link>
-            {/* Link Pengaturan (Belum Aktif) */}
-            <Link href="#" className="block text-gray-500 hover:text-white px-4 py-3 rounded text-sm font-bold transition-colors opacity-50 cursor-not-allowed">
-                <i className="fas fa-cog mr-3"></i> Settings (Soon)
+            <Link href="/admin/analytics" className="block text-gray-400 hover:text-white hover:bg-white/5 px-4 py-3 rounded text-sm font-bold transition-colors">
+              <i className="fas fa-chart-line mr-3"></i> Visitor Analytics
             </Link>
-         </nav>
+            <Link href="/admin/settings" className="block text-gray-400 hover:text-white hover:bg-white/5 px-4 py-3 rounded text-sm font-bold transition-colors">
+              <i className="fas fa-cog mr-3"></i> Settings
+            </Link>
+          </nav>
 
          {/* Tombol Logout di bagian paling bawah sidebar */}
          <button 

@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { contactSchema } from '@/lib/validations/news';
+import { createClient } from '@supabase/supabase-js';
+
+// Initialize Supabase client
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 // Initialize Resend
 const resend = new Resend(process.env.RESEND_API_KEY || 're_placeholder');
@@ -64,7 +71,20 @@ export async function POST(request: NextRequest) {
     const { name, email, message } = result.data;
 
     const fromEmail = process.env.RESEND_FROM_EMAIL || 'inquiry@tmplawyers.com';
-    const toEmail = process.env.RESEND_TO_EMAIL || 'tmp@tmplawyers.com';
+    let toEmail = process.env.RESEND_TO_EMAIL || 'tmp@tmplawyers.com';
+
+    try {
+      const { data: dbSettings } = await supabase
+        .from('site_settings')
+        .select('value')
+        .eq('key', 'email_to')
+        .single();
+      if (dbSettings?.value) {
+        toEmail = dbSettings.value;
+      }
+    } catch (dbErr) {
+      console.warn('Failed to fetch dynamic email_to from database site_settings:', dbErr);
+    }
 
     // 3. Send email via Resend
     const { data, error } = await resend.emails.send({

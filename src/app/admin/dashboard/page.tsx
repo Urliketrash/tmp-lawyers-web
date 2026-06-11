@@ -96,13 +96,16 @@ export default function DashboardPage() {
          
          <nav className="space-y-2 flex-1">
             <Link href="/admin/dashboard" className="block text-white bg-white/5 px-4 py-3 rounded text-sm font-bold border-l-2 border-tmp-gold">
-                <i className="fas fa-newspaper mr-3"></i> News & Articles
+              <i className="fas fa-newspaper mr-3"></i> News & Articles
             </Link>
             <Link href="/admin/team" className="block text-gray-400 hover:text-white hover:bg-white/5 px-4 py-3 rounded text-sm font-bold transition-colors">
-                <i className="fas fa-users mr-3"></i> Team Profiles
+              <i className="fas fa-users mr-3"></i> Team Profiles
             </Link>
-            <Link href="#" className="block text-gray-500 hover:text-white px-4 py-3 rounded text-sm font-bold transition-colors opacity-50 cursor-not-allowed">
-                <i className="fas fa-cog mr-3"></i> Settings (Soon)
+            <Link href="/admin/analytics" className="block text-gray-400 hover:text-white hover:bg-white/5 px-4 py-3 rounded text-sm font-bold transition-colors">
+              <i className="fas fa-chart-line mr-3"></i> Visitor Analytics
+            </Link>
+            <Link href="/admin/settings" className="block text-gray-400 hover:text-white hover:bg-white/5 px-4 py-3 rounded text-sm font-bold transition-colors">
+              <i className="fas fa-cog mr-3"></i> Settings
             </Link>
          </nav>
 

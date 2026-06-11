@@ -1,11 +1,39 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { contactSchema, ContactInput } from "@/lib/validations/news";
 import ScrollReveal from "@/components/ScrollReveal";
+import { supabase } from "@/lib/supabase";
 
 export default function Contact() {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [settings, setSettings] = useState<Record<string, string>>({
+    whatsapp: "0812-1005-4874",
+    email_to: "tmp@tmplawyers.com",
+    linkedin: "https://www.linkedin.com/company/law-firm-tao-manullang-partners/",
+    instagram: "@tmplawfirm",
+    address: "The Habibie Center, Lt 1, Jln. Kemang Selatan No. 98, Cilandak Timur, Jakarta Selatan, 12560.",
+    maps_embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.498!2d106.8128!3d-6.2606!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5d2e764b%3A0x1234567890abcdef!2sThe%20Habibie%20Center%2C%20Jl.%20Kemang%20Selatan%20No.98%2C%20Jakarta%20Selatan!5e0!3m2!1sen!2sid!4v1703123456789!5m2!1sen!2sid",
+  });
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const { data, error } = await supabase.from("site_settings").select("*");
+        if (error) throw error;
+        if (data) {
+          const settingsObj: Record<string, string> = {};
+          data.forEach((item) => {
+            settingsObj[item.key] = item.value;
+          });
+          setSettings((prev) => ({ ...prev, ...settingsObj }));
+        }
+      } catch (err) {
+        console.error("Error loading site settings:", err);
+      }
+    };
+    fetchSettings();
+  }, []);
 
   const {
     register,
@@ -67,18 +95,18 @@ export default function Contact() {
               <div className="flex items-start gap-6">
                 <i className="fas fa-map-marker-alt text-tmp-gold text-xl"></i>
                 <p className="text-sm text-gray-400">
-                  The Habibie Center, Lt 1, Jln. Kemang Selatan No. 98, Cilandak
-                  Timur, Jakarta Selatan, 12560.
+                  {settings.address}
                 </p>
               </div>
               <div className="flex items-center gap-6">
                 <i className="fab fa-whatsapp text-tmp-gold text-xl"></i>
                 <a
-                  href="https://wa.me/6281210054874"
+                  href={`https://wa.me/${settings.whatsapp.startsWith("0") ? "62" + settings.whatsapp.slice(1).replace(/[^0-9]/g, "") : settings.whatsapp.replace(/[^0-9]/g, "")}`}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="text-sm text-gray-300 font-bold tracking-widest hover:text-tmp-gold"
                 >
-                  0812-1005-4874
+                  {settings.whatsapp}
                 </a>
               </div>
               <div className="flex items-center gap-6">
@@ -94,23 +122,36 @@ export default function Contact() {
               <div className="flex items-center gap-6">
                 <i className="fab fa-instagram text-tmp-gold text-xl"></i>
                 <a
-                  href="https://www.instagram.com/tmplawfirm"
+                  href={`https://www.instagram.com/${settings.instagram.replace('@', '').trim()}`}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="text-sm text-gray-300 font-bold tracking-widest hover:text-tmp-gold"
                 >
-                  @tmplawfirm
+                  {settings.instagram}
+                </a>
+              </div>
+              <div className="flex items-center gap-6">
+                <i className="fab fa-linkedin text-tmp-gold text-xl"></i>
+                <a
+                  href={settings.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-gray-300 font-bold tracking-widest hover:text-tmp-gold"
+                >
+                  TMP Law Firm & Partners
                 </a>
               </div>
             </div>
             <ScrollReveal variant="fade-up" className="mt-10">
               <div>
                 <a
-                  href="https://maps.google.com/?q=The+Habibie+Center,+Jl.+Kemang+Selatan+No.98,+Jakarta+Selatan"
+                  href={`https://maps.google.com/?q=${encodeURIComponent(settings.address)}`}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="block cursor-pointer"
                 >
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.498!2d106.8128!3d-6.2606!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5d2e764b%3A0x1234567890abcdef!2sThe%20Habibie%20Center%2C%20Jl.%20Kemang%20Selatan%20No.98%2C%20Jakarta%20Selatan!5e0!3m2!1sen!2sid!4v1703123456789!5m2!1sen!2sid"
+                    src={settings.maps_embed}
                     width="100%"
                     height="300"
                     style={{ border: 0 }}
@@ -120,8 +161,9 @@ export default function Contact() {
                   ></iframe>
                 </a>
                 <a
-                  href="https://www.google.com/maps/dir/?api=1&destination=The+Habibie+Center,+Jl.+Kemang+Selatan+No.98,+Jakarta+Selatan"
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(settings.address)}`}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="mt-3 inline-block px-5 py-2 bg-tmp-gold text-black font-bold rounded shadow hover:bg-yellow-400 transition"
                 >
                   Dapatkan Rute

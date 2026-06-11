@@ -116,7 +116,7 @@ export default function Lawyers() {
                 animate={{ scale: 1, y: 0, opacity: 1 }}
                 exit={{ scale: 0.95, y: 20, opacity: 0 }}
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="relative w-full max-w-4xl bg-tmp-black border border-white/10 rounded-xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden"
+                className="relative w-full max-w-5xl bg-tmp-black border border-white/10 rounded-xl shadow-2xl flex flex-col md:flex-row max-h-[90vh] overflow-y-auto md:overflow-hidden"
               >
                 
                 {/* Close Button - Always visible */}
@@ -127,84 +127,131 @@ export default function Lawyers() {
                   &times;
                 </button>
 
-                {/* Scrollable Content */}
-                <div className="flex-1 overflow-y-auto p-0">
-                  <div className="flex flex-col items-center pt-16 pb-8 px-8 md:px-16 text-center border-b border-white/10 bg-gradient-to-b from-tmp-black to-tmp-dark/50">
-                       <div className="relative w-40 h-52 md:w-48 md:h-64 mb-8 shadow-2xl rounded-lg overflow-hidden border border-white/5">
-                          <Image 
-                              src={selectedLawyer.image || "/assets/logo.png"} 
-                              alt={selectedLawyer.name} 
-                              fill 
-                              className="object-cover"
-                          />
-                       </div>
-                       <h2 className="text-3xl md:text-5xl font-serif italic text-white mb-3">
-                          {selectedLawyer.name}
-                       </h2>
-                       <h3 className="text-white font-bold uppercase tracking-[0.2em] text-xs md:text-sm text-tmp-gold">
-                          {selectedLawyer.role}
-                       </h3>
+                {/* Left Column - Lawyer Photo Card */}
+                <div className="w-full md:w-[380px] shrink-0 p-6 md:p-8 flex items-center justify-center bg-tmp-black">
+                  <div className="bg-white rounded-xl shadow-lg p-6 w-full aspect-[3/4] flex items-center justify-center relative overflow-hidden">
+                    <div className="relative w-full h-full min-h-[260px] md:min-h-[340px]">
+                      <Image 
+                        src={selectedLawyer.image || "/assets/logo.png"} 
+                        alt={selectedLawyer.name} 
+                        fill 
+                        className="object-contain"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Column - Lawyer Details */}
+                <div className="flex-1 md:overflow-y-auto p-6 md:p-8 md:pl-0 flex flex-col">
+                  {/* Name and Role */}
+                  <div className="mb-6">
+                    <h2 className="text-2xl md:text-3xl font-serif italic text-white mb-2">
+                      {selectedLawyer.name}
+                    </h2>
+                    <h3 className="text-tmp-gold font-bold uppercase tracking-[0.2em] text-xs">
+                      {selectedLawyer.role}
+                    </h3>
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-12 p-8 md:p-12 text-left bg-tmp-black">
-                      {/* Left Column */}
-                      <div className="space-y-8">
-                          <div>
-                              <h4 className="text-tmp-gold font-bold uppercase tracking-widest text-xs mb-4 border-b border-white/10 pb-2">Biografi</h4>
-                              <p className="text-gray-400 text-sm leading-loose text-justify whitespace-pre-line">
-                                  {selectedLawyer.biography}
-                              </p>
-                          </div>
-                      </div>
-
-                      {/* Right Column */}
-                      <div className="space-y-8">
-                           <div>
-                               <h4 className="text-tmp-gold font-bold uppercase tracking-widest text-xs mb-4 border-b border-white/10 pb-2">Media Sosial</h4>
-                               <div className="space-y-4">
-                                  <div className="flex items-center gap-3 text-gray-400 text-sm">
-                                    <span className="text-tmp-gold font-bold text-xs uppercase tracking-wider w-24 shrink-0">Email</span>
-                                    {selectedLawyer.email && selectedLawyer.email !== "-" ? (
-                                        <a 
-                                            href={`mailto:${selectedLawyer.email}`}
-                                            className="break-all hover:text-tmp-gold transition-colors font-medium border-b border-white/10 hover:border-tmp-gold pb-0.5"
-                                        >
-                                            {selectedLawyer.email}
-                                        </a>
-                                    ) : (
-                                        <span>-</span>
-                                    )}
-                                  </div>
-                                  
-                                  <div className="flex items-center gap-3 text-gray-400 text-sm">
-                                    <span className="text-tmp-gold font-bold text-xs uppercase tracking-wider w-24 shrink-0">Instagram</span>
-                                    {selectedLawyer.instagram && selectedLawyer.instagram !== "-" ? (
-                                        <a 
-                                            href={`https://instagram.com/${selectedLawyer.instagram.replace('@', '')}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="hover:text-tmp-gold transition-colors font-medium border-b border-white/10 hover:border-tmp-gold pb-0.5"
-                                        >
-                                            {selectedLawyer.instagram}
-                                        </a>
-                                    ) : (
-                                        <span>-</span>
-                                    )}
-                                  </div>
-                               </div>
-                            </div>
-                           <div>
-                               <h4 className="text-tmp-gold font-bold uppercase tracking-widest text-xs mb-4 border-b border-white/10 pb-2">Keahlian</h4>
-                               <div className="flex flex-wrap gap-2">
-                                    {selectedLawyer.skills?.map((skill, idx) => (
-                                        <span key={idx} className="text-[10px] font-bold uppercase tracking-widest text-tmp-gold border border-tmp-gold/30 bg-tmp-gold/5 px-3 py-1.5 rounded-sm">
-                                           {skill}
-                                        </span>
-                                    ))}
-                               </div>
-                           </div>
-                      </div>
+                  {/* Biography */}
+                  <div className="mb-6 text-gray-300 text-sm leading-relaxed text-justify whitespace-pre-line">
+                    {selectedLawyer.biography}
                   </div>
+
+                  {/* Pendidikan */}
+                  {selectedLawyer.education && selectedLawyer.education.length > 0 && (
+                    <div className="py-6 border-t border-b border-white/10">
+                      <h4 className="text-tmp-gold font-bold uppercase tracking-widest text-xs mb-4">
+                        Pendidikan
+                      </h4>
+                      <ul className="space-y-2 text-gray-300 text-sm">
+                        {selectedLawyer.education.map((edu, idx) => (
+                          <li key={idx} className="flex items-start">
+                            <span className="text-tmp-gold mr-2 font-bold">-</span>
+                            <span>{edu}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Pengalaman */}
+                  {selectedLawyer.experience && selectedLawyer.experience.length > 0 && (
+                    <div className="py-6 border-b border-white/10">
+                      <h4 className="text-tmp-gold font-bold uppercase tracking-widest text-xs mb-4">
+                        Pengalaman
+                      </h4>
+                      <ul className="space-y-2 text-gray-300 text-sm">
+                        {selectedLawyer.experience.map((exp, idx) => (
+                          <li key={idx} className="flex items-start">
+                            <span className="text-tmp-gold mr-2 font-bold">-</span>
+                            <span>{exp}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Media Sosial */}
+                  <div className="py-6 border-b border-white/10">
+                    <h4 className="text-tmp-gold font-bold uppercase tracking-widest text-xs mb-4">
+                      Media Sosial
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center text-sm">
+                        <span className="text-tmp-gold font-bold text-xs uppercase tracking-wider w-28 shrink-0">
+                          Email
+                        </span>
+                        {selectedLawyer.email && selectedLawyer.email !== "-" ? (
+                          <a 
+                            href={`mailto:${selectedLawyer.email}`}
+                            className="text-gray-300 hover:text-tmp-gold transition-colors font-medium"
+                          >
+                            {selectedLawyer.email}
+                          </a>
+                        ) : (
+                          <span className="text-gray-500">-</span>
+                        )}
+                      </div>
+                      
+                      <div className="flex items-center text-sm">
+                        <span className="text-tmp-gold font-bold text-xs uppercase tracking-wider w-28 shrink-0">
+                          Instagram
+                        </span>
+                        {selectedLawyer.instagram && selectedLawyer.instagram !== "-" ? (
+                          <a 
+                            href={`https://instagram.com/${selectedLawyer.instagram.replace('@', '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-gray-300 hover:text-tmp-gold transition-colors font-medium"
+                          >
+                            {selectedLawyer.instagram}
+                          </a>
+                        ) : (
+                          <span className="text-gray-500">-</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Keahlian */}
+                  {selectedLawyer.skills && selectedLawyer.skills.length > 0 && (
+                    <div className="py-6">
+                      <h4 className="text-tmp-gold font-bold uppercase tracking-widest text-xs mb-4">
+                        Keahlian
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedLawyer.skills.map((skill, idx) => (
+                          <span 
+                            key={idx} 
+                            className="text-[10px] font-bold uppercase tracking-widest text-tmp-gold border border-tmp-gold/30 bg-tmp-gold/5 px-3 py-1.5 rounded-sm"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             </motion.div>

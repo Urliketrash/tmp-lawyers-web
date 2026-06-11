@@ -43,6 +43,7 @@ import LayoutWrapper from "@/components/LayoutWrapper";
 import Navbar from "@/components/Navbar";
 import QueryProvider from "@/providers/query-provider";
 import { OrganizationJsonLd } from "@/components/JsonLd";
+import VisitorTracker from "@/components/VisitorTracker";
 
 export default function RootLayout({
   children,
@@ -69,6 +70,7 @@ export default function RootLayout({
             sameAs={["https://www.instagram.com/tmplawfirm"]}
           />
           <QueryProvider>
+            <VisitorTracker />
             <Navbar />
             <LayoutWrapper>{children}</LayoutWrapper>
           </QueryProvider>
