@@ -4,6 +4,8 @@ import { createClient } from "@supabase/supabase-js";
 import { Metadata } from "next";
 import { ArticleJsonLd } from "@/components/JsonLd";
 
+export const revalidate = 0; // Disable static caching for this route
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
