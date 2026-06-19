@@ -37,8 +37,9 @@ function checkRateLimit(ip: string): boolean {
  */
 export async function POST(request: NextRequest) {
   try {
-    // 1. Extract IP Address
+    // 1. Extract IP Address (Check Cloudflare first)
     const ip =
+      request.headers.get("cf-connecting-ip") ||
       request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
       request.headers.get("x-real-ip") ||
       "127.0.0.1";
@@ -77,6 +78,72 @@ export async function POST(request: NextRequest) {
       browser = "Opera";
     }
 
+    // Parse Device Brand / Model name
+    let deviceBrand = "Desktop PC";
+    if (deviceType === "Mobile") {
+      deviceBrand = "Mobile Device";
+      if (/iphone/i.test(ua)) {
+        deviceBrand = "iPhone";
+      } else if (/ipad/i.test(ua)) {
+        deviceBrand = "iPad";
+      } else {
+        const modelMatch = ua.match(/android\s+[^;]+;\s+([^;)]+)/i);
+        if (modelMatch && modelMatch[1]) {
+          const model = modelMatch[1].trim();
+          if (/samsung|sm-/i.test(ua)) {
+            deviceBrand = `Samsung (${model})`;
+          } else if (/redmi|xiaomi|mi\s+/i.test(ua)) {
+            deviceBrand = `Xiaomi (${model})`;
+          } else if (/oppo/i.test(ua)) {
+            deviceBrand = `Oppo (${model})`;
+          } else if (/vivo/i.test(ua)) {
+            deviceBrand = `Vivo (${model})`;
+          } else {
+            deviceBrand = model;
+          }
+        }
+      }
+    } else if (deviceType === "Tablet") {
+      deviceBrand = "Tablet";
+      if (/ipad/i.test(ua)) {
+        deviceBrand = "iPad";
+      }
+    } else {
+      if (/macintosh|mac os x/i.test(ua)) {
+        deviceBrand = "Macbook / iMac";
+      } else if (/windows/i.test(ua)) {
+        deviceBrand = "Windows PC";
+      } else if (/linux/i.test(ua)) {
+        deviceBrand = "Linux PC";
+      }
+    }
+
+    // Geolocation lookup for Domicile
+    let location = "Localhost";
+    if (ip !== "127.0.0.1" && ip !== "::1" && !ip.startsWith("192.168.") && !ip.startsWith("10.")) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 1500);
+
+        const geoResponse = await fetch(`http://ip-api.com/json/${ip}?fields=status,city,regionName,countryCode`, {
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+
+        if (geoResponse.ok) {
+          const geoData = await geoResponse.json();
+          if (geoData.status === "success" && geoData.city) {
+            location = `${geoData.city}, ${geoData.regionName || geoData.countryCode}`;
+          } else {
+            location = "Unknown Location";
+          }
+        }
+      } catch (err) {
+        console.error("Geo lookup error:", err);
+        location = "Unknown Location";
+      }
+    }
+
     // 3. Extract request body params and sanitize input lengths
     const body = await request.json().catch(() => ({}));
     let path = body.path || "/";
@@ -94,6 +161,8 @@ export async function POST(request: NextRequest) {
       browser,
       path,
       referrer,
+      device_brand: deviceBrand,
+      location: location,
     });
 
     if (error) {

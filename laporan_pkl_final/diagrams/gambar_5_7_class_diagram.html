@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Gambar 5.7 - Class Diagram</title>
+<style>
+  body { margin: 0; padding: 40px; background: #fff; font-family: Calibri, 'Segoe UI', sans-serif; display: flex; justify-content: center; }
+  h2 { text-align: center; font-size: 14pt; font-weight: normal; color: #333; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+<div>
+<h2>Gambar 5.7 Class Diagram</h2>
+<div class="mermaid">
+classDiagram
+    direction LR
+    
+    class NewsItem {
+        -String id
+        -String title
+        -String date
+        -String category
+        -String summary
+        -String content
+        -String imageUrl
+        -String author
+        +create()
+        +update()
+        +delete()
+        +getById()
+        +getAll()
+    }
+    
+    class Lawyer {
+        -String id
+        -String name
+        -String role
+        -String image
+        -String shortDesc
+        -String biography
+        -String email
+        -Array skills
+        +getAll()
+        +getById()
+    }
+    
+    class User {
+        -String uid
+        -String email
+        -String password
+        +login()
+        +logout()
+        +verifyAuth()
+    }
+    
+    class ContactMessage {
+        -String name
+        -String email
+        -String message
+        -Date timestamp
+        +send()
+        +validate()
+    }
+    
+    User "1" --> "*" NewsItem : manages
+    NewsItem "1" ..> "0..1" Lawyer : references
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+mermaid.initialize({ 
+  startOnLoad: true, 
+  theme: 'base',
+  themeVariables: {
+    fontFamily: 'Calibri, Segoe UI, sans-serif',
+    fontSize: '13px',
+    lineColor: '#333',
+    classText: '#333'
+  }
+});
+</script>
+</body>
+</html>

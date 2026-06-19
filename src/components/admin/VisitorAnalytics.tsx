@@ -12,6 +12,8 @@ type VisitorLog = {
   path: string;
   referrer: string;
   created_at: string;
+  device_brand?: string;
+  location?: string;
 };
 
 export default function VisitorAnalytics() {
@@ -271,6 +273,8 @@ export default function VisitorAnalytics() {
                 <th className="p-4 font-bold uppercase">Page (Path)</th>
                 <th className="p-4 font-bold uppercase">Browser & OS</th>
                 <th className="p-4 font-bold uppercase">Device</th>
+                <th className="p-4 font-bold uppercase">Device Model</th>
+                <th className="p-4 font-bold uppercase">Location/Domicile</th>
                 <th className="p-4 font-bold uppercase">Time</th>
               </tr>
             </thead>
@@ -303,13 +307,19 @@ export default function VisitorAnalytics() {
                         {log.device_type}
                       </span>
                     </td>
+                    <td className="p-4 font-mono text-gray-300 font-medium">
+                      {log.device_brand || "-"}
+                    </td>
+                    <td className="p-4 text-tmp-gold font-medium">
+                      {log.location || "Localhost"}
+                    </td>
                     <td className="p-4 text-gray-400">{date}</td>
                   </tr>
                 );
               })}
               {logs.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center text-gray-500 italic">
+                  <td colSpan={7} className="p-8 text-center text-gray-500 italic">
                     No visitor logs found. Start exploring the website to populate data.
                   </td>
                 </tr>

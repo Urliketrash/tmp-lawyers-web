@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Gambar 5.9 - Sequence Diagram Kelola Berita</title>
+<style>
+  body { margin: 0; padding: 40px; background: #fff; font-family: Calibri, 'Segoe UI', sans-serif; display: flex; justify-content: center; }
+  h2 { text-align: center; font-size: 14pt; font-weight: normal; color: #333; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+<div>
+<h2>Gambar 5.9 Sequence Diagram Kelola Berita</h2>
+<div class="mermaid">
+sequenceDiagram
+    actor Admin
+    participant PA as Panel Admin
+    participant SN as Sistem (Next.js)
+    participant CF as Cloud Firestore
+
+    rect rgb(240, 248, 255)
+    Note over Admin, CF: Proses Tambah Berita
+    Admin->>PA: Mengklik Tombol Tambah Berita
+    PA-->>Admin: Menampilkan Form Tambah Berita
+    Admin->>PA: Mengisi Data Berita dan Upload Gambar
+    Admin->>PA: Menekan Tombol Publish
+    PA->>SN: Mengirim Data Berita
+    SN->>CF: addDoc(collection, data)
+    CF-->>SN: Return Document ID
+    SN-->>PA: Konfirmasi Berhasil
+    PA-->>Admin: Menampilkan Notifikasi Sukses
+    end
+
+    rect rgb(255, 248, 240)
+    Note over Admin, CF: Proses Edit Berita
+    Admin->>PA: Memilih Berita untuk Diedit
+    PA-->>Admin: Menampilkan Form Edit dengan Data
+    Admin->>PA: Mengubah Data yang Diperlukan
+    Admin->>PA: Menekan Tombol Simpan
+    PA->>SN: Mengirim Data Perubahan
+    SN->>CF: updateDoc(docRef, data)
+    CF-->>SN: Return Success
+    SN-->>PA: Konfirmasi Berhasil
+    PA-->>Admin: Menampilkan Notifikasi Sukses
+    end
+
+    rect rgb(255, 240, 240)
+    Note over Admin, CF: Proses Hapus Berita
+    Admin->>PA: Mengklik Tombol Hapus
+    PA-->>Admin: Menampilkan Dialog Konfirmasi
+    Admin->>PA: Mengonfirmasi Penghapusan
+    PA->>SN: Mengirim Request Hapus
+    SN->>CF: deleteDoc(docRef)
+    CF-->>SN: Return Success
+    SN-->>PA: Konfirmasi Berhasil
+    PA-->>Admin: Memperbarui Daftar Berita
+    end
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+mermaid.initialize({ 
+  startOnLoad: true, 
+  theme: 'base',
+  themeVariables: {
+    fontFamily: 'Calibri, Segoe UI, sans-serif',
+    fontSize: '13px',
+    lineColor: '#333',
+    actorBkg: '#E3F2FD',
+    actorBorder: '#333',
+    actorTextColor: '#333',
+    signalColor: '#333',
+    signalTextColor: '#333',
+    noteBkgColor: '#FFF9C4',
+    noteBorderColor: '#333',
+    activationBkgColor: '#E8F5E9',
+    activationBorderColor: '#333'
+  },
+  sequence: {
+    mirrorActors: true,
+    messageAlign: 'center',
+    boxMargin: 10,
+    noteMargin: 10,
+    messageMargin: 35,
+    actorMargin: 50
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Gambar 5.6 - Activity Diagram Mengirim Pesan Kontak</title>
+<style>
+  body { margin: 0; padding: 40px; background: #fff; font-family: Calibri, 'Segoe UI', sans-serif; display: flex; justify-content: center; }
+  h2 { text-align: center; font-size: 14pt; font-weight: normal; color: #333; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+<div>
+<h2>Gambar 5.6 Activity Diagram Mengirim Pesan Kontak</h2>
+<div class="mermaid">
+flowchart TD
+    Start(( )) --> A1["Mengakses Formulir Kontak"]
+    A1 --> A2["Mengisi Nama, Email,<br/>dan Isi Pesan"]
+    A2 --> A3["Menekan Tombol Kirim"]
+    A3 --> A4["Memvalidasi Kelengkapan Data"]
+    A4 --> D1{"Data Lengkap?"}
+    D1 -->|Ya| B1["Mengirimkan Pesan<br/>ke Email Firma"]
+    B1 --> B2["Menampilkan Notifikasi Berhasil"]
+    B2 --> EndNode(( ))
+    D1 -->|Tidak| C1["Menampilkan Pesan Peringatan"]
+    C1 --> A2
+
+    style Start fill:#000,stroke:#000,color:#000
+    style EndNode fill:#000,stroke:#333,color:#000
+    style D1 fill:#FFF9C4,stroke:#333,color:#333
+    style A1 fill:#E3F2FD,stroke:#333,color:#333
+    style A2 fill:#E3F2FD,stroke:#333,color:#333
+    style A3 fill:#E3F2FD,stroke:#333,color:#333
+    style A4 fill:#E8F5E9,stroke:#333,color:#333
+    style B1 fill:#E8F5E9,stroke:#333,color:#333
+    style B2 fill:#E8F5E9,stroke:#333,color:#333
+    style C1 fill:#FFEBEE,stroke:#333,color:#333
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+mermaid.initialize({ 
+  startOnLoad: true, 
+  theme: 'base',
+  themeVariables: {
+    fontFamily: 'Calibri, Segoe UI, sans-serif',
+    fontSize: '13px',
+    lineColor: '#333'
+  },
+  flowchart: { curve: 'linear', padding: 15, nodeSpacing: 30, rankSpacing: 40 }
+});
+</script>
+</body>
+</html>

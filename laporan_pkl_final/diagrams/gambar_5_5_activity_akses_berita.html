@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Gambar 5.5 - Activity Diagram Mengakses Berita</title>
+<style>
+  body { margin: 0; padding: 40px; background: #fff; font-family: Calibri, 'Segoe UI', sans-serif; display: flex; justify-content: center; }
+  h2 { text-align: center; font-size: 14pt; font-weight: normal; color: #333; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+<div>
+<h2>Gambar 5.5 Activity Diagram Mengakses Berita</h2>
+<div class="mermaid">
+flowchart TD
+    Start(( )) --> A1["Mengakses Website"]
+    A1 --> A2["Menampilkan Halaman Utama<br/>dengan Daftar Berita Terbaru"]
+    A2 --> A3["Melihat Daftar Berita"]
+    A3 --> D1{"Ingin Melihat<br/>Detail?"}
+    D1 -->|Ya| B1["Mengklik Judul Berita"]
+    B1 --> B2["Mengambil Data Berita<br/>dari Database"]
+    B2 --> B3["Menampilkan Halaman<br/>Detail Berita"]
+    B3 --> B4["Membaca Isi Lengkap Berita"]
+    B4 --> EndNode(( ))
+    D1 -->|Tidak| EndNode
+
+    style Start fill:#000,stroke:#000,color:#000
+    style EndNode fill:#000,stroke:#333,color:#000
+    style D1 fill:#FFF9C4,stroke:#333,color:#333
+    style A1 fill:#E3F2FD,stroke:#333,color:#333
+    style A2 fill:#E8F5E9,stroke:#333,color:#333
+    style A3 fill:#E3F2FD,stroke:#333,color:#333
+    style B1 fill:#E3F2FD,stroke:#333,color:#333
+    style B2 fill:#E8F5E9,stroke:#333,color:#333
+    style B3 fill:#E8F5E9,stroke:#333,color:#333
+    style B4 fill:#E3F2FD,stroke:#333,color:#333
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+mermaid.initialize({ 
+  startOnLoad: true, 
+  theme: 'base',
+  themeVariables: {
+    fontFamily: 'Calibri, Segoe UI, sans-serif',
+    fontSize: '13px',
+    lineColor: '#333'
+  },
+  flowchart: { curve: 'linear', padding: 15, nodeSpacing: 30, rankSpacing: 40 }
+});
+</script>
+</body>
+</html>

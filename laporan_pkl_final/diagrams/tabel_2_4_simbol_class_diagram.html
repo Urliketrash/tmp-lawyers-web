@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Tabel 2.4 - Simbol Class Diagram</title>
+<style>
+  /* Base styles */
+  :root {
+    --bg-color: #f8f9fa;
+    --card-bg: #ffffff;
+    --text-color: #333333;
+    --border-color: #dddddd;
+    --table-header-bg: #f2f2f2;
+    --table-header-text: #333333;
+    --accent-color: #4a90e2;
+    --shape-stroke: #333333;
+    --shape-fill-hollow: #ffffff;
+    --shape-fill-solid: #333333;
+    --font-family: Calibri, 'Segoe UI', Arial, sans-serif;
+  }
+
+  /* Theme: Academic B&W */
+  .theme-academic {
+    --bg-color: #ffffff;
+    --card-bg: #ffffff;
+    --text-color: #000000;
+    --border-color: #000000;
+    --table-header-bg: #ffffff;
+    --table-header-text: #000000;
+    --accent-color: #000000;
+    --shape-stroke: #000000;
+    --shape-fill-hollow: #ffffff;
+    --shape-fill-solid: #000000;
+  }
+
+  /* Theme: Visio Blue */
+  .theme-visio {
+    --bg-color: #f0f4f8;
+    --card-bg: #ffffff;
+    --text-color: #2c3e50;
+    --border-color: #a0b0c0;
+    --table-header-bg: #d9e2ec;
+    --table-header-text: #102a43;
+    --accent-color: #1976d2;
+    --shape-stroke: #1976d2;
+    --shape-fill-hollow: #ffffff;
+    --shape-fill-solid: #1976d2;
+  }
+
+  /* Theme: Corporate Gold (tmplawyers.com style) */
+  .theme-gold {
+    --bg-color: #0f1115;
+    --card-bg: #161a22;
+    --text-color: #e2e8f0;
+    --border-color: #384152;
+    --table-header-bg: #1e2530;
+    --table-header-text: #d4af37;
+    --accent-color: #d4af37;
+    --shape-stroke: #d4af37;
+    --shape-fill-hollow: #161a22;
+    --shape-fill-solid: #d4af37;
+  }
+
+  body {
+    margin: 0;
+    padding: 30px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 800px;
+    background: var(--card-bg);
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box;
+  }
+
+  .theme-academic .container {
+    box-shadow: none;
+    border: 1px solid #000000;
+    border-radius: 0;
+  }
+
+  h1 {
+    font-size: 16pt;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 11pt;
+    margin-bottom: 30px;
+    opacity: 0.8;
+  }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    width: 100%;
+    max-width: 800px;
+  }
+
+  button {
+    padding: 8px 16px;
+    font-family: var(--font-family);
+    font-size: 10pt;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+
+  button:hover {
+    background: var(--table-header-bg);
+    border-color: var(--accent-color);
+  }
+
+  button.active {
+    background: var(--accent-color);
+    color: #ffffff;
+    border-color: var(--accent-color);
+  }
+  
+  .theme-gold button.active {
+    color: #0f1115;
+    font-weight: bold;
+  }
+
+  /* Table styling */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+
+  th, td {
+    border: 1px solid var(--border-color);
+    padding: 12px 15px;
+    text-align: left;
+    vertical-align: middle;
+    font-size: 11pt;
+  }
+
+  th {
+    background-color: var(--table-header-bg);
+    color: var(--table-header-text);
+    font-weight: bold;
+    text-align: center;
+    font-size: 11pt;
+  }
+
+  td.center-align {
+    text-align: center;
+  }
+
+  /* SVG Styling */
+  svg {
+    display: block;
+    margin: 0 auto;
+  }
+
+  .svg-stroke {
+    stroke: var(--shape-stroke);
+    stroke-width: 1.5px;
+    fill: none;
+  }
+
+  .svg-fill-hollow {
+    fill: var(--shape-fill-hollow);
+    stroke: var(--shape-stroke);
+    stroke-width: 1.5px;
+  }
+
+  .svg-fill-solid {
+    fill: var(--shape-fill-solid);
+    stroke: var(--shape-stroke);
+    stroke-width: 1.5px;
+  }
+
+  .svg-text {
+    font-family: var(--font-family);
+    font-size: 10px;
+    fill: var(--text-color);
+  }
+
+  .svg-text-title {
+    font-weight: bold;
+  }
+
+  /* Print Styles */
+  @media print {
+    .controls {
+      display: none;
+    }
+    body {
+      background: #ffffff;
+      color: #000000;
+      padding: 0;
+    }
+    .container {
+      width: 100%;
+      max-width: 100%;
+      box-shadow: none;
+      padding: 0;
+      background: #ffffff;
+      border: none;
+    }
+    th, td {
+      border: 1px solid #000000 !important;
+      color: #000000 !important;
+    }
+    th {
+      background: #ffffff !important;
+      color: #000000 !important;
+    }
+    .svg-stroke {
+      stroke: #000000 !important;
+    }
+    .svg-fill-hollow {
+      fill: #ffffff !important;
+      stroke: #000000 !important;
+    }
+    .svg-fill-solid {
+      fill: #000000 !important;
+      stroke: #000000 !important;
+    }
+    .svg-text {
+      fill: #000000 !important;
+    }
+  }
+</style>
+</head>
+<body class="theme-academic">
+
+<div class="controls">
+  <button onclick="setTheme('academic')" id="btn-academic" class="active">Dokumen Akademik (B&W)</button>
+  <button onclick="setTheme('visio')" id="btn-visio">Microsoft Visio (Blue)</button>
+  <button onclick="setTheme('gold')" id="btn-gold">Premium Gold</button>
+  <button onclick="window.print()">Cetak / Simpan PDF</button>
+</div>
+
+<div class="container">
+  <h1>Tabel 2.4 Simbol Class Diagram</h1>
+  <div class="subtitle">Daftar simbol dan notasi yang digunakan dalam perancangan Class Diagram</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Simbol</th>
+        <th style="width: 20%;">Nama</th>
+        <th>Deskripsi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="center-align">
+          <svg width="120" height="70" viewBox="0 0 120 70">
+            <!-- Class box -->
+            <rect x="5" y="5" width="110" height="60" class="svg-fill-hollow" />
+            <!-- Dividers -->
+            <line x1="5" y1="23" x2="115" y2="23" class="svg-stroke" />
+            <line x1="5" y1="41" x2="115" y2="41" class="svg-stroke" />
+            <!-- Text Class Name -->
+            <text x="60" y="16" text-anchor="middle" class="svg-text svg-text-title">NamaKelas</text>
+            <!-- Text Attributes -->
+            <text x="10" y="34" class="svg-text">- atribut: tipe</text>
+            <!-- Text Methods -->
+            <text x="10" y="52" class="svg-text">+ method()</text>
+          </svg>
+        </td>
+        <td><strong>Class</strong></td>
+        <td>Blok pembangun pada pemrograman berorientasi objek yang terdiri dari nama, atribut, dan method.</td>
+      </tr>
+      <tr>
+        <td class="center-align">
+          <svg width="120" height="40" viewBox="0 0 120 40">
+            <!-- Association line -->
+            <line x1="10" y1="20" x2="110" y2="20" class="svg-stroke" />
+          </svg>
+        </td>
+        <td><strong>Association</strong></td>
+        <td>Hubungan umum antara dua class.</td>
+      </tr>
+      <tr>
+        <td class="center-align">
+          <svg width="120" height="40" viewBox="0 0 120 40">
+            <!-- Aggregation diamond (hollow) -->
+            <polygon points="10,20 20,14 30,20 20,26" class="svg-fill-hollow" />
+            <!-- Line -->
+            <line x1="30" y1="20" x2="110" y2="20" class="svg-stroke" />
+          </svg>
+        </td>
+        <td><strong>Aggregation</strong></td>
+        <td>Relasi mempunyai dimana class anak dapat berdiri sendiri.</td>
+      </tr>
+      <tr>
+        <td class="center-align">
+          <svg width="120" height="40" viewBox="0 0 120 40">
+            <!-- Composition diamond (filled) -->
+            <polygon points="10,20 20,14 30,20 20,26" class="svg-fill-solid" />
+            <!-- Line -->
+            <line x1="30" y1="20" x2="110" y2="20" class="svg-stroke" />
+          </svg>
+        </td>
+        <td><strong>Composition</strong></td>
+        <td>Relasi bagian dari dimana class anak tidak dapat berdiri sendiri.</td>
+      </tr>
+      <tr>
+        <td class="center-align">
+          <svg width="120" height="40" viewBox="0 0 120 40">
+            <!-- Generalization triangle (hollow) pointing left -->
+            <polygon points="10,20 25,12 25,28" class="svg-fill-hollow" />
+            <!-- Line -->
+            <line x1="25" y1="20" x2="110" y2="20" class="svg-stroke" />
+          </svg>
+        </td>
+        <td><strong>Generalization</strong></td>
+        <td>Relasi inheritance dimana class anak mewarisi perilaku class induk.</td>
+      </tr>
+      <tr>
+        <td class="center-align">
+          <svg width="120" height="40" viewBox="0 0 120 40">
+            <!-- Dependency line (dashed) -->
+            <line x1="10" y1="20" x2="100" y2="20" class="svg-stroke" stroke-dasharray="5,4" />
+            <!-- Open arrowhead pointing right -->
+            <polyline points="92,14 100,20 92,26" class="svg-stroke" fill="none" />
+          </svg>
+        </td>
+        <td><strong>Dependency</strong></td>
+        <td>Relasi ketergantungan antar class.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  function setTheme(themeName) {
+    // Remove all theme classes
+    document.body.className = '';
+    
+    // Add select theme class
+    document.body.classList.add('theme-' + themeName);
+    
+    // Update active button state
+    document.getElementById('btn-academic').classList.remove('active');
+    document.getElementById('btn-visio').classList.remove('active');
+    document.getElementById('btn-gold').classList.remove('active');
+    
+    document.getElementById('btn-' + themeName).classList.add('active');
+  }
+</script>
+</body>
+</html>
