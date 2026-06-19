@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Preloader from "./Preloader";
+import BackToTop from "./BackToTop";
 import { supabase } from "@/lib/supabase";
 import { useAuthStore } from "@/store/auth-store";
 
@@ -54,6 +55,7 @@ export default function LayoutWrapper({
       >
         {children}
       </div>
+      <BackToTop />
     </>
   );
 }

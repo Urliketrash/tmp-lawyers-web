@@ -5,7 +5,6 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { NewsItem, MOCK_NEWS } from "@/data/newsData";
 import ScrollReveal from "@/components/ScrollReveal";
-
 export default function News() {
   const [news, setNews] = useState<NewsItem[]>(MOCK_NEWS); // Default to static mock data
   const [loading, setLoading] = useState(true);
@@ -44,8 +43,6 @@ export default function News() {
     fetchNews();
   }, []);
 
-  if (loading) return null; // Or a loading skeleton
-
   return (
     <section id="news" className="py-32 px-6 bg-tmp-dark border-t border-white/5">
       <div className="container mx-auto max-w-6xl">
@@ -57,7 +54,29 @@ export default function News() {
         </ScrollReveal>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {news.map((item, index) => (
+          {loading
+            ? Array.from({ length: 3 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="bg-tmp-black border border-white/5 animate-pulse"
+                >
+                  <div className="p-8">
+                    <div className="flex justify-between items-center mb-4">
+                      <div className="h-5 w-20 bg-white/10 rounded" />
+                      <div className="h-3 w-28 bg-white/5 rounded" />
+                    </div>
+                    <div className="h-6 w-full bg-white/10 rounded mb-2" />
+                    <div className="h-6 w-3/4 bg-white/10 rounded mb-4" />
+                    <div className="space-y-2 mb-6">
+                      <div className="h-4 w-full bg-white/5 rounded" />
+                      <div className="h-4 w-full bg-white/5 rounded" />
+                      <div className="h-4 w-2/3 bg-white/5 rounded" />
+                    </div>
+                    <div className="h-3 w-24 bg-tmp-gold/20 rounded" />
+                  </div>
+                </div>
+              ))
+            : news.map((item, index) => (
             <ScrollReveal
               key={item.id}
               variant="fade-up"
@@ -89,7 +108,8 @@ export default function News() {
                   </div>
               </Link>
             </ScrollReveal>
-          ))}
+              ))
+          }
         </div>
 
         <ScrollReveal variant="fade-up" className="text-center mt-12">

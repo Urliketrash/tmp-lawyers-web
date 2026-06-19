@@ -1,13 +1,17 @@
 import { MOCK_NEWS, NewsItem } from "@/data/newsData";
 import NewsDetailContent from "@/components/NewsDetailContent";
-import { createClient } from "@/lib/supabase-server";
+import { createClient } from "@supabase/supabase-js";
 import { Metadata } from "next";
 import { ArticleJsonLd } from "@/components/JsonLd";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 // Generate params for static export
 export async function generateStaticParams() {
   try {
-    const supabase = await createClient();
     const { data } = await supabase.from("news").select("id");
     if (data && data.length > 0) {
         return data.map((item) => ({
@@ -35,7 +39,6 @@ export async function generateMetadata({
 
   if (!news) {
     try {
-      const supabase = await createClient();
       const { data } = await supabase
         .from("news")
         .select("*")
@@ -98,7 +101,6 @@ export default async function NewsDetailPage({
   // 2. If not in mock, try fetching from Supabase
   if (!news) {
     try {
-        const supabase = await createClient();
         const { data, error } = await supabase
           .from("news")
           .select("*")
