@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import { type Lawyer, lawyersData } from "@/data/lawyersData";
@@ -16,6 +16,46 @@ export default function Lawyers() {
   const [selectedLawyer, setSelectedLawyer] = useState<Lawyer | null>(null);
   const [mounted, setMounted] = useState(false);
   const { data: dbLawyers } = useTeam();
+
+  // Drag-to-scroll state
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+  const hasDragged = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    if (!scrollRef.current) return;
+    isDragging.current = true;
+    hasDragged.current = false;
+    startX.current = e.pageX - scrollRef.current.offsetLeft;
+    scrollLeft.current = scrollRef.current.scrollLeft;
+    scrollRef.current.style.cursor = "grabbing";
+    scrollRef.current.style.userSelect = "none";
+  }, []);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!isDragging.current || !scrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX.current) * 1.5; // scroll speed multiplier
+    if (Math.abs(walk) > 5) hasDragged.current = true;
+    scrollRef.current.scrollLeft = scrollLeft.current - walk;
+  }, []);
+
+  const handleMouseUp = useCallback(() => {
+    if (!scrollRef.current) return;
+    isDragging.current = false;
+    scrollRef.current.style.cursor = "grab";
+    scrollRef.current.style.removeProperty("user-select");
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    if (!scrollRef.current) return;
+    isDragging.current = false;
+    scrollRef.current.style.cursor = "grab";
+    scrollRef.current.style.removeProperty("user-select");
+  }, []);
 
   const displayLawyers = dbLawyers && dbLawyers.length > 0 ? dbLawyers : lawyersData;
 
@@ -49,7 +89,15 @@ export default function Lawyers() {
           </h2>
           <h3 className="text-4xl font-serif italic">Meet Our Lawyers</h3>
         </ScrollReveal>
-        <div className="overflow-x-auto w-full no-scrollbar snap-x snap-mandatory scroll-smooth py-4 -my-4">
+        <div
+          ref={scrollRef}
+          className="overflow-x-auto w-full no-scrollbar snap-x snap-mandatory py-4 -my-4"
+          style={{ cursor: "grab" }}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
+        >
           <div className="flex flex-row justify-center w-fit min-w-full gap-8 px-4 md:px-8">
             {displayLawyers.map((lawyer, index) => (
               <ScrollReveal
@@ -79,6 +127,7 @@ export default function Lawyers() {
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
+                    if (hasDragged.current) return; // prevent click after drag
                     setSelectedLawyer(lawyer);
                   }}
                   className="relative z-10 text-tmp-gold text-sm font-bold uppercase tracking-widest hover:text-white transition-colors mt-auto pt-4 cursor-pointer text-left"
