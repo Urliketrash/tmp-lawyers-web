@@ -101,3 +101,25 @@ body,
 .animate-marquee-right:hover {
   animation-play-state: paused;
 }
+
+@keyframes marquee-left {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee-left {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 35s linear infinite;
+}
+
+.animate-marquee-left:hover {
+  animation-play-state: paused;
+}
+
+@media (hover: none) {
+  .animate-marquee-left:active {
+    animation-play-state: paused;
+  }
+}
+

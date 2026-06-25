@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import { type Lawyer, lawyersData } from "@/data/lawyersData";
@@ -9,53 +9,13 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { motion, AnimatePresence } from "framer-motion";
 
 /**
- * Public Lawyers section component. Shows a grid of lawyers from database.
+ * Public Lawyers section component. Shows an infinite marquee ticker of lawyers.
  * Clicking a lawyer opens a premium modal with detail biography.
  */
 export default function Lawyers() {
   const [selectedLawyer, setSelectedLawyer] = useState<Lawyer | null>(null);
   const [mounted, setMounted] = useState(false);
   const { data: dbLawyers } = useTeam();
-
-  // Drag-to-scroll state
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const isDragging = useRef(false);
-  const hasDragged = useRef(false);
-  const startX = useRef(0);
-  const scrollLeft = useRef(0);
-
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    if (!scrollRef.current) return;
-    isDragging.current = true;
-    hasDragged.current = false;
-    startX.current = e.pageX - scrollRef.current.offsetLeft;
-    scrollLeft.current = scrollRef.current.scrollLeft;
-    scrollRef.current.style.cursor = "grabbing";
-    scrollRef.current.style.userSelect = "none";
-  }, []);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!isDragging.current || !scrollRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX.current) * 1.5; // scroll speed multiplier
-    if (Math.abs(walk) > 5) hasDragged.current = true;
-    scrollRef.current.scrollLeft = scrollLeft.current - walk;
-  }, []);
-
-  const handleMouseUp = useCallback(() => {
-    if (!scrollRef.current) return;
-    isDragging.current = false;
-    scrollRef.current.style.cursor = "grab";
-    scrollRef.current.style.removeProperty("user-select");
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    if (!scrollRef.current) return;
-    isDragging.current = false;
-    scrollRef.current.style.cursor = "grab";
-    scrollRef.current.style.removeProperty("user-select");
-  }, []);
 
   const displayLawyers = dbLawyers && dbLawyers.length > 0 ? dbLawyers : lawyersData;
 
@@ -89,56 +49,87 @@ export default function Lawyers() {
           </h2>
           <h3 className="text-4xl font-serif italic">Meet Our Lawyers</h3>
         </ScrollReveal>
-        <div
-          ref={scrollRef}
-          className="overflow-x-auto w-full no-scrollbar snap-x snap-mandatory py-4 -my-4"
-          style={{ cursor: "grab" }}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseLeave}
-        >
-          <div className="flex flex-row justify-center w-fit min-w-full gap-8 px-4 md:px-8">
-            {displayLawyers.map((lawyer, index) => (
-              <ScrollReveal
-                key={lawyer.id}
-                variant="fade-up"
-                delay={index * 0.1}
-                className="w-[280px] sm:w-[320px] shrink-0 snap-center bg-tmp-dark p-6 rounded-lg group flex flex-col h-full"
-              >
-                <div className="relative w-full h-64 mb-4 overflow-hidden">
-                  <Image
-                    src={lawyer.image || "/assets/logo.png"}
-                    alt={lawyer.name}
-                    fill
-                    className="object-cover rounded opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
-                  />
-                </div>
-                <h4 className="text-tmp-gold font-bold uppercase tracking-[0.5em] text-[10px] mb-2">
-                  {lawyer.role}
-                </h4>
-                <h3 className="text-xl font-serif italic text-white mb-4 min-h-[3.5rem] flex items-center">
-                  {lawyer.name}
-                </h3>
-                <p className="text-gray-400 text-xs leading-relaxed mb-3 text-justify line-clamp-3 min-h-[3.75rem]">
-                  {lawyer.shortDesc}
-                </p>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (hasDragged.current) return; // prevent click after drag
-                    setSelectedLawyer(lawyer);
-                  }}
-                  className="relative z-10 text-tmp-gold text-sm font-bold uppercase tracking-widest hover:text-white transition-colors mt-auto pt-4 cursor-pointer text-left"
-                  suppressHydrationWarning
+        
+        <ScrollReveal variant="fade-up" delay={0.1}>
+          <div className="relative w-full overflow-hidden py-6">
+            {/* Track Marquee Ticker */}
+            <div className="flex w-max animate-marquee-left py-2">
+              {/* First set */}
+              {displayLawyers.map((lawyer) => (
+                <div
+                  key={`first-${lawyer.id}`}
+                  className="mx-4 w-[280px] sm:w-[320px] shrink-0 bg-tmp-dark p-6 rounded-lg group flex flex-col h-[480px] border border-white/5 hover:border-tmp-gold/30 transition-colors duration-300"
                 >
-                  Lihat Selengkapnya
-                </button>
-              </ScrollReveal>
-            ))}
+                  <div className="relative w-full h-64 mb-4 overflow-hidden">
+                    <Image
+                      src={lawyer.image || "/assets/logo.png"}
+                      alt={lawyer.name}
+                      fill
+                      className="object-cover rounded opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                    />
+                  </div>
+                  <h4 className="text-tmp-gold font-bold uppercase tracking-[0.5em] text-[10px] mb-2">
+                    {lawyer.role}
+                  </h4>
+                  <h3 className="text-xl font-serif italic text-white mb-4 min-h-[3.5rem] flex items-center">
+                    {lawyer.name}
+                  </h3>
+                  <p className="text-gray-400 text-xs leading-relaxed mb-3 text-justify line-clamp-3 min-h-[3.75rem]">
+                    {lawyer.shortDesc}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedLawyer(lawyer);
+                    }}
+                    className="relative z-10 text-tmp-gold text-sm font-bold uppercase tracking-widest hover:text-white transition-colors mt-auto pt-4 cursor-pointer text-left"
+                    suppressHydrationWarning
+                  >
+                    Lihat Selengkapnya
+                  </button>
+                </div>
+              ))}
+
+              {/* Second set (duplicate for seamless scrolling) */}
+              {displayLawyers.map((lawyer) => (
+                <div
+                  key={`second-${lawyer.id}`}
+                  className="mx-4 w-[280px] sm:w-[320px] shrink-0 bg-tmp-dark p-6 rounded-lg group flex flex-col h-[480px] border border-white/5 hover:border-tmp-gold/30 transition-colors duration-300"
+                >
+                  <div className="relative w-full h-64 mb-4 overflow-hidden">
+                    <Image
+                      src={lawyer.image || "/assets/logo.png"}
+                      alt={lawyer.name}
+                      fill
+                      className="object-cover rounded opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                    />
+                  </div>
+                  <h4 className="text-tmp-gold font-bold uppercase tracking-[0.5em] text-[10px] mb-2">
+                    {lawyer.role}
+                  </h4>
+                  <h3 className="text-xl font-serif italic text-white mb-4 min-h-[3.5rem] flex items-center">
+                    {lawyer.name}
+                  </h3>
+                  <p className="text-gray-400 text-xs leading-relaxed mb-3 text-justify line-clamp-3 min-h-[3.75rem]">
+                    {lawyer.shortDesc}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedLawyer(lawyer);
+                    }}
+                    className="relative z-10 text-tmp-gold text-sm font-bold uppercase tracking-widest hover:text-white transition-colors mt-auto pt-4 cursor-pointer text-left"
+                    suppressHydrationWarning
+                  >
+                    Lihat Selengkapnya
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );
