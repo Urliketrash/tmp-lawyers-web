@@ -71,8 +71,10 @@ export default function RootLayout({
           />
           <QueryProvider>
             <VisitorTracker />
-            <Navbar />
-            <LayoutWrapper>{children}</LayoutWrapper>
+            <LayoutWrapper>
+              <Navbar />
+              {children}
+            </LayoutWrapper>
           </QueryProvider>
         </div>
       </body>

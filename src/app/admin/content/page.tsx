@@ -14,7 +14,7 @@ interface ServiceItem {
 
 export default function ContentManagerPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"home" | "about" | "services" | "clients" | "lawyers">("home");
+  const [activeTab, setActiveTab] = useState<"home" | "about" | "services" | "clients" | "lawyers" | "contact">("home");
   const router = useRouter();
 
   // Loading & Saving States
@@ -34,6 +34,14 @@ export default function ContentManagerPage() {
   const [aboutP3, setAboutP3] = useState("");
   const [aboutP4, setAboutP4] = useState("");
   const [aboutMottoDesc, setAboutMottoDesc] = useState("");
+
+  // Contact & Social states
+  const [contactWhatsapp, setContactWhatsapp] = useState("");
+  const [contactEmailTo, setContactEmailTo] = useState("");
+  const [contactLinkedin, setContactLinkedin] = useState("");
+  const [contactInstagram, setContactInstagram] = useState("");
+  const [contactAddress, setContactAddress] = useState("");
+  const [contactMapsEmbed, setContactMapsEmbed] = useState("");
 
   // Services states
   const [services, setServices] = useState<ServiceItem[]>([]);
@@ -66,6 +74,13 @@ export default function ContentManagerPage() {
           let p3 = "This objective is supported by our experience in all aspects, starting from partners and associates who have experience in their respective areas of expertise. TMP Law Firm is capable of assisting with your legal issues with a professional team in fields such as Criminal Law, Civil Law, Business Law, Banking or Financial Services Law, Property Law, Tax Law, Capital Market Law, Employment Law, and Consumer Protection.";
           let p4 = "We are also capable of providing Legal Services for every business activity of our clients as a preventive measure by identifying each regulation, analyzing risk management, and providing legal counsel so that clients can make the right decisions in conducting their business activities.";
           let mottoDesc = "To be a law firm capable of addressing clients' needs for all legal issues they face.";
+
+          let whatsapp = "0812-1005-4874";
+          let emailTo = "tmp@tmplawyers.com";
+          let linkedin = "https://www.linkedin.com/company/law-firm-tao-manullang-partners/";
+          let instagram = "@tmplawfirm";
+          let address = "The Habibie Center, Lt 1, Jln. Kemang Selatan No. 98, Cilandak Timur, Jakarta Selatan, 12560.";
+          let mapsEmbed = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.498!2d106.8128!3d-6.2606!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5d2e764b%3A0x1234567890abcdef!2sThe%20Habibie%20Center%2C%20Jl.%20Kemang%20Selatan%20No.98%2C%20Jakarta%20Selatan!5e0!3m2!1sen!2sid!4v1703123456789!5m2!1sen!2sid";
 
           let servicesList: ServiceItem[] = [
             {
@@ -167,6 +182,13 @@ export default function ContentManagerPage() {
             if (item.key === "about_p4") p4 = item.value;
             if (item.key === "about_motto_desc") mottoDesc = item.value;
 
+            if (item.key === "whatsapp") whatsapp = item.value;
+            if (item.key === "email_to") emailTo = item.value;
+            if (item.key === "linkedin") linkedin = item.value;
+            if (item.key === "instagram") instagram = item.value;
+            if (item.key === "address") address = item.value;
+            if (item.key === "maps_embed") mapsEmbed = item.value;
+
             if (item.key === "services_data") {
               try {
                 servicesList = JSON.parse(item.value);
@@ -201,6 +223,13 @@ export default function ContentManagerPage() {
           setAboutP4(p4);
           setAboutMottoDesc(mottoDesc);
 
+          setContactWhatsapp(whatsapp);
+          setContactEmailTo(emailTo);
+          setContactLinkedin(linkedin);
+          setContactInstagram(instagram);
+          setContactAddress(address);
+          setContactMapsEmbed(mapsEmbed);
+
           setServices(servicesList);
           setTopClients(topClientsList);
           setOtherClients(otherClientsList);
@@ -231,6 +260,12 @@ export default function ContentManagerPage() {
         { key: "about_p3", value: aboutP3.trim() },
         { key: "about_p4", value: aboutP4.trim() },
         { key: "about_motto_desc", value: aboutMottoDesc.trim() },
+        { key: "whatsapp", value: contactWhatsapp.trim() },
+        { key: "email_to", value: contactEmailTo.trim() },
+        { key: "linkedin", value: contactLinkedin.trim() },
+        { key: "instagram", value: contactInstagram.trim() },
+        { key: "address", value: contactAddress.trim() },
+        { key: "maps_embed", value: contactMapsEmbed.trim() },
         { key: "services_data", value: JSON.stringify(services) },
         { key: "clients_top", value: JSON.stringify(topClients) },
         { key: "clients_other", value: JSON.stringify(otherClients) },
@@ -335,6 +370,9 @@ export default function ContentManagerPage() {
           </div>
           <h1 className="text-tmp-gold font-bold text-xl mb-1">TMP ADMIN</h1>
           <p className="text-gray-500 text-xs tracking-widest">CONTENT MANAGER</p>
+          <p className="text-[10px] text-tmp-gold/80 italic mt-3 max-w-[200px] leading-relaxed">
+            "Halo admin ganteng, semangat menjalani hidup ya! :)"
+          </p>
         </div>
 
         <nav className="space-y-2 flex-1">
@@ -369,7 +407,7 @@ export default function ContentManagerPage() {
 
         {/* Tab Controls */}
         <div className="flex flex-wrap border-b border-white/10 mb-8 gap-2">
-          {(["home", "about", "services", "clients", "lawyers"] as const).map((tab) => (
+          {(["home", "about", "services", "clients", "lawyers", "contact"] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -382,6 +420,7 @@ export default function ContentManagerPage() {
               {tab === "services" && "Our Services"}
               {tab === "clients" && "Our Clients"}
               {tab === "lawyers" && "Team Members"}
+              {tab === "contact" && "Contact & Socials"}
             </button>
           ))}
         </div>
@@ -736,6 +775,90 @@ export default function ContentManagerPage() {
                   >
                     Buka Pengelola Profil Tim &rarr;
                   </Link>
+                </div>
+              </div>
+            )}
+
+            {/* TAB: CONTACT & SOCIALS */}
+            {activeTab === "contact" && (
+              <div className="space-y-6">
+                <h3 className="text-tmp-gold text-[10px] font-bold uppercase tracking-widest border-b border-white/5 pb-2">Contact & Socials Settings</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* WhatsApp */}
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">WhatsApp Number</label>
+                    <input
+                      type="text"
+                      value={contactWhatsapp}
+                      onChange={(e) => setContactWhatsapp(e.target.value)}
+                      className="w-full bg-black border border-white/10 p-3 rounded text-sm focus:border-tmp-gold outline-none"
+                      placeholder="e.g. 0812-1005-4874"
+                      required
+                    />
+                  </div>
+
+                  {/* Email Destination */}
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Inquiry Target Email</label>
+                    <input
+                      type="email"
+                      value={contactEmailTo}
+                      onChange={(e) => setContactEmailTo(e.target.value)}
+                      className="w-full bg-black border border-white/10 p-3 rounded text-sm focus:border-tmp-gold outline-none"
+                      placeholder="e.g. tmp@tmplawyers.com"
+                      required
+                    />
+                  </div>
+
+                  {/* LinkedIn */}
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">LinkedIn Page Link (Optional)</label>
+                    <input
+                      type="url"
+                      value={contactLinkedin}
+                      onChange={(e) => setContactLinkedin(e.target.value)}
+                      className="w-full bg-black border border-white/10 p-3 rounded text-sm focus:border-tmp-gold outline-none"
+                      placeholder="e.g. https://www.linkedin.com/company/..."
+                    />
+                  </div>
+
+                  {/* Instagram */}
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Instagram Username (Optional)</label>
+                    <input
+                      type="text"
+                      value={contactInstagram}
+                      onChange={(e) => setContactInstagram(e.target.value)}
+                      className="w-full bg-black border border-white/10 p-3 rounded text-sm focus:border-tmp-gold outline-none"
+                      placeholder="e.g. @tmplawfirm"
+                    />
+                  </div>
+
+                  {/* Office Address */}
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Office Address</label>
+                    <textarea
+                      value={contactAddress}
+                      onChange={(e) => setContactAddress(e.target.value)}
+                      rows={3}
+                      className="w-full bg-black border border-white/10 p-3 rounded text-sm focus:border-tmp-gold outline-none resize-none"
+                      placeholder="e.g. Jalan Kemang Selatan No. 98..."
+                      required
+                    />
+                  </div>
+
+                  {/* Google Maps Embed Iframe URL */}
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Google Maps Iframe Source (embed src)</label>
+                    <input
+                      type="text"
+                      value={contactMapsEmbed}
+                      onChange={(e) => setContactMapsEmbed(e.target.value)}
+                      className="w-full bg-black border border-white/10 p-3 rounded text-sm focus:border-tmp-gold outline-none"
+                      placeholder="e.g. https://www.google.com/maps/embed?pb=..."
+                      required
+                    />
+                  </div>
                 </div>
               </div>
             )}

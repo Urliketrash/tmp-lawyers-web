@@ -17,7 +17,16 @@ export default function VisitorTracker() {
       return;
     }
 
-    // 2. Prevent duplicate tracks for the exact same path in a single render session
+    // 2. Check if admin analytics bypass is active in localStorage
+    try {
+      if (typeof window !== "undefined" && window.localStorage && window.localStorage.getItem("tmp_ignore_analytics") === "true") {
+        return;
+      }
+    } catch (e) {
+      console.warn("localStorage is not available:", e);
+    }
+
+    // 3. Prevent duplicate tracks for the exact same path in a single render session
     if (lastTrackedPath.current === pathname) {
       return;
     }
