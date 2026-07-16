@@ -22,7 +22,7 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
                     {news.category}
                 </span>
                 <span className="text-gray-500 text-[10px] uppercase tracking-widest">
-                    {new Date(news.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    {new Date(news.date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
                 </span>
             </div>
             <h1 className="text-3xl md:text-5xl font-serif italic text-white leading-tight mb-8">

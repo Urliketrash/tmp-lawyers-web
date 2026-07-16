@@ -14,9 +14,9 @@ export type LoginInput = z.infer<typeof loginSchema>;
  * Validation schema for the Public Contact form.
  */
 export const contactSchema = z.object({
-  name: z.string().min(1, 'Nama wajib diisi'),
-  email: z.string().email('Format email tidak valid'),
-  message: z.string().min(10, 'Pesan minimal 10 karakter'),
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Invalid email format'),
+  message: z.string().min(10, 'Message must be at least 10 characters'),
 });
 
 export type ContactInput = z.infer<typeof contactSchema>;

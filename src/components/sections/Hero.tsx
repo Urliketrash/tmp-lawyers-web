@@ -1,11 +1,55 @@
-"use client";
-
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-
+import { supabase } from "@/lib/supabase";
 import ScrollReveal from "@/components/ScrollReveal";
 
 export default function Hero() {
+  const [heroTitle, setHeroTitle] = useState("Advocate & Counsellor at Law");
+  const [heroDesc, setHeroDesc] = useState("Providing comprehensive legal assistance with optimal support and effective-efficient strategies.");
+  const [heroCta, setHeroCta] = useState("Consult Now");
+
+  useEffect(() => {
+    const fetchHeroData = async () => {
+      try {
+        const { data, error } = await supabase.from("site_settings").select("*");
+        if (error) throw error;
+        if (data) {
+          data.forEach((item) => {
+            if (item.key === "home_hero_title") setHeroTitle(item.value);
+            if (item.key === "home_hero_desc") setHeroDesc(item.value);
+            if (item.key === "home_hero_cta") setHeroCta(item.value);
+          });
+        }
+      } catch (e) {
+        console.error("Error loading hero data:", e);
+      }
+    };
+    fetchHeroData();
+  }, []);
+
+  const renderTitle = (title: string) => {
+    if (title === "Advocate & Counsellor at Law") {
+      return (
+        <>
+          Advocate & <br />
+          <span className="text-tmp-gold not-italic">Counsellor</span> at Law
+        </>
+      );
+    }
+    if (title.includes("Counsellor")) {
+      const parts = title.split("Counsellor");
+      return (
+        <>
+          {parts[0]}
+          <span className="text-tmp-gold not-italic">Counsellor</span>
+          {parts[1]}
+        </>
+      );
+    }
+    return title;
+  };
+
   return (
     <header
       id="home"
@@ -20,7 +64,7 @@ export default function Hero() {
           fill
           className="object-cover object-center"
           priority
-          quality={90}
+          quality={75}
         />
       </div>
 
@@ -31,19 +75,17 @@ export default function Hero() {
           </p>
         </div>
         <h1 className="text-4xl md:text-8xl font-serif italic mb-6 md:mb-8 leading-tight">
-          Advocate & <br />
-          <span className="text-tmp-gold not-italic">Counsellor</span> at Law
+          {renderTitle(heroTitle)}
         </h1>
-        <p className="text-gray-400 text-xs md:text-lg max-w-4xl mx-auto leading-relaxed mb-8 md:mb-12">
-          Menyediakan bantuan jasa hukum komprehensif dengan
-          pelayanan optimal dan strategi <span className="whitespace-nowrap">efektif-efisien</span>.
+        <p className="text-gray-400 text-xs md:text-lg max-w-4xl mx-auto leading-relaxed mb-8 md:mb-12 whitespace-pre-line">
+          {heroDesc}
         </p>
         <Link
           href="#contact"
           className="bg-tmp-gold text-black font-extrabold uppercase tracking-[0.2em] py-4 px-8 md:py-5 md:px-12 text-xs md:text-base transition-all duration-400 inline-block hover:bg-white hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(197,160,89,0.2)] relative z-20 cursor-pointer"
           suppressHydrationWarning
         >
-          Konsultasi Sekarang
+          {heroCta}
         </Link>
       </ScrollReveal>
     </header>

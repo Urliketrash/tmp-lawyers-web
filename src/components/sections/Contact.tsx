@@ -5,6 +5,19 @@ import { contactSchema, ContactInput } from "@/lib/validations/news";
 import ScrollReveal from "@/components/ScrollReveal";
 import { supabase } from "@/lib/supabase";
 
+const getLinkedInUsername = (url: string) => {
+  if (!url) return "TMP Law Firm & Partners";
+  try {
+    const urlWithoutQuery = url.split("?")[0];
+    const cleanUrl = urlWithoutQuery.replace(/\/$/, "");
+    const parts = cleanUrl.split("/");
+    const lastPart = parts[parts.length - 1];
+    return lastPart ? lastPart : "TMP Law Firm & Partners";
+  } catch (e) {
+    return "TMP Law Firm & Partners";
+  }
+};
+
 export default function Contact() {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [settings, setSettings] = useState<Record<string, string>>({
@@ -89,26 +102,30 @@ export default function Contact() {
               Our Contact
             </h2>
             <p className="text-gray-400 text-sm mb-12 italic">
-              Menerima tamu kapan saja untuk konsultasi profesional.
+              Welcoming visitors anytime for professional consultation.
             </p>
             <div className="space-y-10">
-              <div className="flex items-start gap-6">
-                <i className="fas fa-map-marker-alt text-tmp-gold text-xl"></i>
-                <p className="text-sm text-gray-400">
-                  {settings.address}
-                </p>
-              </div>
-              <div className="flex items-center gap-6">
-                <i className="fab fa-whatsapp text-tmp-gold text-xl"></i>
-                <a
-                  href={`https://wa.me/${settings.whatsapp.startsWith("0") ? "62" + settings.whatsapp.slice(1).replace(/[^0-9]/g, "") : settings.whatsapp.replace(/[^0-9]/g, "")}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-gray-300 font-bold tracking-widest hover:text-tmp-gold"
-                >
-                  {settings.whatsapp}
-                </a>
-              </div>
+              {settings.address && settings.address !== "-" && (
+                <div className="flex items-start gap-6">
+                  <i className="fas fa-map-marker-alt text-tmp-gold text-xl"></i>
+                  <p className="text-sm text-gray-400">
+                    {settings.address}
+                  </p>
+                </div>
+              )}
+              {settings.whatsapp && settings.whatsapp !== "-" && (
+                <div className="flex items-center gap-6">
+                  <i className="fab fa-whatsapp text-tmp-gold text-xl"></i>
+                  <a
+                    href={`https://wa.me/${settings.whatsapp.startsWith("0") ? "62" + settings.whatsapp.slice(1).replace(/[^0-9]/g, "") : settings.whatsapp.replace(/[^0-9]/g, "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-gray-300 font-bold tracking-widest hover:text-tmp-gold"
+                  >
+                    {settings.whatsapp}
+                  </a>
+                </div>
+              )}
               <div className="flex items-center gap-6">
                 <i className="fas fa-globe text-tmp-gold text-xl"></i>
                 <a
@@ -119,57 +136,63 @@ export default function Contact() {
                   www.tmplawyers.com
                 </a>
               </div>
-              <div className="flex items-center gap-6">
-                <i className="fab fa-instagram text-tmp-gold text-xl"></i>
-                <a
-                  href={`https://www.instagram.com/${settings.instagram.replace('@', '').trim()}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-gray-300 font-bold tracking-widest hover:text-tmp-gold"
-                >
-                  {settings.instagram}
-                </a>
-              </div>
-              <div className="flex items-center gap-6">
-                <i className="fab fa-linkedin text-tmp-gold text-xl"></i>
-                <a
-                  href={settings.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-gray-300 font-bold tracking-widest hover:text-tmp-gold"
-                >
-                  TMP Law Firm & Partners
-                </a>
-              </div>
+              {settings.instagram && settings.instagram.trim() !== "" && settings.instagram.trim() !== "-" && (
+                <div className="flex items-center gap-6">
+                  <i className="fab fa-instagram text-tmp-gold text-xl"></i>
+                  <a
+                    href={`https://www.instagram.com/${settings.instagram.replace('@', '').trim()}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-gray-300 font-bold tracking-widest hover:text-tmp-gold"
+                  >
+                    {settings.instagram}
+                  </a>
+                </div>
+              )}
+              {settings.linkedin && settings.linkedin.trim() !== "" && settings.linkedin.trim() !== "-" && (
+                <div className="flex items-center gap-6">
+                  <i className="fab fa-linkedin text-tmp-gold text-xl"></i>
+                  <a
+                    href={settings.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-gray-300 font-bold tracking-widest hover:text-tmp-gold"
+                  >
+                    {getLinkedInUsername(settings.linkedin)}
+                  </a>
+                </div>
+              )}
             </div>
-            <ScrollReveal variant="fade-up" className="mt-10">
-              <div>
-                <a
-                  href={`https://maps.google.com/?q=${encodeURIComponent(settings.address)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block cursor-pointer"
-                >
-                  <iframe
-                    src={settings.maps_embed}
-                    width="100%"
-                    height="300"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                  ></iframe>
-                </a>
-                <a
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(settings.address)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 inline-block px-5 py-2 bg-tmp-gold text-black font-bold rounded shadow hover:bg-yellow-400 transition"
-                >
-                  Dapatkan Rute
-                </a>
-              </div>
-            </ScrollReveal>
+            {settings.address && settings.address !== "-" && settings.maps_embed && settings.maps_embed !== "-" && (
+              <ScrollReveal variant="fade-up" className="mt-10">
+                <div>
+                  <a
+                    href={`https://maps.google.com/?q=${encodeURIComponent(settings.address)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block cursor-pointer"
+                  >
+                    <iframe
+                      src={settings.maps_embed}
+                      width="100%"
+                      height="300"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    ></iframe>
+                  </a>
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(settings.address)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-block px-5 py-2 bg-tmp-gold text-black font-bold rounded shadow hover:bg-yellow-400 transition"
+                  >
+                    Get Directions
+                  </a>
+                </div>
+              </ScrollReveal>
+            )}
           </ScrollReveal>
           <ScrollReveal variant="fade-left" className="lg:w-1/2">
             {status === "success" ? (
@@ -178,16 +201,17 @@ export default function Contact() {
                   <i className="fas fa-check text-tmp-gold text-2xl"></i>
                 </div>
                 <h3 className="text-2xl font-serif italic text-white mb-4">
-                  Pesan Terkirim!
+                  Message Sent!
                 </h3>
                 <p className="text-gray-400 text-sm mb-8 leading-relaxed">
-                  Terima kasih telah menghubungi kami. Tim kami akan segera meninjau pesan Anda dan memberikan balasan secepatnya.
+                  Thank you for contacting us. Our team will review your message and respond as soon as possible.
                 </p>
                 <button
+                  suppressHydrationWarning
                   onClick={() => setStatus("idle")}
                   className="text-tmp-gold text-xs font-bold uppercase tracking-widest hover:text-white transition-colors"
                 >
-                  Kirim Pesan Lain
+                  Send Another Message
                 </button>
               </div>
             ) : (
@@ -237,7 +261,7 @@ export default function Contact() {
                   className="bg-tmp-gold text-black font-extrabold uppercase tracking-[0.2em] py-5 px-12 w-full text-sm transition-all duration-400 hover:bg-white hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(197,160,89,0.2)] disabled:opacity-50 disabled:cursor-not-allowed"
                   suppressHydrationWarning
                 >
-                  {status === "sending" ? "Mengirim..." : "Kirimkan Pertanyaan"}
+                  {status === "sending" ? "Sending..." : "Send Inquiry"}
                 </button>
               </form>
             )}

@@ -1,6 +1,39 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 import ScrollReveal from "@/components/ScrollReveal";
 
 export default function About() {
+  const [heading, setHeading] = useState("Comprehensive Legal Services With Effective and Efficient.");
+  const [p1, setP1] = useState("TMP Law Firm is a law firm established in Jakarta since 2021. TMP Law Firm is here to offer comprehensive legal assistance to our clients. The legal services provided cover various areas according to the needs and interests of clients, such as litigation, non-litigation, including commercial business areas for individuals/companies.");
+  const [p2, setP2] = useState("TMP Law Firm will always meet client needs with optimal service in handling every legal case/issue using effective-efficient strategies to deliver the best results for our clients. The main objective of TMP Law Firm is to be a law firm capable of addressing clients' needs for all legal issues they face.");
+  const [p3, setP3] = useState("This objective is supported by our experience in all aspects, starting from partners and associates who have experience in their respective areas of expertise. TMP Law Firm is capable of assisting with your legal issues with a professional team in fields such as Criminal Law, Civil Law, Business Law, Banking or Financial Services Law, Property Law, Tax Law, Capital Market Law, Employment Law, and Consumer Protection.");
+  const [p4, setP4] = useState("We are also capable of providing Legal Services for every business activity of our clients as a preventive measure by identifying each regulation, analyzing risk management, and providing legal counsel so that clients can make the right decisions in conducting their business activities.");
+  const [mottoDesc, setMottoDesc] = useState("To be a law firm capable of addressing clients' needs for all legal issues they face.");
+
+  useEffect(() => {
+    const fetchAboutData = async () => {
+      try {
+        const { data, error } = await supabase.from("site_settings").select("*");
+        if (error) throw error;
+        if (data) {
+          data.forEach((item) => {
+            if (item.key === "about_heading") setHeading(item.value);
+            if (item.key === "about_p1") setP1(item.value);
+            if (item.key === "about_p2") setP2(item.value);
+            if (item.key === "about_p3") setP3(item.value);
+            if (item.key === "about_p4") setP4(item.value);
+            if (item.key === "about_motto_desc") setMottoDesc(item.value);
+          });
+        }
+      } catch (e) {
+        console.error("Error loading about data:", e);
+      }
+    };
+    fetchAboutData();
+  }, []);
+
   return (
     <section id="about" className="py-32 px-6 bg-tmp-black">
       <div className="container mx-auto max-w-6xl">
@@ -9,25 +42,17 @@ export default function About() {
             Our Firm
           </h2>
           <h3 className="text-2xl md:text-3xl font-serif font-bold italic text-white max-w-5xl mx-auto leading-relaxed">
-            Comprehensive Legal Services With Effective and Efficient.
+            {heading}
           </h3>
         </ScrollReveal>
 
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           <ScrollReveal variant="fade-right">
             <div className="space-y-4 text-justify text-gray-400 text-sm leading-loose">
-              <p>
-                TMP Law Firm merupakan firma hukum yang didirikan di Jakarta sejak 2021. TMP Law Firm hadir menawarkan bantuan jasa hukum yang komprehensif kepada klien kami. Jasa hukum yang disediakan mencakup berbagai area sesuai kebutuhan dan kepentingan klien, seperti area litigasi, non-litigasi, termasuk area bisnis komersil bagi individu/perusahaan.
-              </p>
-              <p>
-                TMP Law Firm akan senantiasa memenuhi kebutuhan dengan pelayanan yang optimal dalam setiap penanganan perkara/permasalahan hukum dengan strategi yang efektif-efisien sehingga mampu memberikan hasil terbaik bagi klien. Tujuan utama TMP Law Firm yaitu menjadi firma hukum yang mampu menjawab kebutuhan klien atas segala permasalahan hukum yang dihadapi.
-              </p>
-              <p>
-                Tujuan tersebut didukung dengan pengalaman kami pada segala aspek, mulai dari partner serta associates yang memiliki pengalaman dalam setiap bidang keahliannya. TMP Law Firm mampu membantu permasalahan hukum Anda dengan tim yang profesional dalam bidangnya seperti Hukum Pidana, Hukum Perdata, Hukum Bisnis, Hukum Perbankan atau Jasa Keuangan, Hukum Properti, Hukum Pajak, Hukum Pasar Modal, Hukum Ketenagakerjaan, dan Perlindungan Konsumen.
-              </p>
-              <p>
-                Kami juga mampu memberikan Pelayanan Jasa Hukum pada setiap kegiatan bisnis klien dalam upaya preventif dengan melakukan identifikasi atas setiap regulasi, analisa pengelolaan risiko, dan memberikan pertimbangan hukum sehingga klien mampu mengambil keputusan yang tepat dalam pelaksanaan kegiatan bisnis.
-              </p>
+              {p1 && <p>{p1}</p>}
+              {p2 && <p>{p2}</p>}
+              {p3 && <p>{p3}</p>}
+              {p4 && <p>{p4}</p>}
             </div>
           </ScrollReveal>
           <ScrollReveal
@@ -41,8 +66,7 @@ export default function About() {
               &quot;Trust - Strategy - Professional&quot;
             </p>
             <p className="text-gray-400 text-xs leading-relaxed">
-              Menjadi firma hukum yang mampu menjawab kebutuhan klien atas
-              segala permasalahan hukum yang dihadapi.
+              {mottoDesc}
             </p>
           </ScrollReveal>
         </div>

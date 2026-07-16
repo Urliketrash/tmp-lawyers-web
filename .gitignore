@@ -60,3 +60,9 @@ next-env.d.ts
 __pycache__/
 .venv/
 
+# Temp/debug files
+*_tc_args.txt
+check_logs.js
+ppt_dump.txt
+
+

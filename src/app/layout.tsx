@@ -18,14 +18,14 @@ export const metadata: Metadata = {
     template: "%s | TMP Law Firm",
   },
   description: "Advocate & Counsellor at Law. Trust • Strategy • Professional. Providing premium litigation, corporate, events, and regulation legal services.",
-  keywords: ["TMP Law Firm", "Tao Manullang & Partners", "Law Firm Jakarta", "Advokat Jakarta", "Pengacara Jakarta", "Litigation", "Corporate Law", "Regulation"],
+  keywords: ["TMP Law Firm", "Tao Manullang & Partners", "Law Firm Jakarta", "Jakarta Lawyers", "Jakarta Attorneys", "Litigation", "Corporate Law", "Regulation"],
   authors: [{ name: "TMP Law Firm" }],
   openGraph: {
     title: "TMP Law Firm - Tao Manullang & Partners",
     description: "Advocate & Counsellor at Law. Trust • Strategy • Professional.",
     url: "https://tmplawyers.com",
     siteName: "TMP Law Firm",
-    locale: "id_ID",
+    locale: "en_US",
     type: "website",
   },
   twitter: {
@@ -51,7 +51,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className="scroll-smooth" suppressHydrationWarning>
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
         <link
           rel="stylesheet"

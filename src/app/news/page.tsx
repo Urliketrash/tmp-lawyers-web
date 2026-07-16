@@ -92,7 +92,7 @@ export default function NewsPage() {
                                 {item.category}
                             </span>
                             <p className="text-gray-500 text-[10px] uppercase tracking-widest">
-                                {new Date(item.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                {new Date(item.date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
                             </p>
                         </div>
                         <h4 className="text-xl font-serif italic text-white mb-4 line-clamp-2 group-hover:text-tmp-gold transition-colors">

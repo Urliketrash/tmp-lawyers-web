@@ -32,12 +32,12 @@ export default function SettingsPage() {
 
         if (data) {
           data.forEach((item) => {
-            if (item.key === "whatsapp") setWhatsapp(item.value);
-            if (item.key === "email_to") setEmailTo(item.value);
-            if (item.key === "linkedin") setLinkedin(item.value);
-            if (item.key === "instagram") setInstagram(item.value);
-            if (item.key === "address") setAddress(item.value);
-            if (item.key === "maps_embed") setMapsEmbed(item.value);
+            if (item.key === "whatsapp") setWhatsapp(item.value || "");
+            if (item.key === "email_to") setEmailTo(item.value || "");
+            if (item.key === "linkedin") setLinkedin(item.value || "");
+            if (item.key === "instagram") setInstagram(item.value || "");
+            if (item.key === "address") setAddress(item.value || "");
+            if (item.key === "maps_embed") setMapsEmbed(item.value || "");
           });
         }
       } catch (err) {
@@ -133,6 +133,9 @@ export default function SettingsPage() {
           <Link href="/admin/team" className="block text-gray-400 hover:text-white hover:bg-white/5 px-4 py-3 rounded text-sm font-bold transition-colors">
             <i className="fas fa-users mr-3"></i> Team Profiles
           </Link>
+          <Link href="/admin/content" className="block text-gray-400 hover:text-white hover:bg-white/5 px-4 py-3 rounded text-sm font-bold transition-colors">
+            <i className="fas fa-edit mr-3"></i> Kelola Konten (CMS)
+          </Link>
           <Link href="/admin/analytics" className="block text-gray-400 hover:text-white hover:bg-white/5 px-4 py-3 rounded text-sm font-bold transition-colors">
             <i className="fas fa-chart-line mr-3"></i> Visitor Analytics
           </Link>
@@ -208,7 +211,7 @@ export default function SettingsPage() {
               {/* LinkedIn */}
               <div className="space-y-2 md:col-span-2">
                 <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                  LinkedIn Page Link
+                  LinkedIn Page Link (Opsional)
                 </label>
                 <input
                   type="url"
@@ -216,14 +219,13 @@ export default function SettingsPage() {
                   onChange={(e) => setLinkedin(e.target.value)}
                   className="w-full bg-black border border-white/10 p-3 rounded text-sm focus:border-tmp-gold outline-none"
                   placeholder="e.g. https://www.linkedin.com/company/..."
-                  required
                 />
               </div>
 
               {/* Instagram */}
               <div className="space-y-2 md:col-span-2">
                 <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                  Instagram Username
+                  Instagram Username (Opsional)
                 </label>
                 <input
                   type="text"
@@ -231,7 +233,6 @@ export default function SettingsPage() {
                   onChange={(e) => setInstagram(e.target.value)}
                   className="w-full bg-black border border-white/10 p-3 rounded text-sm focus:border-tmp-gold outline-none"
                   placeholder="e.g. @tmplawfirm"
-                  required
                 />
               </div>
 

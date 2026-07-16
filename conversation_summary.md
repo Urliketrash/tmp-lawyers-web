@@ -1,30 +1,44 @@
-# Ringkasan Percakapan & Riwayat Perubahan (Bilingual Feature & Rollback)
+# Ringkasan Percakapan & Riwayat Perubahan (Penerjemahan Bahasa Inggris & Sistem CMS Admin)
 
-Dokumen ini mencatat kronologi percakapan dan riwayat pengembangan fitur multibahasa hingga proses pembatalan (rollback) yang telah kita lakukan pada repositori `tmplawyers.com`.
-
----
-
-## 1. Kronologi Percakapan & Permintaan User
-1. **Pembuatan Rencana Implementasi**: User meminta dibuatkan rencana implementasi fitur multibahasa (Indonesia & Inggris) berdasarkan dokumen PRD `language.md`.
-2. **Penyempurnaan Rencana**: Rencana disempurnakan dengan menyederhanakan mekanisme penerjemahan (menggunakan editor side-by-side/tab dengan tombol "AI Translate" instan berbasis OpenAI SDK, tanpa antrean latar belakang yang rumit).
-3. **Commit & Push Awal**: Sebelum eksekusi, kode dasar dicadangkan dan didokumentasikan di commit `1e1aa57` agar memiliki titik pemulihan jika user ingin membatalkan perubahan.
-4. **Eksekusi Fitur**: Seluruh infrastruktur `next-intl` dikonfigurasi, rute publik dipindahkan ke segmen `[locale]`, form CMS admin diperbarui dengan tombol AI Translate, dan migrasi SQL `supabase-migration-v2.sql` dibuat.
-5. **Penyelesaian Bug Build**: Menyelesaikan berbagai error kompilasi TypeScript dan Turbopack (seperti perbaikan tag `hrefLang`, properti tipe data, dan pemisahan layout menggunakan *Route Groups* Next.js).
-6. **Revert (Rollback)**: User memutuskan untuk tidak menggunakan fitur tersebut dan meminta repositori dikembalikan ke kondisi awal sebelum pengerjaan dimulai.
-7. **Pembersihan Akhir**: Repositori dikembalikan ke komit `1e1aa57` dan semua file untracked dibersihkan via `git clean -fd`.
+Dokumen ini mencatat seluruh pengerjaan, keputusan arsitektur, dan perubahan yang telah diselesaikan pada repositori `tmplawyers.com` pada sesi ini. Dokumen ini dapat Anda baca kembali untuk melanjutkan pengerjaan berikutnya.
 
 ---
 
-## 2. Detail Implementasi yang Sempat Dilakukan
-Bagi referensi pengembangan di masa depan, berikut adalah arsitektur i18n yang sempat berjalan dengan sukses:
-* **next-intl**: Menangani lokalisasi UI statis via file JSON (`messages/id.json`, `messages/en.json`) dan pendeteksian kuki preferensi bahasa.
-* **AI Translation Endpoint (`/api/translate`)**: Memanfaatkan OpenAI API (`gpt-4o-mini`) dengan instruksi khusus untuk mengenali terminologi hukum Indonesia (seperti mempertahankan gelar akademis dan menerjemahkan istilah hukum secara presisi).
-* **Route Groups (`(public)` & `(admin)`)**: Memisahkan layout root untuk menghindari tag HTML bersarang (nested layout) di Next.js App Router.
+## 1. Ringkasan Tugas yang Telah Selesai
+
+### A. Perbaikan Error Hydration Mismatch
+* Mengidentifikasi error hidrasi pada Next.js yang disebabkan oleh pembacaan elemen yang tidak seragam antara server-side rendering (SSR) dan client-side rendering (CSR).
+* Memastikan kode bersih dan siap dikompilasi tanpa adanya modifikasi tak terduga dari ekstensi browser.
+
+### B. Migrasi Bahasa Inggris untuk Halaman Publik
+Sesuai permintaan klien, seluruh halaman depan (publik) telah dimigrasikan ke **Bahasa Inggris**:
+* **[layout.tsx](file:///d:/Developments/tmplawyers.com/src/app/layout.tsx)**: Mengubah konfigurasi bahasa dokumen menjadi `html lang="en"` dan locale openGraph menjadi `"en_US"`.
+* **Seksi Halaman Utama**: Menerjemahkan semua teks pada komponen **Hero**, **About**, **Lawyers (Modal Detail)**, **Services**, **Clients**, dan **Contact** (formulir kontak publik).
+* **Data Statis**: Menerjemahkan konten biografi, pendidikan, dan pengalaman para pengacara di **[lawyersData.ts](file:///d:/Developments/tmplawyers.com/src/data/lawyersData.ts)** serta isi artikel berita bawaan di **[newsData.ts](file:///d:/Developments/tmplawyers.com/src/data/newsData.ts)**.
+* **Format Tanggal Berita**: Mengubah format penanggalan artikel berita dari locale `'id-ID'` ke `'en-US'` (contoh output: *"June 18, 2026"*).
+* **Pesan Error Validasi Publik**: Menerjemahkan skema Zod `contactSchema` di **[news.ts](file:///d:/Developments/tmplawyers.com/src/lib/validations/news.ts)** ke Bahasa Inggris (contoh: *"Name is required"*).
+
+### C. Admin Dashboard Tetap dalam Bahasa Indonesia
+Sesuai instruksi Anda, seluruh antarmuka pengelolaan admin dipertahankan dalam **Bahasa Indonesia**:
+* Halaman login, dashboard berita, analitik pengunjung, pengaturan umum, dan manajemen tim pengacara tetap menampilkan teks Bahasa Indonesia.
+* Skema validasi untuk area admin (`loginSchema`, `newsSchema`, dan `lawyerSchema` di **[news.ts](file:///d:/Developments/tmplawyers.com/src/lib/validations/news.ts)**) tetap menggunakan Bahasa Indonesia (contoh: *"Email wajib diisi"*).
+
+### D. Fitur CMS Halaman Admin (Dinamis via Supabase)
+Klien ingin agar admin dapat mengedit konten halaman utama secara mandiri. Kami telah membuat sistem CMS dinamis:
+* **Halaman Baru [page.tsx (CMS)](file:///d:/Developments/tmplawyers.com/src/app/admin/content/page.tsx) (`/admin/content`)**: Antarmuka kelola konten berbasis tab di admin panel untuk mengubah teks Hero, teks About, daftar 12 Layanan (dukungan CRUD penuh), dan daftar Klien (Top & Project Clients) secara visual.
+* **Penyimpanan Database**: Menggunakan tabel key-value `site_settings` milik Supabase untuk menyimpan pengaturan ini (termasuk penyimpanan array dinamis dalam string JSON untuk seksi Layanan dan Klien).
+* **Sidebar Menu**: Menambahkan menu *"Kelola Konten (CMS)"* pada sidebar seluruh halaman admin.
+* **Integrasi Frontend & Fallback**: Mengubah komponen publik [Hero.tsx](file:///d:/Developments/tmplawyers.com/src/components/sections/Hero.tsx), [About.tsx](file:///d:/Developments/tmplawyers.com/src/components/sections/About.tsx), [Services.tsx](file:///d:/Developments/tmplawyers.com/src/components/sections/Services.tsx), dan [Clients.tsx](file:///d:/Developments/tmplawyers.com/src/components/sections/Clients.tsx) agar mengambil data dari database secara real-time. Jika data di database kosong, website akan secara aman menampilkan konten statis bahasa Inggris bawaan saat ini.
+
+### E. Pembersihan Peringatan Konsol Next.js
+* Mengubah properti kualitas gambar latar belakang di seksi Hero dari `quality={90}` menjadi `quality={75}` di berkas [Hero.tsx](file:///d:/Developments/tmplawyers.com/src/components/sections/Hero.tsx) untuk menghilangkan peringatan *unconfigured qualities* pada konsol Next.js.
 
 ---
 
-## 3. Status Terkini Proyek
-* **Cabang Git**: `main`
-* **Status Kerja**: `working tree clean` (Semua perubahan i18n telah dihapus secara permanen).
-* **Cache Build**: Folder `.next/` telah dihapus untuk menghindari anomali cache.
-* **Database**: Perubahan pada Supabase bersifat opsional dan dikendalikan sepenuhnya lewat SQL Editor dashboard Anda. Jika Anda sempat menjalankan migrasi, tabel `services` baru dan kolom translasi di database tidak akan mengganggu performa kode versi lama Anda.
+## 2. Hasil Verifikasi Build Akhir
+* Perintah `bun run build` telah dijalankan dan berhasil diselesaikan dengan status **`Compiled successfully`** tanpa ada error kompilasi TypeScript atau linter.
+* Semua fungsionalitas CMS baru dan integrasi frontend publik dinamis siap digunakan.
+
+---
+
+Selamat beristirahat! Ketika Anda kembali nanti, kita bisa langsung menguji fitur baru ini atau melanjutkan ke revisi berikutnya.

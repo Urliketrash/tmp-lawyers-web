@@ -101,6 +101,9 @@ export default function DashboardPage() {
             <Link href="/admin/team" className="block text-gray-400 hover:text-white hover:bg-white/5 px-4 py-3 rounded text-sm font-bold transition-colors">
               <i className="fas fa-users mr-3"></i> Team Profiles
             </Link>
+            <Link href="/admin/content" className="block text-gray-400 hover:text-white hover:bg-white/5 px-4 py-3 rounded text-sm font-bold transition-colors">
+              <i className="fas fa-edit mr-3"></i> Kelola Konten (CMS)
+            </Link>
             <Link href="/admin/analytics" className="block text-gray-400 hover:text-white hover:bg-white/5 px-4 py-3 rounded text-sm font-bold transition-colors">
               <i className="fas fa-chart-line mr-3"></i> Visitor Analytics
             </Link>
