@@ -94,9 +94,9 @@ export default function Lawyers() {
       <div className="container mx-auto max-w-6xl">
         <ScrollReveal variant="fade-up" className="text-center mb-16">
           <h2 className="text-tmp-gold text-xs font-bold uppercase tracking-[0.5em] mb-4">
-            Our Lawyers
+            Our Team
           </h2>
-          <h3 className="text-4xl font-serif italic">Meet Our Lawyers</h3>
+          <h3 className="text-4xl font-serif italic">Meet Our Team</h3>
         </ScrollReveal>
         
         <ScrollReveal variant="fade-up" delay={0.1}>
