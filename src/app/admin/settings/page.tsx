@@ -358,7 +358,7 @@ export default function SettingsPage() {
           <h1 className="text-tmp-gold font-bold text-xl mb-1">TMP ADMIN</h1>
           <p className="text-gray-500 text-xs tracking-widest">CONTENT MANAGER</p>
           <p className="text-[10px] text-tmp-gold/80 italic mt-3 max-w-[200px] leading-relaxed">
-            "Halo admin ganteng, semangat menjalani hidup ya! :)"
+            &ldquo;Halo admin ganteng, semangat menjalani hidup ya! :)&rdquo;
           </p>
         </div>
         

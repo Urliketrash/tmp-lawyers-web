@@ -10,6 +10,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { lawyerSchema, LawyerInput } from "@/lib/validations/news";
 import { lawyersData } from "@/data/lawyersData";
 
+function generateUniqueFileName(fileExt: string) {
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+}
+
 /**
  * Halaman Form Edit Profil Tim Pengacara (Admin)
  * Route: /admin/team/edit/[id]
@@ -150,8 +154,8 @@ export default function EditTeamPage({ params }: { params: Promise<{ id: string 
       if (file) {
         setActionLoader({ isLoading: true, status: 'loading', message: 'Uploading Photo...' });
         
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+        const fileExt = file.name.split('.').pop() || '';
+        const fileName = generateUniqueFileName(fileExt);
         const filePath = `team/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
@@ -286,10 +290,13 @@ export default function EditTeamPage({ params }: { params: Promise<{ id: string 
                     suppressHydrationWarning
                 >
                     <option value="FOUNDER">Founder</option>
+                    <option value="MANAGING PARTNER">Managing Partner</option>
                     <option value="PARTNER">Partner</option>
+                    <option value="SENIOR PARTNER">Senior Partner</option>
                     <option value="ASSOCIATE">Associate</option>
                     <option value="JUNIOR ASSOCIATE">Junior Associate</option>
                     <option value="PARALEGAL">Paralegal</option>
+                    <option value="INTERNSHIP">Internship</option>
                 </select>
                 {errors.role && (
                     <p className="text-red-500 text-xs mt-1">{errors.role.message}</p>

@@ -1,4 +1,4 @@
-﻿PERANCANGAN DAN PENGEMBANGAN WEBSITE COMPANY PROFILE BERBASIS WEB MENGGUNAKAN NEXT.JS DAN FIREBASE PADA TAO MANULLANG & PARTNERS LAW FIRM
+PERANCANGAN WEBSITE COMPANY PROFILE MENGGUNAKAN NEXT.JS DAN FIREBASE PADA TAO MANULLANG & PARTNERS LAW FIRM
 
 LAPORAN PRAKTEK KERJA LAPANGAN
 
@@ -17,9 +17,9 @@ LEMBAR PERSETUJUAN
 
 NIM         : [NIM Mahasiswa]
 Nama        : [Nama Mahasiswa]
-Judul Kerja Praktek : Perancangan dan Pengembangan Website Company Profile
-                      Berbasis Web Menggunakan Next.js dan Firebase Pada
-                      TAO MANULLANG & Partners Law Firm
+Judul Kerja Praktek : Perancangan Website Company Profile Menggunakan
+                      Next.js dan Firebase Pada TAO MANULLANG & Partners
+                      Law Firm
 
 Laporan Kerja Praktek Ini Telah Diperiksa dan Disetujui.
 
@@ -44,9 +44,8 @@ LEMBAR PENGESAHAN PRAKTEK KERJA LAPANGAN
 Nama         : [Nama Mahasiswa]
 NIM          : [NIM Mahasiswa]
 Program Studi: Sistem Informasi
-Judul        : Perancangan dan Pengembangan Website Company Profile
-               Berbasis Web Menggunakan Next.js dan Firebase Pada
-               TAO MANULLANG & Partners Law Firm
+Judul        : Perancangan Website Company Profile Menggunakan Next.js
+               dan Firebase Pada TAO MANULLANG & Partners Law Firm
 
 Disetujui dan Disahkan Oleh :
 
@@ -68,7 +67,7 @@ NIDN. 1027029102
 
 KATA PENGANTAR
 
-       Alhamdulillah Segala Puji bagi Allah Subhannahu wa Ta'ala yang telah memberikan Rahmat dan Hidayah-Nya kepada penulis dalam menyelesaikan Laporan Praktek Kerja Lapangan ini sehingga penulis dapat menyelesaikan tepat pada waktunya, dengan judul "Perancangan dan Pengembangan Website Company Profile Berbasis Web Menggunakan Next.js dan Firebase Pada TAO MANULLANG & Partners Law Firm".
+       Alhamdulillah Segala Puji bagi Allah Subhannahu wa Ta'ala yang telah memberikan Rahmat dan Hidayah-Nya kepada penulis dalam menyelesaikan Laporan Praktek Kerja Lapangan ini sehingga penulis dapat menyelesaikan tepat pada waktunya, dengan judul "Perancangan Website Company Profile Menggunakan Next.js dan Firebase Pada TAO MANULLANG & Partners Law Firm".
        Penulis menyadari bahwa tanpa adanya bantuan dari berbagai pihak, penulis akan banyak menemui kesulitan dalam penyusunan laporan ini. Untuk itu izinkan penulis mengucapkan terimakasih kepada :
 1. Kepada orang tua dan keluarga saya tercinta yang selalu memberikan support dan do'a yang tidak hentinya dalam keadaan apapun.
 2. Bapak Dr. Yogi Yunefri, M.Kom., MTA., MCE selaku Dekan Fakultas Ilmu Komputer Universitas Lancang Kuning.
@@ -194,7 +193,7 @@ A. Latar Belakang
        Kondisi tersebut tentu menimbulkan sejumlah kendala. Pertama, calon klien tidak dapat memperoleh informasi lengkap mengenai firma secara mandiri tanpa harus menghubungi pihak firma terlebih dahulu. Kedua, informasi yang tersebar di media sosial tidak terindeks oleh mesin pencari sehingga jangkauannya terbatas. Ketiga, citra profesional firma belum terwakili secara optimal di dunia digital karena belum adanya platform resmi yang menampilkan profil perusahaan secara terstruktur.
        Melihat permasalahan tersebut, penulis berinisiatif untuk merancang dan mengembangkan sebuah website company profile untuk TAO MANULLANG & Partners Law Firm. Website ini dirancang tidak hanya sebagai media informasi statis, tetapi juga dilengkapi dengan sistem pengelolaan berita (CMS) yang memungkinkan staf firma untuk menambah, mengubah, dan menghapus berita hukum secara mandiri. Selain itu, website juga menyediakan formulir kontak yang terintegrasi langsung ke email firma sehingga calon klien dapat mengirimkan pesan konsultasi awal secara online.
        Dalam pengembangan website ini, penulis menggunakan framework Next.js sebagai basis pembangunan frontend karena framework tersebut mendukung fitur Server-Side Rendering yang sangat baik untuk keperluan optimasi mesin pencari. Untuk sisi backend, penulis memanfaatkan Firebase sebagai penyedia layanan database, autentikasi, dan penyimpanan file secara cloud tanpa perlu membangun server sendiri. Sementara untuk tampilan antarmuka, digunakan Tailwind CSS yang memungkinkan pembuatan desain responsif secara cepat dan konsisten.
-       Berdasarkan latar belakang tersebut, penulis tertarik untuk melakukan penelitian mengenai "Perancangan dan Pengembangan Website Company Profile Berbasis Web Menggunakan Next.js dan Firebase Pada TAO MANULLANG & Partners Law Firm", guna membantu memecahkan permasalahan yang ada serta mendukung transformasi digital firma hukum tersebut.
+       Berdasarkan latar belakang tersebut, penulis tertarik untuk melakukan penelitian mengenai "Perancangan Website Company Profile Menggunakan Next.js dan Firebase Pada TAO MANULLANG & Partners Law Firm", guna membantu memecahkan permasalahan yang ada serta mendukung transformasi digital firma hukum tersebut.
 
 B. Rumusan Masalah
 

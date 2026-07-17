@@ -9,6 +9,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { lawyerSchema, LawyerInput } from "@/lib/validations/news";
 
+function generateUniqueFileName(fileExt: string) {
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+}
+
 /**
  * Halaman Form Tambah Profil Tim Pengacara Baru (Admin)
  * Route: /admin/team/create
@@ -83,9 +87,9 @@ export default function CreateTeamPage() {
       if (file) {
         setActionLoader({ isLoading: true, status: 'loading', message: 'Uploading Photo...' });
         
-        const fileExt = file.name.split('.').pop();
+        const fileExt = file.name.split('.').pop() || '';
         // Generate nama file unik menggunakan kombinasi waktu dan string acak
-        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+        const fileName = generateUniqueFileName(fileExt);
         const filePath = `team/${fileName}`; // Folder tujuan di bucket storage: team/
 
         // Upload ke bucket 'news-images' di Supabase
@@ -218,10 +222,13 @@ export default function CreateTeamPage() {
                     suppressHydrationWarning
                 >
                     <option value="FOUNDER">Founder</option>
+                    <option value="MANAGING PARTNER">Managing Partner</option>
                     <option value="PARTNER">Partner</option>
+                    <option value="SENIOR PARTNER">Senior Partner</option>
                     <option value="ASSOCIATE">Associate</option>
                     <option value="JUNIOR ASSOCIATE">Junior Associate</option>
                     <option value="PARALEGAL">Paralegal</option>
+                    <option value="INTERNSHIP">Internship</option>
                 </select>
                 {errors.role && (
                     <p className="text-red-500 text-xs mt-1">{errors.role.message}</p>

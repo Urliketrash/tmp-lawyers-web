@@ -34,10 +34,6 @@ export default function AdminNewsList() {
     message: ''
   });
 
-  useEffect(() => {
-    fetchNews();
-  }, []);
-
   const fetchNews = async () => {
     setLoading(true);
     try {
@@ -71,6 +67,10 @@ export default function AdminNewsList() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchNews();
+  }, []);
 
   const handleDeleteClick = (id: string) => {
     setDeleteId(id);

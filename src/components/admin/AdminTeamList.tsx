@@ -32,10 +32,6 @@ export default function AdminTeamList() {
     message: ''
   });
 
-  useEffect(() => {
-    fetchLawyers();
-  }, []);
-
   const fetchLawyers = async () => {
     setLoading(true);
     try {
@@ -73,6 +69,10 @@ export default function AdminTeamList() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchLawyers();
+  }, []);
 
   const handleDeleteClick = (id: string) => {
     setDeleteId(id);

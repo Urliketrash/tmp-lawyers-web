@@ -20,7 +20,6 @@ export default function LayoutWrapper({
   // Maintenance & SEO States
   const [maintenanceMode, setMaintenanceMode] = useState(false);
   const [contactWhatsapp, setContactWhatsapp] = useState("");
-  const [checkingMaintenance, setCheckingMaintenance] = useState(true);
 
   useEffect(() => {
     // Check initial user
@@ -81,8 +80,6 @@ export default function LayoutWrapper({
         }
       } catch (err) {
         console.error("Failed to load maintenance status:", err);
-      } finally {
-        setCheckingMaintenance(false);
       }
     };
 
@@ -110,7 +107,7 @@ export default function LayoutWrapper({
 
           <div className="space-y-4">
             <h1 className="text-[10px] tracking-[0.4em] font-bold text-tmp-gold uppercase">Under Maintenance</h1>
-            <h2 className="text-4xl md:text-5xl font-serif italic text-white leading-tight">We'll Be Back Soon</h2>
+            <h2 className="text-4xl md:text-5xl font-serif italic text-white leading-tight">We&apos;ll Be Back Soon</h2>
             <div className="w-12 h-[1px] bg-tmp-gold mx-auto my-4"></div>
             <p className="text-gray-400 text-sm leading-relaxed max-w-md mx-auto">
               Our website is currently undergoing scheduled maintenance to improve our services. We appreciate your patience and will be back online shortly.

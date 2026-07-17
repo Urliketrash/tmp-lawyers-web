@@ -41,7 +41,7 @@ export type NewsInput = z.infer<typeof newsSchema>;
 export const lawyerSchema = z.object({
   id: z.string().min(1, 'ID wajib diisi').regex(/^[a-z0-9-]+$/, 'ID hanya boleh huruf kecil, angka, dan strip'),
   name: z.string().min(1, 'Nama wajib diisi').max(100, 'Nama maksimal 100 karakter'),
-  role: z.enum(['FOUNDER', 'PARTNER', 'ASSOCIATE', 'JUNIOR ASSOCIATE', 'PARALEGAL']),
+  role: z.enum(['FOUNDER', 'MANAGING PARTNER', 'PARTNER', 'SENIOR PARTNER', 'ASSOCIATE', 'JUNIOR ASSOCIATE', 'PARALEGAL', 'INTERNSHIP']),
   shortDesc: z.string().min(1, 'Deskripsi singkat wajib diisi').max(500, 'Deskripsi singkat maksimal 500 karakter'),
   italicDesc: z.string().min(1, 'Deskripsi italic wajib diisi').max(300, 'Deskripsi italic maksimal 300 karakter'),
   biography: z.string().optional(),

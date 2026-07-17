@@ -261,7 +261,7 @@ export default function Lawyers() {
                     </h3>
                     {selectedLawyer.italicDesc && (
                       <p className="text-gray-400 italic text-xs md:text-sm border-l-2 border-tmp-gold/50 pl-3 py-0.5 mt-3 leading-relaxed">
-                        "{selectedLawyer.italicDesc}"
+                        &ldquo;{selectedLawyer.italicDesc}&rdquo;
                       </p>
                     )}
                   </div>

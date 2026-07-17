@@ -2,22 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { MOCK_NEWS, NewsItem } from "@/data/newsData";
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 import ScrollReveal from "@/components/ScrollReveal";
 
 export default function NewsPage() {
-  const router = useRouter();
   const [news, setNews] = useState<NewsItem[]>(MOCK_NEWS); // Default to mock for SSR/Initial
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchNews();
-  }, []);
 
   const fetchNews = async () => {
     try {
@@ -44,10 +35,12 @@ export default function NewsPage() {
     } catch (error) {
       console.error("Error fetching news:", error);
       // Keep MOCK_NEWS if error
-    } finally {
-        setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchNews();
+  }, []);
 
   return (
     <main className="bg-tmp-black min-h-screen text-white pt-32">
