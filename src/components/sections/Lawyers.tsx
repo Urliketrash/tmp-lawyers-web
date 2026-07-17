@@ -144,7 +144,7 @@ export default function Lawyers() {
                           src={lawyer.image || "/assets/logo.png"}
                           alt={lawyer.name}
                           fill
-                          className="object-cover opacity-80 group-hover:opacity-95 group-hover:scale-105 transition-all duration-700 ease-out"
+                          className="object-cover opacity-95 md:opacity-80 md:group-hover:opacity-95 md:group-hover:scale-105 transition-all duration-700 ease-out"
                         />
                         {/* Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent group-hover:from-black group-hover:via-black/80 transition-all duration-500" />
@@ -153,24 +153,24 @@ export default function Lawyers() {
                       {/* Content Overlay */}
                       <div className="absolute inset-x-0 bottom-0 p-6 flex flex-col z-10 justify-end h-full">
                         {/* Role */}
-                        <span className="text-tmp-gold font-bold uppercase tracking-[0.3em] text-[10px] mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                        <span className="text-tmp-gold font-bold uppercase tracking-[0.3em] text-[10px] mb-2 transform translate-y-0 md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-500 ease-out">
                           {lawyer.role}
                         </span>
 
                         {/* Name */}
-                        <h3 className="text-2xl font-serif italic text-white mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                        <h3 className="text-2xl font-serif italic text-white mb-2 transform translate-y-0 md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-500 ease-out">
                           {lawyer.name}
                         </h3>
 
                         {/* Animating description on hover */}
-                        <div className="max-h-0 opacity-0 overflow-hidden group-hover:max-h-24 group-hover:opacity-100 transition-all duration-500 ease-in-out">
+                        <div className="overflow-hidden max-h-24 opacity-100 md:max-h-0 md:opacity-0 md:group-hover:max-h-24 md:group-hover:opacity-100 transition-all duration-500 ease-in-out">
                           <p className="text-gray-300 text-xs leading-relaxed text-justify mb-4 line-clamp-3">
                             {lawyer.shortDesc}
                           </p>
                         </div>
 
                         {/* Button/Link */}
-                        <div className="mt-2 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out">
+                        <div className="mt-2 transform translate-y-0 opacity-100 md:translate-y-4 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 transition-all duration-500 ease-out">
                           <span className="text-tmp-gold text-xs font-bold uppercase tracking-widest border-b border-tmp-gold/30 pb-1 group-hover:border-tmp-gold transition-colors">
                             View Details →
                           </span>

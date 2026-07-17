@@ -190,29 +190,29 @@ export default function Services() {
                     src={service.image}
                     alt={service.title}
                     fill
-                    className="object-cover opacity-50 group-hover:opacity-30 group-hover:scale-105 transition-all duration-700 ease-out"
+                    className="object-cover opacity-30 md:opacity-50 md:group-hover:opacity-30 md:group-hover:scale-105 transition-all duration-700 ease-out"
                   />
                   {/* Dark Overlay */}
                   <div className="absolute inset-0 bg-black/75 group-hover:bg-black/80 transition-all duration-500" />
                 </div>
 
                 {/* Inset Border (Style 11 characteristic) */}
-                <div className="absolute inset-5 border border-white/0 group-hover:border-tmp-gold/30 rounded-lg transition-all duration-500 z-10 pointer-events-none" />
+                <div className="absolute inset-5 border border-tmp-gold/20 md:border-white/0 md:group-hover:border-tmp-gold/30 rounded-lg transition-all duration-500 z-10 pointer-events-none" />
 
                 {/* Content Overlay */}
                 <div className="absolute inset-0 p-8 flex flex-col z-20 justify-center items-center text-center h-full">
                   {/* Label */}
-                  <span className="text-tmp-gold font-bold uppercase tracking-[0.3em] text-[10px] mb-3 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                  <span className="text-tmp-gold font-bold uppercase tracking-[0.3em] text-[10px] mb-3 transform translate-y-0 md:translate-y-2 md:group-hover:translate-y-0 transition-transform duration-500 ease-out">
                     Area of Practice
                   </span>
 
                   {/* Title */}
-                  <h4 className="text-xl font-serif text-white font-medium mb-4 transform translate-y-2 group-hover:translate-y-[-6px] transition-transform duration-500 ease-out leading-snug px-2">
+                  <h4 className="text-xl font-serif text-white font-medium mb-4 transform translate-y-0 md:translate-y-2 md:group-hover:translate-y-[-6px] transition-transform duration-500 ease-out leading-snug px-2">
                     {service.title}
                   </h4>
 
                   {/* Description (fades and slides up on hover) */}
-                  <p className="text-gray-300 text-xs leading-relaxed max-h-0 opacity-0 overflow-hidden group-hover:max-h-[180px] group-hover:opacity-100 transition-all duration-500 ease-in-out px-2 text-justify">
+                  <p className="text-gray-300 text-xs leading-relaxed overflow-hidden max-h-[180px] opacity-100 md:max-h-0 md:opacity-0 md:group-hover:max-h-[180px] md:group-hover:opacity-100 transition-all duration-500 ease-in-out px-2 text-justify">
                     {service.description}
                   </p>
                 </div>
@@ -264,29 +264,29 @@ export default function Services() {
                             src={service.image}
                             alt={service.title}
                             fill
-                            className="object-cover opacity-50 group-hover:opacity-30 group-hover:scale-105 transition-all duration-700 ease-out"
+                            className="object-cover opacity-30 md:opacity-50 md:group-hover:opacity-30 md:group-hover:scale-105 transition-all duration-700 ease-out"
                           />
                           {/* Dark Overlay */}
                           <div className="absolute inset-0 bg-black/75 group-hover:bg-black/80 transition-all duration-500" />
                         </div>
 
                         {/* Inset Border (Style 11 characteristic) */}
-                        <div className="absolute inset-5 border border-white/0 group-hover:border-tmp-gold/30 rounded-lg transition-all duration-500 z-10 pointer-events-none" />
+                        <div className="absolute inset-5 border border-tmp-gold/20 md:border-white/0 md:group-hover:border-tmp-gold/30 rounded-lg transition-all duration-500 z-10 pointer-events-none" />
 
                         {/* Content Overlay */}
                         <div className="absolute inset-0 p-8 flex flex-col z-20 justify-center items-center text-center h-full">
                           {/* Label */}
-                          <span className="text-tmp-gold font-bold uppercase tracking-[0.3em] text-[10px] mb-3 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                          <span className="text-tmp-gold font-bold uppercase tracking-[0.3em] text-[10px] mb-3 transform translate-y-0 md:translate-y-2 md:group-hover:translate-y-0 transition-transform duration-500 ease-out">
                             Area of Practice
                           </span>
 
                           {/* Title */}
-                          <h4 className="text-xl font-serif text-white font-medium mb-4 transform translate-y-2 group-hover:translate-y-[-6px] transition-transform duration-500 ease-out leading-snug px-2">
+                          <h4 className="text-xl font-serif text-white font-medium mb-4 transform translate-y-0 md:translate-y-2 md:group-hover:translate-y-[-6px] transition-transform duration-500 ease-out leading-snug px-2">
                             {service.title}
                           </h4>
 
                           {/* Description (fades and slides up on hover) */}
-                          <p className="text-gray-300 text-xs leading-relaxed max-h-0 opacity-0 overflow-hidden group-hover:max-h-[180px] group-hover:opacity-100 transition-all duration-500 ease-in-out px-2 text-justify">
+                          <p className="text-gray-300 text-xs leading-relaxed overflow-hidden max-h-[180px] opacity-100 md:max-h-0 md:opacity-0 md:group-hover:max-h-[180px] md:group-hover:opacity-100 transition-all duration-500 ease-in-out px-2 text-justify">
                             {service.description}
                           </p>
                         </div>
