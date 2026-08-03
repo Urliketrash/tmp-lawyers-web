@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { NewsItem, MOCK_NEWS } from "@/data/newsData";
+import { NewsItem } from "@/data/newsData";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import sanitizeHtml from "@/lib/sanitize";
+
+import { supabase } from "@/lib/supabase";
 
 const getReadTime = (content: string) => {
   if (!content) return "3 min read";
@@ -34,10 +36,40 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Filter Related Articles
+  // Fetch Real Related Articles from Supabase DB
   useEffect(() => {
-    const filtered = MOCK_NEWS.filter((item) => item.id !== news.id).slice(0, 3);
-    setRelatedArticles(filtered);
+    const fetchRelatedArticles = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("news")
+          .select("*")
+          .neq("id", news.id)
+          .order("date", { ascending: false })
+          .limit(3);
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          const mapped: NewsItem[] = data.map((item) => ({
+            id: item.id,
+            title: item.title,
+            date: item.date,
+            category: item.category,
+            summary: item.summary,
+            content: item.content,
+            imageUrl: item.image_url || "",
+            author: item.author
+          }));
+          setRelatedArticles(mapped);
+        } else {
+          setRelatedArticles([]);
+        }
+      } catch (err) {
+        console.error("Error fetching related articles:", err);
+      }
+    };
+
+    fetchRelatedArticles();
   }, [news.id]);
 
   // Social Share Handlers
