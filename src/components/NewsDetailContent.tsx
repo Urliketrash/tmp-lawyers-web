@@ -156,9 +156,9 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
             <span className="text-gray-400 text-xs font-light">{getReadTime(news.content)}</span>
             <span className="text-gray-500 text-xs">•</span>
             <span className="text-gray-400 text-xs font-light">
-              {new Date(news.date).toLocaleDateString("id-ID", {
+              {new Date(news.date).toLocaleDateString("en-US", {
                 day: "numeric",
-                month: "long",
+                month: "short",
                 year: "numeric",
               })}
             </span>
@@ -174,7 +174,7 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
             const displayAuthor = rawAuthor.includes("|") ? rawAuthor.split("|")[0].trim() : rawAuthor;
             const displayRole = rawAuthor.includes("|")
               ? rawAuthor.split("|")[1].trim()
-              : (news.authorRole || "ADVOKAT & KONSULTAN HUKUM • TMP LAW FIRM");
+              : (news.authorRole || "ADVOCATE & LEGAL CONSULTANT • TMP LAW FIRM");
 
             return (
               <div className="flex items-center gap-4 bg-tmp-dark/90 border border-white/10 p-4 rounded-xl max-w-md shadow-lg">
@@ -250,14 +250,14 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
                 <i className="fas fa-gavel" /> Legal Disclaimer Notice
               </div>
               <p className="text-gray-400 text-xs leading-relaxed font-light text-justify">
-                Artikel dan publikasi hukum ini disusun semata-mata untuk tujuan edukasi dan informasi umum, serta tidak boleh ditafsirkan sebagai nasihat hukum formal atau pendapat hukum resmi atas kasus tertentu. Untuk konsultasi dan penanganan perkara hukum konkret, silakan menghubungi tim advokat TMP Law Firm.
+                This legal publication is prepared solely for general educational and informational purposes and does not constitute formal legal advice or legal opinion on specific cases. For tailored legal counsel, please contact the attorneys of TMP Law Firm.
               </p>
             </ScrollReveal>
 
             {/* Share Article Bar */}
             <ScrollReveal variant="fade-up" className="pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
               <span className="text-gray-400 text-xs font-bold uppercase tracking-widest">
-                Bagikan Publikasi Ini:
+                Share This Publication:
               </span>
               <div className="flex items-center gap-3">
                 <a
@@ -282,7 +282,7 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
                   className="bg-white/5 hover:bg-white/15 text-white border border-white/15 px-4 py-2 rounded-md text-xs font-bold transition-all duration-300 inline-flex items-center gap-2 cursor-pointer"
                 >
                   <i className="fas fa-link text-xs" />
-                  {copied ? "Link Tersalin!" : "Salin Tautan"}
+                  {copied ? "Link Copied!" : "Copy Link"}
                 </button>
               </div>
             </ScrollReveal>
@@ -297,19 +297,19 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
               </div>
 
               <div>
-                <h3 className="text-white font-serif italic text-xl mb-2">Butuh Konsultasi Hukum?</h3>
+                <h3 className="text-white font-serif italic text-xl mb-2">Need Legal Advice?</h3>
                 <p className="text-gray-400 text-xs leading-relaxed font-light">
-                  Tim Advokat & Konsultan Hukum TMP Law Firm siap membantu analisis, penanganan perkara, dan mitigasi risiko bisnis Anda.
+                  TMP Law Firm&apos;s team of advocates and legal consultants is ready to assist with case analysis, dispute resolution, and corporate risk mitigation.
                 </p>
               </div>
 
               <a
-                href="https://wa.me/6281210054874?text=Halo%20TMP%20Law%20Firm,%20saya%20tertarik%20berkonsultasi%20mengenai%20layanan%20hukum."
+                href="https://wa.me/6281210054874?text=Hello%20TMP%20Law%20Firm,%20I%20would%20like%20to%20consult%20regarding%20legal%20services."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full bg-tmp-gold text-black font-extrabold uppercase tracking-widest text-[10px] sm:text-xs py-3.5 px-4 rounded-md hover:bg-white transition-all duration-300 shadow-md inline-flex items-center justify-center gap-2 text-center"
               >
-                <i className="fab fa-whatsapp text-sm" /> Konsultasi via WhatsApp &rarr;
+                <i className="fab fa-whatsapp text-sm" /> Consult via WhatsApp &rarr;
               </a>
             </ScrollReveal>
 
@@ -317,7 +317,7 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
             {relatedArticles.length > 0 && (
               <ScrollReveal variant="fade-up" delay={0.1} className="bg-tmp-dark border border-white/10 p-6 rounded-xl space-y-4">
                 <h4 className="text-tmp-gold text-xs font-bold uppercase tracking-widest border-b border-white/10 pb-3 flex items-center justify-between">
-                  <span>Artikel Terkait</span>
+                  <span>Related Publications</span>
                   <i className="fas fa-bookmark text-xs opacity-60" />
                 </h4>
 
@@ -335,7 +335,7 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
                         {rel.title}
                       </h5>
                       <span className="text-gray-500 text-[10px] mt-1 block">
-                        {new Date(rel.date).toLocaleDateString("id-ID", {
+                        {new Date(rel.date).toLocaleDateString("en-US", {
                           day: "numeric",
                           month: "short",
                           year: "numeric",

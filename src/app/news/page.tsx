@@ -92,7 +92,7 @@ export default function NewsPage() {
             Legal Insights & Articles
           </h1>
           <p className="text-gray-400 text-xs sm:text-sm max-w-xl mx-auto font-light leading-relaxed">
-            Arsip lengkap analisis hukum, ulasan peraturan terbaru, serta artikel advokasi publik yang ditulis langsung oleh para legal advisor TMP Law Firm.
+            Comprehensive archive of legal analysis, regulatory updates, and client alerts authored by TMP Law Firm attorneys.
           </p>
         </ScrollReveal>
 
@@ -102,7 +102,7 @@ export default function NewsPage() {
           <div className="max-w-md mx-auto relative">
             <input
               type="text"
-              placeholder="Cari judul artikel atau isu hukum..."
+              placeholder="Search publication title or legal topic..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-tmp-dark/90 border border-white/10 text-white placeholder-gray-500 px-5 py-3.5 pr-12 rounded-lg text-xs sm:text-sm focus:outline-none focus:border-tmp-gold transition-colors shadow-inner"
@@ -133,7 +133,7 @@ export default function NewsPage() {
           <div className="text-center py-20 bg-tmp-dark border border-white/10 rounded-xl">
             <i className="fas fa-newspaper text-3xl text-gray-600 mb-4 block" />
             <p className="text-gray-400 text-sm italic">
-              Tidak ada artikel yang sesuai dengan pencarian atau filter pilihan Anda.
+              No publications match your search query or selected filter.
             </p>
           </div>
         ) : (
@@ -165,7 +165,7 @@ export default function NewsPage() {
                       <div className="flex items-center justify-between text-[10px] text-gray-400 mb-3">
                         <span>{getReadTime(item.content)}</span>
                         <span>
-                          {new Date(item.date).toLocaleDateString("id-ID", {
+                          {new Date(item.date).toLocaleDateString("en-US", {
                             day: "numeric",
                             month: "short",
                             year: "numeric",
@@ -185,10 +185,10 @@ export default function NewsPage() {
 
                   <div className="px-6 pb-6 pt-0 flex items-center justify-between border-t border-white/5 pt-4">
                     <span className="text-gray-400 text-[10px]">
-                      Oleh {item.author?.includes("|") ? item.author.split("|")[0].trim() : (item.author || "Advokat TMP")}
+                      By {item.author?.includes("|") ? item.author.split("|")[0].trim() : (item.author || "TMP Advocate")}
                     </span>
                     <span className="text-tmp-gold text-[10px] font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-                      Baca Artikel &rarr;
+                      Read Article &rarr;
                     </span>
                   </div>
                 </Link>

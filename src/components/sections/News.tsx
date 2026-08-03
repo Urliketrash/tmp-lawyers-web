@@ -77,10 +77,10 @@ export default function News() {
             INSIGHT & ARTICLE
           </h2>
           <h3 className="text-3xl sm:text-4xl md:text-5xl font-serif italic text-white max-w-2xl mx-auto leading-tight mb-4">
-            Perspektif & Analisis Hukum Terkini
+            Latest Legal Insights & Perspectives
           </h3>
           <p className="text-gray-400 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed font-light">
-            Publikasi dan analisis hukum independen oleh tim advokat TMP Law Firm mengenai perubahan regulasi, mitigasi risiko bisnis, dan studi kasus hukum.
+            Independent legal publications and commentary by TMP Law Firm advocates on regulatory developments, risk mitigation, and corporate practice.
           </p>
         </ScrollReveal>
 
@@ -111,7 +111,7 @@ export default function News() {
           </div>
         ) : filteredNews.length === 0 ? (
           <div className="text-center py-16 bg-tmp-dark border border-white/10 rounded-xl">
-            <p className="text-gray-400 text-sm italic">Belum ada publikasi pada kategori ini.</p>
+            <p className="text-gray-400 text-sm italic">No publications found in this category.</p>
           </div>
         ) : (
           <div className="space-y-8">
@@ -152,9 +152,9 @@ export default function News() {
                           <span>{getReadTime(featuredArticle.content)}</span>
                           <span>•</span>
                           <span>
-                            {new Date(featuredArticle.date).toLocaleDateString("id-ID", {
+                            {new Date(featuredArticle.date).toLocaleDateString("en-US", {
                               day: "numeric",
-                              month: "long",
+                              month: "short",
                               year: "numeric",
                             })}
                           </span>
@@ -201,7 +201,7 @@ export default function News() {
                         </div>
 
                         <span className="inline-flex items-center text-tmp-gold text-xs font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform">
-                          Baca Artikel <i className="fas fa-arrow-right ml-2 text-xs" />
+                          Read Article <i className="fas fa-arrow-right ml-2 text-xs" />
                         </span>
                       </div>
                     </div>
@@ -241,7 +241,7 @@ export default function News() {
                           <div className="flex items-center justify-between text-[10px] text-gray-400 mb-3">
                             <span>{getReadTime(item.content)}</span>
                             <span>
-                              {new Date(item.date).toLocaleDateString("id-ID", {
+                              {new Date(item.date).toLocaleDateString("en-US", {
                                 day: "numeric",
                                 month: "short",
                                 year: "numeric",
@@ -261,10 +261,10 @@ export default function News() {
 
                       <div className="px-6 pb-6 pt-0 flex items-center justify-between text-xs">
                         <span className="text-gray-400 text-[10px]">
-                          Oleh {item.author?.includes("|") ? item.author.split("|")[0].trim() : (item.author || "Advokat TMP")}
+                          By {item.author?.includes("|") ? item.author.split("|")[0].trim() : (item.author || "TMP Advocate")}
                         </span>
                         <span className="text-tmp-gold font-bold uppercase tracking-wider text-[10px] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-                          Lihat Detail &rarr;
+                          View Details &rarr;
                         </span>
                       </div>
                     </Link>
@@ -281,7 +281,7 @@ export default function News() {
             href="/news"
             className="inline-flex items-center gap-3 border border-tmp-gold/40 px-8 py-3.5 rounded-md text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-tmp-gold hover:text-black transition-all duration-300 shadow-lg hover:shadow-[0_0_20px_rgba(197,160,89,0.3)]"
           >
-            Lihat Semua Publikasi Hukum <i className="fas fa-arrow-right text-xs" />
+            View All Publications <i className="fas fa-arrow-right text-xs" />
           </Link>
         </ScrollReveal>
       </div>
