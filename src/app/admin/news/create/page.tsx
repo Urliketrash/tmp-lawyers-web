@@ -149,15 +149,20 @@ export default function CreateNewsPage() {
 
         // 2. Add to Supabase DB
         setActionLoader({ isLoading: true, status: 'loading', message: 'Saving to Database...' });
-        const docData: any = {
+        
+        // Combine author and authorRole using '|' divider to fit inside existing 'author' DB column safely
+        const combinedAuthor = data.authorRole && data.authorRole.trim()
+          ? `${data.author.trim()}|${data.authorRole.trim()}`
+          : data.author.trim();
+
+        const docData = {
           title: data.title,
           category: data.category,
           date: data.date,
           summary: data.summary,
           content: data.content,
           image_url: finalImageUrl,
-          author: data.author,
-          author_role: data.authorRole || "ADVOKAT & KONSULTAN HUKUM • TMP LAW FIRM"
+          author: combinedAuthor
         };
 
         // Timeout Promise

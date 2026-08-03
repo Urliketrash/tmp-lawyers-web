@@ -87,13 +87,22 @@ function EditNewsContent() {
             if (error) throw error;
 
             if (data) {
+                let parsedAuthor = data.author || "Wang Tao Bicton Manullang, S.H.";
+                let parsedRole = "ADVOKAT & KONSULTAN HUKUM • TMP LAW FIRM";
+
+                if (parsedAuthor.includes("|")) {
+                  const parts = parsedAuthor.split("|");
+                  parsedAuthor = parts[0].trim();
+                  parsedRole = parts[1].trim();
+                }
+
                 reset({
                     title: data.title,
                     category: data.category as any,
                     summary: data.summary,
                     content: data.content,
-                    author: data.author || "Wang Tao Bicton Manullang, S.H.",
-                    authorRole: data.author_role || "ADVOKAT & KONSULTAN HUKUM • TMP LAW FIRM",
+                    author: parsedAuthor,
+                    authorRole: parsedRole,
                     date: data.date
                 });
                 setExistingImageUrl(data.image_url || "");
@@ -192,15 +201,19 @@ function EditNewsContent() {
 
         // 2. Update Supabase
         setActionLoader({ isLoading: true, status: 'loading', message: 'Saving Changes...' });
-        const updateData: any = {
+        
+        const combinedAuthor = data.authorRole && data.authorRole.trim()
+          ? `${data.author.trim()}|${data.authorRole.trim()}`
+          : data.author.trim();
+
+        const updateData = {
           title: data.title,
           category: data.category,
           date: data.date,
           summary: data.summary,
           content: data.content,
           image_url: finalImageUrl,
-          author: data.author,
-          author_role: data.authorRole || "ADVOKAT & KONSULTAN HUKUM • TMP LAW FIRM",
+          author: combinedAuthor,
           updated_at: new Date().toISOString()
         };
         

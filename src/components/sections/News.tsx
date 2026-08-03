@@ -177,8 +177,12 @@ export default function News() {
                             TMP
                           </div>
                           <div>
-                            <p className="text-white text-xs font-bold">{featuredArticle.author}</p>
-                            <p className="text-gray-400 text-[10px]">TMP Law Firm</p>
+                            <p className="text-white text-xs font-bold">
+                              {featuredArticle.author?.includes("|") ? featuredArticle.author.split("|")[0].trim() : featuredArticle.author}
+                            </p>
+                            <p className="text-gray-400 text-[10px]">
+                              {featuredArticle.author?.includes("|") ? featuredArticle.author.split("|")[1].trim() : "TMP Law Firm"}
+                            </p>
                           </div>
                         </div>
 
@@ -242,7 +246,9 @@ export default function News() {
                       </div>
 
                       <div className="px-6 pb-6 pt-0 flex items-center justify-between text-xs">
-                        <span className="text-gray-400 text-[10px]">Oleh {item.author || "Advokat TMP"}</span>
+                        <span className="text-gray-400 text-[10px]">
+                          Oleh {item.author?.includes("|") ? item.author.split("|")[0].trim() : (item.author || "Advokat TMP")}
+                        </span>
                         <span className="text-tmp-gold font-bold uppercase tracking-wider text-[10px] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
                           Lihat Detail &rarr;
                         </span>

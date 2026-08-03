@@ -97,17 +97,27 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
           </h1>
 
           {/* Author Attribution Card */}
-          <div className="flex items-center gap-4 bg-tmp-dark/90 border border-white/10 p-4 rounded-xl max-w-md">
-            <div className="w-12 h-12 rounded-full bg-tmp-gold/20 border border-tmp-gold/50 flex items-center justify-center text-tmp-gold font-serif font-bold text-base shrink-0">
-              TMP
-            </div>
-            <div>
-              <p className="text-white text-xs font-bold">{news.author || "Wang Tao Bicton Manullang, S.H."}</p>
-              <p className="text-tmp-gold text-[10px] uppercase tracking-wider font-semibold mt-0.5">
-                {news.authorRole || "Advokat & Konsultan Hukum • TMP Law Firm"}
-              </p>
-            </div>
-          </div>
+          {(() => {
+            const rawAuthor = news.author || "Wang Tao Bicton Manullang, S.H.";
+            const displayAuthor = rawAuthor.includes("|") ? rawAuthor.split("|")[0].trim() : rawAuthor;
+            const displayRole = rawAuthor.includes("|")
+              ? rawAuthor.split("|")[1].trim()
+              : (news.authorRole || "ADVOKAT & KONSULTAN HUKUM • TMP LAW FIRM");
+
+            return (
+              <div className="flex items-center gap-4 bg-tmp-dark/90 border border-white/10 p-4 rounded-xl max-w-md">
+                <div className="w-12 h-12 rounded-full bg-tmp-gold/20 border border-tmp-gold/50 flex items-center justify-center text-tmp-gold font-serif font-bold text-base shrink-0">
+                  TMP
+                </div>
+                <div>
+                  <p className="text-white text-xs font-bold">{displayAuthor}</p>
+                  <p className="text-tmp-gold text-[10px] uppercase tracking-wider font-semibold mt-0.5">
+                    {displayRole}
+                  </p>
+                </div>
+              </div>
+            );
+          })()}
         </ScrollReveal>
 
         {/* Featured Image Container - Controlled Max Height (Fixing "Too Large" issue!) */}

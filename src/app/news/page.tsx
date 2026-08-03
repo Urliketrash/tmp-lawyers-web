@@ -186,7 +186,9 @@ export default function NewsPage() {
                   </div>
 
                   <div className="px-6 pb-6 pt-0 flex items-center justify-between border-t border-white/5 pt-4">
-                    <span className="text-gray-400 text-[10px]">Oleh {item.author || "Advokat TMP"}</span>
+                    <span className="text-gray-400 text-[10px]">
+                      Oleh {item.author?.includes("|") ? item.author.split("|")[0].trim() : (item.author || "Advokat TMP")}
+                    </span>
                     <span className="text-tmp-gold text-[10px] font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
                       Baca Artikel &rarr;
                     </span>
