@@ -10,6 +10,8 @@ import sanitizeHtml from "@/lib/sanitize";
 
 import { supabase } from "@/lib/supabase";
 
+import { lawyersData } from "@/data/lawyersData";
+
 const getReadTime = (content: string) => {
   if (!content) return "3 min read";
   const words = content.replace(/<[^>]*>/g, "").split(/\s+/).filter(Boolean).length;
@@ -21,6 +23,7 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [copied, setCopied] = useState(false);
   const [relatedArticles, setRelatedArticles] = useState<NewsItem[]>([]);
+  const [lawyerPhoto, setLawyerPhoto] = useState<string | null>(null);
 
   // Calculate Reading Scroll Progress
   useEffect(() => {
@@ -35,6 +38,43 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Match Author to Lawyer Profile Photo
+  useEffect(() => {
+    const matchLawyer = async () => {
+      const rawAuthor = news.author || "Wang Tao Bicton Manullang, S.H.";
+      const authorName = rawAuthor.includes("|") ? rawAuthor.split("|")[0].trim() : rawAuthor;
+      const authorLower = authorName.toLowerCase();
+
+      try {
+        const { data } = await supabase.from("lawyers").select("name, image");
+        const pool = data && data.length > 0 ? data : lawyersData;
+
+        const matched = pool.find((l) => {
+          const lName = l.name.toLowerCase();
+          const firstWord = l.name.split(" ")[0].toLowerCase();
+          return (
+            authorLower.includes(lName) ||
+            lName.includes(authorLower) ||
+            (firstWord.length > 3 && authorLower.includes(firstWord))
+          );
+        });
+
+        if (matched && matched.image) {
+          setLawyerPhoto(matched.image);
+        } else {
+          setLawyerPhoto(null);
+        }
+      } catch {
+        const matchedStatic = lawyersData.find(
+          (l) => authorLower.includes(l.name.toLowerCase()) || l.name.toLowerCase().includes(authorLower)
+        );
+        setLawyerPhoto(matchedStatic ? matchedStatic.image : null);
+      }
+    };
+
+    matchLawyer();
+  }, [news.author]);
 
   // Fetch Real Related Articles from Supabase DB
   useEffect(() => {
@@ -128,7 +168,7 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
             {news.title}
           </h1>
 
-          {/* Author Attribution Card */}
+          {/* Author Attribution Card with Real Lawyer Photo */}
           {(() => {
             const rawAuthor = news.author || "Wang Tao Bicton Manullang, S.H.";
             const displayAuthor = rawAuthor.includes("|") ? rawAuthor.split("|")[0].trim() : rawAuthor;
@@ -137,9 +177,23 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
               : (news.authorRole || "ADVOKAT & KONSULTAN HUKUM • TMP LAW FIRM");
 
             return (
-              <div className="flex items-center gap-4 bg-tmp-dark/90 border border-white/10 p-4 rounded-xl max-w-md">
-                <div className="w-12 h-12 rounded-full bg-tmp-gold/20 border border-tmp-gold/50 flex items-center justify-center text-tmp-gold font-serif font-bold text-base shrink-0">
-                  TMP
+              <div className="flex items-center gap-4 bg-tmp-dark/90 border border-white/10 p-4 rounded-xl max-w-md shadow-lg">
+                <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-tmp-gold/60 shrink-0 bg-tmp-black shadow-md">
+                  {lawyerPhoto ? (
+                    <Image
+                      src={lawyerPhoto}
+                      alt={displayAuthor}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <Image
+                      src="/assets/logo.png"
+                      alt="TMP"
+                      fill
+                      className="object-contain p-2 bg-tmp-black"
+                    />
+                  )}
                 </div>
                 <div>
                   <p className="text-white text-xs font-bold">{displayAuthor}</p>
@@ -152,27 +206,27 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
           })()}
         </ScrollReveal>
 
-        {/* Featured Image Container - Controlled Max Height (Fixing "Too Large" issue!) */}
-        {news.imageUrl && (
-          <ScrollReveal variant="zoom-in" className="mb-12">
-            <div className="relative w-full h-[260px] sm:h-[360px] md:h-[420px] max-h-[440px] rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-black">
-              <Image
-                src={news.imageUrl}
-                alt={news.title}
-                fill
-                priority
-                sizes="(max-width: 1200px) 100vw, 1200px"
-                className="object-cover opacity-95"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-tmp-black/60 via-transparent to-transparent pointer-events-none" />
-            </div>
-          </ScrollReveal>
-        )}
-
-        {/* 2-Column Responsive Body Layout (Content Left, Sticky Sidebar Right) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        {/* Option A Layout: 2-Column Responsive Body Layout (Content Left, Sticky Sidebar Right) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mt-8">
           {/* Main Article Text Column */}
           <div className="lg:col-span-8 space-y-8">
+            {/* Featured Image Container - Positioned inside Left Column for Option A Layout */}
+            {news.imageUrl && (
+              <ScrollReveal variant="zoom-in" className="mb-8">
+                <div className="relative w-full aspect-video sm:h-[360px] md:h-[400px] max-h-[420px] rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-black">
+                  <Image
+                    src={news.imageUrl}
+                    alt={news.title}
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 800px"
+                    className="object-cover opacity-95"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-tmp-black/60 via-transparent to-transparent pointer-events-none" />
+                </div>
+              </ScrollReveal>
+            )}
+
             {/* Article Content with Custom Editorial Typography */}
             <ScrollReveal
               variant="fade-up"
@@ -234,7 +288,7 @@ export default function NewsDetailContent({ news }: { news: NewsItem }) {
             </ScrollReveal>
           </div>
 
-          {/* Right Sticky Sidebar Column */}
+          {/* Right Sticky Sidebar Column (Aligned at top next to Article Left Column!) */}
           <div className="lg:col-span-4 space-y-8 lg:sticky lg:top-32">
             {/* Consultation CTA Box */}
             <ScrollReveal variant="fade-up" className="bg-gradient-to-br from-tmp-dark to-black border border-tmp-gold/40 p-6 sm:p-8 rounded-xl shadow-2xl space-y-4">

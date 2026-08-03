@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { NewsItem, MOCK_NEWS } from "@/data/newsData";
+import { lawyersData } from "@/data/lawyersData";
 import ScrollReveal from "@/components/ScrollReveal";
 
 const CATEGORIES = ["ALL", "CLIENT ALERT", "CLIENT INSIGHT", "REGULATION", "CORPORATE", "LITIGATION"];
@@ -173,9 +174,25 @@ export default function News() {
 
                       <div className="pt-6 border-t border-white/10 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-tmp-gold/20 border border-tmp-gold/40 flex items-center justify-center text-tmp-gold text-xs font-bold font-serif">
-                            TMP
-                          </div>
+                          {(() => {
+                            const rawAuthor = featuredArticle.author || "Wang Tao Bicton Manullang, S.H.";
+                            const authorName = rawAuthor.includes("|") ? rawAuthor.split("|")[0].trim() : rawAuthor;
+                            const authorLower = authorName.toLowerCase();
+                            const matched = lawyersData.find(
+                              (l) => authorLower.includes(l.name.toLowerCase()) || l.name.toLowerCase().includes(authorLower)
+                            );
+                            const photo = matched ? matched.image : null;
+
+                            return (
+                              <div className="relative w-8 h-8 rounded-full overflow-hidden border border-tmp-gold/50 flex items-center justify-center shrink-0 bg-tmp-black">
+                                {photo ? (
+                                  <Image src={photo} alt={authorName} fill className="object-cover" />
+                                ) : (
+                                  <Image src="/assets/logo.png" alt="TMP" fill className="object-contain p-1 bg-tmp-black" />
+                                )}
+                              </div>
+                            );
+                          })()}
                           <div>
                             <p className="text-white text-xs font-bold">
                               {featuredArticle.author?.includes("|") ? featuredArticle.author.split("|")[0].trim() : featuredArticle.author}
