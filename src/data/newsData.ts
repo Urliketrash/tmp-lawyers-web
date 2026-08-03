@@ -7,6 +7,8 @@ export type NewsItem = {
   content: string; // HTML content or Markdown
   imageUrl: string;
   author: string;
+  readTime?: string;
+  authorRole?: string;
 };
 
 export const MOCK_NEWS: NewsItem[] = [
