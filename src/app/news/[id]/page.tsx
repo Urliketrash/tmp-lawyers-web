@@ -56,7 +56,8 @@ export async function generateMetadata({
           summary: data.summary,
           content: data.content,
           imageUrl: data.image_url || "",
-          author: data.author
+          author: data.author,
+          authorRole: data.author_role || undefined
         };
       }
     } catch (error) {
@@ -120,7 +121,8 @@ export default async function NewsDetailPage({
                 summary: data.summary,
                 content: data.content,
                 imageUrl: data.image_url || "",
-                author: data.author
+                author: data.author,
+                authorRole: data.author_role || undefined
             };
         }
     } catch (error) {

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tabel Basis Data - Laporan PKL</title>
+<style>
+  :root {
+    --bg-color: #f8f9fa;
+    --card-bg: #ffffff;
+    --text-color: #333333;
+    --border-color: #dddddd;
+    --table-header-bg: #f2f2f2;
+    --table-header-text: #333333;
+    --accent-color: #4a90e2;
+    --font-family: Calibri, 'Segoe UI', Arial, sans-serif;
+  }
+
+  /* Tema: Academic B&W */
+  .theme-academic {
+    --bg-color: #ffffff;
+    --card-bg: #ffffff;
+    --text-color: #000000;
+    --border-color: #000000;
+    --table-header-bg: #ffffff;
+    --table-header-text: #000000;
+    --accent-color: #000000;
+  }
+
+  /* Tema: Visio Blue */
+  .theme-visio {
+    --bg-color: #f0f4f8;
+    --card-bg: #ffffff;
+    --text-color: #2c3e50;
+    --border-color: #a0b0c0;
+    --table-header-bg: #d9e2ec;
+    --table-header-text: #102a43;
+    --accent-color: #1976d2;
+  }
+
+  /* Tema: Corporate Gold */
+  .theme-gold {
+    --bg-color: #0f1115;
+    --card-bg: #161a22;
+    --text-color: #e2e8f0;
+    --border-color: #384152;
+    --table-header-bg: #1e2530;
+    --table-header-text: #d4af37;
+    --accent-color: #d4af37;
+  }
+
+  body {
+    margin: 0;
+    padding: 20px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .controls {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    background: var(--card-bg);
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border: 1px solid var(--border-color);
+  }
+
+  .tab-container {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  button {
+    padding: 8px 16px;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-color);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  button:hover {
+    background: var(--table-header-bg);
+    border-color: var(--accent-color);
+  }
+
+  button.active {
+    background: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+  }
+
+  .theme-gold button.active {
+    color: #0f1115;
+    font-weight: bold;
+  }
+
+  .theme-btn.active {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 800px;
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: 1px solid var(--border-color);
+    margin-bottom: 40px;
+    box-sizing: border-box;
+  }
+
+  /* Academic styling override */
+  .theme-academic .container {
+    box-shadow: none;
+    border: none;
+    padding: 10px;
+  }
+
+  h3 {
+    font-size: 14pt;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+    margin-top: 0;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1.5px solid var(--border-color);
+  }
+
+  .theme-academic table {
+    border: 2px solid #000000;
+  }
+
+  th {
+    background: var(--table-header-bg);
+    border: 1.5px solid var(--border-color);
+    padding: 10px 12px;
+    font-size: 11pt;
+    font-weight: bold;
+    text-align: center;
+    color: var(--table-header-text);
+  }
+
+  .theme-academic th {
+    border: 2px solid #000000;
+  }
+
+  td {
+    border: 1.5px solid var(--border-color);
+    padding: 8px 12px;
+    font-size: 11pt;
+    vertical-align: middle;
+  }
+
+  .theme-academic td {
+    border: 1.5px solid #000000;
+  }
+
+  td.center-align {
+    text-align: center;
+  }
+
+  td:first-child {
+    text-align: center;
+    width: 50px;
+  }
+
+  td:nth-child(2) {
+    width: 150px;
+    font-weight: bold;
+  }
+
+  td:nth-child(3) {
+    width: 100px;
+    text-align: center;
+  }
+
+  td:nth-child(4) {
+    text-align: justify;
+    line-height: 1.4;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .helper-text {
+    font-size: 12px;
+    text-align: center;
+    color: #777;
+    margin-top: 15px;
+  }
+
+  @media print {
+    body {
+      background: #fff;
+      color: #000;
+      padding: 0;
+    }
+    .controls, .tab-container, .helper-text {
+      display: none !important;
+    }
+    .container {
+      box-shadow: none;
+      border: none;
+      padding: 0;
+      width: 100%;
+    }
+  }
+</style>
+</head>
+<body class="theme-academic">
+
+<div class="controls">
+  <span style="align-self: center; font-weight: bold; font-size: 13px;">Tema Visual:</span>
+  <button class="theme-btn active" id="btn-academic" onclick="setTheme('academic')">Academic B&W</button>
+  <button class="theme-btn" id="btn-visio" onclick="setTheme('visio')">Visio Blue</button>
+  <button class="theme-btn" id="btn-gold" onclick="setTheme('gold')">Premium Gold</button>
+  <button onclick="window.print()" style="background: #28a745; color: #fff; border-color: #28a745;">Cetak / PDF</button>
+</div>
+
+<div class="tab-container">
+  <button class="tab-btn active" id="tab-5.1" onclick="showTable('5.1')">Tabel 5.1 News</button>
+  <button class="tab-btn" id="tab-5.2" onclick="showTable('5.2')">Tabel 5.2 Lawyers</button>
+  <button class="tab-btn" id="tab-5.3" onclick="showTable('5.3')">Tabel 5.3 Users</button>
+</div>
+
+<!-- CONTAINER TABEL 5.1: STRUKTUR KOLEKSI NEWS -->
+<div id="table-5.1" class="container">
+  <h3>Tabel 5. 1 Struktur Koleksi News</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Nama Field</th>
+        <th>Tipe Data</th>
+        <th>Keterangan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>id</td>
+        <td>String</td>
+        <td>Kunci dokumen unik (auto-generated)</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>title</td>
+        <td>String</td>
+        <td>Judul artikel berita</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>date</td>
+        <td>String</td>
+        <td>Tanggal publikasi berita</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>category</td>
+        <td>String</td>
+        <td>Kategori artikel (misal: Pidana, Perdata)</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>summary</td>
+        <td>String</td>
+        <td>Deskripsi singkat berita di halaman utama</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>content</td>
+        <td>String</td>
+        <td>Isi artikel berita lengkap dalam format HTML</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>imageUrl</td>
+        <td>String</td>
+        <td>Tautan path gambar berita di Firebase Storage</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>author</td>
+        <td>String</td>
+        <td>Nama penulis berita</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="helper-text">Tips: Gunakan <b>Win+Shift+S</b> untuk screenshot tabel B&W ini dan paste langsung ke Microsoft Word.</div>
+</div>
+
+<!-- CONTAINER TABEL 5.2: STRUKTUR KOLEKSI LAWYERS -->
+<div id="table-5.2" class="container hidden">
+  <h3>Tabel 5. 2 Struktur Koleksi Lawyers</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Nama Field</th>
+        <th>Tipe Data</th>
+        <th>Keterangan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>id</td>
+        <td>String</td>
+        <td>Identifier unik profil pengacara</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>name</td>
+        <td>String</td>
+        <td>Nama lengkap pengacara beserta gelar akademis</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>role</td>
+        <td>String</td>
+        <td>Jabatan pengacara di firma (Founding Partner, dll)</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>image</td>
+        <td>String</td>
+        <td>Tautan berkas foto profil pengacara</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>shortDesc</td>
+        <td>String</td>
+        <td>Deskripsi singkat pengacara</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>biography</td>
+        <td>String</td>
+        <td>Riwayat hidup dan biografi karir hukum lengkap</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>email</td>
+        <td>String</td>
+        <td>Email profesional pengacara</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>skills</td>
+        <td>Array</td>
+        <td>Daftar bidang keahlian hukum yang dikuasai</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="helper-text">Tips: Gunakan <b>Win+Shift+S</b> untuk screenshot tabel B&W ini dan paste langsung ke Microsoft Word.</div>
+</div>
+
+<!-- CONTAINER TABEL 5.3: STRUKTUR DATA USERS -->
+<div id="table-5.3" class="container hidden">
+  <h3>Tabel 5. 3 Struktur Data Users (Firebase Authentication)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Nama Field</th>
+        <th>Tipe Data</th>
+        <th>Keterangan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>uid</td>
+        <td>String</td>
+        <td>User ID unik admin (auto-generated)</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>email</td>
+        <td>String</td>
+        <td>Alamat email terdaftar admin</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>password</td>
+        <td>String</td>
+        <td>Sandi keamanan terenkripsi (diuji internal)</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="helper-text">Tips: Gunakan <b>Win+Shift+S</b> untuk screenshot tabel B&W ini dan paste langsung ke Microsoft Word.</div>
+</div>
+
+<script>
+  function setTheme(theme) {
+    document.body.className = '';
+    document.body.classList.add('theme-' + theme);
+    
+    // Update active class on buttons
+    const buttons = document.querySelectorAll('.theme-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    
+    document.getElementById('btn-' + theme).classList.add('active');
+  }
+
+  function showTable(tableId) {
+    // Hide all containers
+    const containers = document.querySelectorAll('.container');
+    containers.forEach(c => c.classList.add('hidden'));
+    
+    // Show selected container
+    document.getElementById('table-' + tableId).classList.remove('hidden');
+    
+    // Update active class on buttons
+    const buttons = document.querySelectorAll('.tab-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    
+    document.getElementById('tab-' + tableId).classList.add('active');
+  }
+</script>
+
+</body>
+</html>

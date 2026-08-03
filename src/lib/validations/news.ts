@@ -30,7 +30,8 @@ export const newsSchema = z.object({
   date: z.string().min(1, 'Tanggal wajib diisi'),
   summary: z.string().min(1, 'Ringkasan wajib diisi').max(500, 'Ringkasan maksimal 500 karakter'),
   content: z.string().min(1, 'Konten wajib diisi'),
-  author: z.string().default('Admin Team'),
+  author: z.string().default('Wang Tao & Partners'),
+  authorRole: z.string().optional(),
 });
 
 export type NewsInput = z.infer<typeof newsSchema>;

@@ -32,12 +32,36 @@ export default function CreateNewsPage() {
       category: "LITIGATION",
       summary: "",
       content: "",
-      author: "Admin Team",
+      author: "Wang Tao Bicton Manullang, S.H.",
+      authorRole: "ADVOKAT & KONSULTAN HUKUM • TMP LAW FIRM",
       date: new Date().toISOString().split('T')[0]
     }
   });
 
   const content = watch("content");
+
+  const [lawyersList, setLawyersList] = useState<{ name: string; role: string }[]>([]);
+
+  // Fetch Lawyer profiles for author selection
+  useEffect(() => {
+    const getLawyers = async () => {
+      try {
+        const { data } = await supabase.from("lawyers").select("name, role");
+        if (data && data.length > 0) {
+          setLawyersList(data);
+        } else {
+          setLawyersList([
+            { name: "Wang Tao Bicton Manullang, S.H.", role: "FOUNDER & MANAGING PARTNER" },
+            { name: "H Ronaldo Munthe, S.H.", role: "PARTNER & ADVOCATE" },
+            { name: "Yudis Arya, S.H.", role: "PARTNER & LEGAL CONSULTANT" }
+          ]);
+        }
+      } catch (err) {
+        console.error("Failed to load lawyers for selector:", err);
+      }
+    };
+    getLawyers();
+  }, []);
 
   // Register the hidden content field
   useEffect(() => {
@@ -59,6 +83,17 @@ export default function CreateNewsPage() {
             setPreviewUrl(reader.result as string);
         };
         reader.readAsDataURL(selectedFile);
+    }
+  };
+
+  const handleSelectLawyer = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedName = e.target.value;
+    if (!selectedName || selectedName === "CUSTOM") return;
+
+    const found = lawyersList.find((l) => l.name === selectedName);
+    if (found) {
+      setValue("author", found.name, { shouldValidate: true });
+      setValue("authorRole", `${found.role} • TMP LAW FIRM`, { shouldValidate: true });
     }
   };
 
@@ -114,14 +149,15 @@ export default function CreateNewsPage() {
 
         // 2. Add to Supabase DB
         setActionLoader({ isLoading: true, status: 'loading', message: 'Saving to Database...' });
-        const docData = {
+        const docData: any = {
           title: data.title,
           category: data.category,
           date: data.date,
           summary: data.summary,
           content: data.content,
           image_url: finalImageUrl,
-          author: data.author
+          author: data.author,
+          author_role: data.authorRole || "ADVOKAT & KONSULTAN HUKUM • TMP LAW FIRM"
         };
 
         // Timeout Promise
@@ -216,6 +252,56 @@ export default function CreateNewsPage() {
                     {errors.date && (
                         <p className="text-red-500 text-xs mt-1">{errors.date.message}</p>
                     )}
+                </div>
+            </div>
+
+            {/* Author & Author Role Section (Umbra Style Customization) */}
+            <div className="bg-tmp-dark/90 border border-white/10 p-6 rounded-xl space-y-4">
+                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                    <h3 className="text-tmp-gold text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+                        <i className="fas fa-user-edit text-xs" /> Author & Lawyer Attribution Card
+                    </h3>
+                    <span className="text-gray-400 text-[10px] italic">Ditampilkan di atas artikel detail</span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label className="block text-gray-300 text-xs font-medium mb-1.5">Pilih Tim Advokat</label>
+                        <select
+                            onChange={handleSelectLawyer}
+                            className="w-full bg-black border border-white/10 p-3 text-white text-xs focus:border-tmp-gold focus:outline-none rounded"
+                        >
+                            <option value="CUSTOM">-- Custom / Ketik Manual --</option>
+                            {lawyersList.map((lawyer, idx) => (
+                                <option key={idx} value={lawyer.name}>
+                                    {lawyer.name} ({lawyer.role})
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label className="block text-gray-300 text-xs font-medium mb-1.5">Nama Penulis / Advokat</label>
+                        <input
+                            type="text"
+                            {...register("author")}
+                            className="w-full bg-black border border-white/10 p-3 text-white text-xs focus:border-tmp-gold focus:outline-none rounded"
+                            placeholder="e.g. Wang Tao Bicton Manullang, S.H."
+                        />
+                        {errors.author && (
+                            <p className="text-red-500 text-xs mt-1">{errors.author.message}</p>
+                        )}
+                    </div>
+
+                    <div>
+                        <label className="block text-gray-300 text-xs font-medium mb-1.5">Jabatan / Role Penulis</label>
+                        <input
+                            type="text"
+                            {...register("authorRole")}
+                            className="w-full bg-black border border-white/10 p-3 text-white text-xs focus:border-tmp-gold focus:outline-none rounded"
+                            placeholder="e.g. FOUNDER & MANAGING PARTNER • TMP LAW FIRM"
+                        />
+                    </div>
                 </div>
             </div>
 
