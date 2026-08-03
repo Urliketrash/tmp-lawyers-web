@@ -73,16 +73,13 @@ export default function News() {
       <div className="container mx-auto max-w-6xl relative z-10">
         {/* Section Header */}
         <ScrollReveal variant="fade-up" className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 border border-tmp-gold/30 bg-tmp-gold/5 px-4 py-1.5 rounded-full mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-tmp-gold animate-pulse" />
-            <span className="text-tmp-gold text-[10px] font-bold uppercase tracking-[0.3em]">
-              Legal Insights & Publications
-            </span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif italic text-white max-w-2xl mx-auto leading-tight">
-            Perspektif & Analisis Hukum Terkini
+          <h2 className="text-tmp-gold text-xs font-bold uppercase tracking-[0.5em] mb-4">
+            INSIGHT & ARTICLE
           </h2>
-          <p className="text-gray-400 text-xs sm:text-sm max-w-xl mx-auto mt-4 leading-relaxed font-light">
+          <h3 className="text-3xl sm:text-4xl md:text-5xl font-serif italic text-white max-w-2xl mx-auto leading-tight mb-4">
+            Perspektif & Analisis Hukum Terkini
+          </h3>
+          <p className="text-gray-400 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed font-light">
             Publikasi dan analisis hukum independen oleh tim advokat TMP Law Firm mengenai perubahan regulasi, mitigasi risiko bisnis, dan studi kasus hukum.
           </p>
         </ScrollReveal>

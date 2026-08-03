@@ -85,11 +85,9 @@ export default function NewsPage() {
 
         {/* Page Header */}
         <ScrollReveal variant="fade-up" className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 border border-tmp-gold/30 bg-tmp-gold/5 px-4 py-1.5 rounded-full mb-4">
-            <span className="text-tmp-gold text-[10px] font-bold uppercase tracking-[0.3em]">
-              TMP LAW FIRM PUBLICATIONS
-            </span>
-          </div>
+          <h2 className="text-tmp-gold text-xs font-bold uppercase tracking-[0.5em] mb-4">
+            INSIGHT & ARTICLE
+          </h2>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif italic text-white mb-4">
             Legal Insights & Articles
           </h1>
