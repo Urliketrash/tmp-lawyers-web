@@ -46,8 +46,8 @@ export default function ScrollReveal({
   children,
   variant = 'fade-up',
   delay = 0,
-  duration = 0.6,
-  className,
+  duration = 0.5,
+  className = '',
 }: ScrollRevealProps) {
   const chosenVariant = variants[variant] || variants['fade-up'];
 
@@ -55,9 +55,10 @@ export default function ScrollReveal({
     <motion.div
       initial={chosenVariant.initial}
       whileInView={chosenVariant.whileInView}
-      viewport={{ once: true, margin: '-100px' }}
-      transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] }}
-      className={className}
+      viewport={{ once: true, margin: '-20px' }}
+      transition={{ duration, delay, ease: [0.22, 1, 0.36, 1] }}
+      style={{ willChange: 'transform, opacity' }}
+      className={`transform-gpu ${className}`}
     >
       {children}
     </motion.div>
